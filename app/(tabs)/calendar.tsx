@@ -198,21 +198,24 @@ const App = () => {
       />
 
       <View style={styles.todoContainer}>
-        <Text style={styles.todoTitle}>Todo List</Text>
+        <Text style={styles.todoTitle}>Subject's List</Text>
         <FlatList
           data={subject}
           keyExtractor={(item) => item.ctdt_hoc_phan_id.toString()}
           renderItem={({ item, index }) => (
-            <View
-              style={[
-                styles.subjectItem,
-                {
-                  backgroundColor: colors[index % colors.length], // Đặt màu nền
-                },
-              ]}
-            >
+            <View style={[styles.subjectItem]}>
+              <View
+                style={[
+                  styles.circleColor,
+                  {
+                    backgroundColor: colors[index % colors.length], // Đặt màu nền
+                  },
+                ]}
+              >
+                <Text style={styles.indexText}></Text>
+              </View>
               <Text style={styles.subjectText}>
-                {index + 1}. {item.ctdt_hoc_phan_ten_tieng_viet}
+                {item.ctdt_hoc_phan_ten_tieng_viet}
               </Text>
             </View>
           )}
@@ -263,9 +266,7 @@ const App = () => {
 
               <View style={styles.row}>
                 <Text style={styles.label}>📝 Notes:</Text>
-                <Text style={styles.value}>
-                  {eventInfo.tkb_ghi_chu || "No notes available"}
-                </Text>
+                <Text style={styles.value}>{eventInfo.tkb_ghi_chu}</Text>
               </View>
 
               <Button title="Close" onPress={() => setModalVisible(false)} />
@@ -299,19 +300,26 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   subjectItem: {
-    padding: 15,
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: 1,
+    padding: 10,
     marginVertical: 8,
     marginHorizontal: 10,
     borderRadius: 10, // Bo tròn góc
     shadowColor: "#000", // Màu của bóng
-    shadowOffset: { width: 0, height: 4 }, // Độ lệch của bóng (ngang, dọc)
-    shadowOpacity: 0.3, // Độ trong suốt của bóng
+    // shadowOffset: { width: 0, height: 4 }, // Độ lệch của bóng (ngang, dọc)
+    shadowOpacity: 1, // Độ trong suốt của bóng
     shadowRadius: 4, // Bán kính của bóng
     elevation: 5, // Đổ bóng trên Android
   },
   subjectText: {
     fontSize: 16,
     color: "#333", // Màu chữ
+  },
+
+  indexText: {
+    fontSize: 16,
   },
 
   modalBackground: {
@@ -375,6 +383,19 @@ const styles = StyleSheet.create({
   modalDescription: {
     marginVertical: 15,
     textAlign: "center",
+  },
+  circleColor: {
+    width: 30,
+    height: 30,
+    borderRadius: 15, // Tạo hình tròn
+    justifyContent: "center",
+    alignItems: "center",
+    marginRight: 10, // Khoảng cách giữa vòng tròn và tên môn học
+    shadowOpacity: 1, // Độ trong suốt của bóng
+    shadowRadius: 4, // Bán kính của bóng
+    // borderWidth: 1, // Độ trong suốt của bóng
+    // borderRadius: 15, // Tạo hình tròn
+    // borderStyle: "solid",
   },
 });
 
