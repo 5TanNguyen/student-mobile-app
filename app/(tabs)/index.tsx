@@ -36,6 +36,16 @@ export default function StudentInfoScreen() {
     quoc_tich_hien_tai_tieng_anh: "",
     ctdt_khoa_hoc_nam_hoc: "",
     sv_sinh_vien_ngay_nhap_hoc: "",
+    quoc_tich_goc_tieng_anh: "",
+    sv_sinh_vien_ten_cha: "",
+    sv_sinh_vien_sdt_cha: "",
+    sv_sinh_vien_email_cha: "",
+    sv_sinh_vien_ten_me: "",
+    sv_sinh_vien_sdt_me: "",
+    sv_sinh_vien_email_me: "",
+    sv_sinh_vien_ten_nguoi_giam_ho: "",
+    sv_sinh_vien_sdt_nguoi_giam_ho: "",
+    sv_sinh_vien_email_nguoi_giam_ho: "",
   });
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
@@ -51,12 +61,12 @@ export default function StudentInfoScreen() {
   const useIsomorphicLayoutEffect =
     typeof window !== "undefined" ? useLayoutEffect : useEffect;
 
-  useEffect(() => {
+  useIsomorphicLayoutEffect(() => {
     // requestPermission();
 
     axios
       .get(
-        `http://10.10.4.43/studentsdnc-api/api/v1/common/keys/getPublicKey`,
+        `http://10.10.3.82/studentsdnc-api/api/v1/common/keys/getPublicKey`,
         {
           headers: {
             "Content-Type": "application/json",
@@ -71,13 +81,13 @@ export default function StudentInfoScreen() {
 
     axios
       .get(
-        `http://10.10.4.43:8081/studentsdnc-api/api/v1/sinhvien/info/Thongtinsinhvien`,
+        `http://10.10.3.82/studentsdnc-api/api/v1/sinhvien/info/Thongtinsinhvien`,
         {
           headers: {
             "Content-Type": "application/json",
             "DHNCT-API-KEY": "@cntt@dhnct@",
             "DHNCT-Authorization":
-              "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJxbF9uZ3VvaV9kdW5nX2lkIjoiNTAwIiwicWxfbmd1b2lfZHVuZ19ob190ZW4iOiJOZ3V5XHUxZWM1biBWXHUwMTAzbiBQaG9uZyIsInFsX25ndW9pX2R1bmdfZW1haWwiOiJ0ZXN0MDNAZ21haWwuY29tIiwicWxfbmd1b2lfZHVuZ19hdmF0YXIiOiJ1cGxvYWRzXC9zdHVkZW50c1wvMTk4MTkxMTAwMDNcLzE5ODE5MTEwMDAzXzY3NDUyZTFmZTM1NmIuanBnIiwicWxfbmd1b2lfZHVuZ190b2tlbiI6bnVsbCwicWxfbmd1b2lfZHVuZ19sb2FpIjoiMSIsInFsX25ndW9pX2R1bmdfbmdheV90YW8iOiIyMDI0LTEwLTIyIDE1OjA5OjE3IiwicWxfbmd1b2lfZHVuZ19uZ2F5X2NhcF9uaGF0IjoiMjAyNC0xMi0wNCAxNjoxNjoyMSIsImFjdGl2ZV9mbGFnIjoiMSIsImNyZWF0ZWRfYXQiOiIyMDI0LTEwLTIyIDE1OjA5OjE3IiwidXBkYXRlZF9hdCI6IjIwMjQtMTItMDQgMTY6MTY6MjEiLCJxbF9uZ3VvaV9kdW5nX2lzX2FkbWluIjpudWxsLCJxbF9uZ3VvaV9kdW5nX2hvIjoiSFx1MWVlNyIsInFsX25ndW9pX2R1bmdfdGVuIjoiVFx1MDBlZHUiLCJzdGFydF90aW1lIjoxNzM0NTA4NzAyLjAwODIyfQ.PUYMP-PtszaTdzKZH7J_Mm7NcIh34sGpCDslV8akObQ",
+              "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJxbF9uZ3VvaV9kdW5nX2lkIjoiNTAwIiwicWxfbmd1b2lfZHVuZ19ob190ZW4iOiJOZ3V5XHUxZWM1biBWXHUwMTAzbiBQaG9uZyIsInFsX25ndW9pX2R1bmdfZW1haWwiOiJ0ZXN0MDNAZ21haWwuY29tIiwicWxfbmd1b2lfZHVuZ19hdmF0YXIiOiJ1cGxvYWRzXC9zdHVkZW50c1wvMTk4MTkxMTAwMDNcLzE5ODE5MTEwMDAzXzY3NDUyZTFmZTM1NmIuanBnIiwicWxfbmd1b2lfZHVuZ190b2tlbiI6bnVsbCwicWxfbmd1b2lfZHVuZ19sb2FpIjoiMSIsInFsX25ndW9pX2R1bmdfbmdheV90YW8iOiIyMDI0LTEwLTIyIDE1OjA5OjE3IiwicWxfbmd1b2lfZHVuZ19uZ2F5X2NhcF9uaGF0IjoiMjAyNC0xMi0wNCAxNjoxNjoyMSIsImFjdGl2ZV9mbGFnIjoiMSIsImNyZWF0ZWRfYXQiOiIyMDI0LTEwLTIyIDE1OjA5OjE3IiwidXBkYXRlZF9hdCI6IjIwMjQtMTItMDQgMTY6MTY6MjEiLCJxbF9uZ3VvaV9kdW5nX2lzX2FkbWluIjpudWxsLCJxbF9uZ3VvaV9kdW5nX2hvIjoiSFx1MWVlNyIsInFsX25ndW9pX2R1bmdfdGVuIjoiVFx1MDBlZHUiLCJzdGFydF90aW1lIjoxNzM0NTc1MzI0Ljc2ODkxNn0.GGgdo98oF6dSEr7qDROVDYUwe15gxGQeGlC9TSeBm1w",
           },
         }
       )
@@ -85,7 +95,7 @@ export default function StudentInfoScreen() {
         setStudent(response.data.data);
 
         console.log("Load thông tin sinh viên");
-        console.log(response.data.data);
+        console.log(response.data);
       })
       .catch((error) => {
         console.error("Error fetching student info:", error);
@@ -100,9 +110,12 @@ export default function StudentInfoScreen() {
     );
   }
 
-  const avatarUri = selectedImage
-    ? selectedImage
-    : `${student.sv_sinh_vien_avatar}`;
+  // const avatarUri = selectedImage
+  //   ? selectedImage
+  //   : `${student.sv_sinh_vien_avatar}`;
+  const avatarUri =
+    "http://10.10.3.82/studentsdnc-api/uploads/students/19819110003/19819110003_6763c471e05e3.jpg";
+
   const gender = student.sv_sinh_vien_gioi_tinh === "2" ? "Male" : "Female";
 
   const openModal = () => {
@@ -210,10 +223,7 @@ export default function StudentInfoScreen() {
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <View style={styles.profileContainer}>
-        <Image
-          source={{ uri: avatarUri || "đường dẫn mặc định" }}
-          style={styles.avatar}
-        />
+        <Image source={{ uri: avatarUri }} style={styles.avatar} />
         <View style={styles.infoTextContainer}>
           <Text style={styles.name}>
             {student.sv_sinh_vien_ten} {student.sv_sinh_vien_ho}
@@ -228,6 +238,7 @@ export default function StudentInfoScreen() {
       </View>
 
       <View style={styles.infoContainer}>
+        {/* Các thông tin chi tiết của sinh viên */}
         <View style={styles.infoRow}>
           <Text style={styles.label}>Class Code:</Text>
           <Text style={styles.value}>{student.sv_lop_ma}</Text>
@@ -258,31 +269,62 @@ export default function StudentInfoScreen() {
             {student.sv_sinh_vien_dia_chi_thuong_tru}
           </Text>
         </View>
+      </View>
+
+      {/* Khối thông tin cha */}
+      <View style={styles.sectionContainer}>
+        <Text style={styles.sectionTitle}>Father's Information</Text>
         <View style={styles.infoRow}>
-          <Text style={styles.label}>Passport:</Text>
-          <Text style={styles.value}>{student.sv_sinh_vien_cccd}</Text>
+          <Text style={styles.label}>Name:</Text>
+          <Text style={styles.value}>{student.sv_sinh_vien_ten_cha}</Text>
         </View>
         <View style={styles.infoRow}>
-          <Text style={styles.label}>Ethnicity:</Text>
-          <Text style={styles.value}>{student.dm_dan_toc_ten_tieng_anh}</Text>
+          <Text style={styles.label}>Phone:</Text>
+          <Text style={styles.value}>{student.sv_sinh_vien_sdt_cha}</Text>
         </View>
         <View style={styles.infoRow}>
-          <Text style={styles.label}>Religion:</Text>
-          <Text style={styles.value}>{student.dm_ten_ton_giao_tieng_anh}</Text>
+          <Text style={styles.label}>Email:</Text>
+          <Text style={styles.value}>{student.sv_sinh_vien_email_cha}</Text>
+        </View>
+      </View>
+
+      {/* Khối thông tin mẹ */}
+      <View style={styles.sectionContainer}>
+        <Text style={styles.sectionTitle}>Mother's Information</Text>
+        <View style={styles.infoRow}>
+          <Text style={styles.label}>Name:</Text>
+          <Text style={styles.value}>{student.sv_sinh_vien_ten_me}</Text>
         </View>
         <View style={styles.infoRow}>
-          <Text style={styles.label}>Current Nationality:</Text>
+          <Text style={styles.label}>Phone:</Text>
+          <Text style={styles.value}>{student.sv_sinh_vien_sdt_me}</Text>
+        </View>
+        <View style={styles.infoRow}>
+          <Text style={styles.label}>Email:</Text>
+          <Text style={styles.value}>{student.sv_sinh_vien_email_me}</Text>
+        </View>
+      </View>
+
+      {/* Khối thông tin người giám hộ */}
+      <View style={styles.sectionContainer}>
+        <Text style={styles.sectionTitle}>Guardian's Information</Text>
+        <View style={styles.infoRow}>
+          <Text style={styles.label}>Name:</Text>
           <Text style={styles.value}>
-            {student.quoc_tich_hien_tai_tieng_anh}
+            {student.sv_sinh_vien_ten_nguoi_giam_ho}
           </Text>
         </View>
         <View style={styles.infoRow}>
-          <Text style={styles.label}>Course:</Text>
-          <Text style={styles.value}>{student.ctdt_khoa_hoc_nam_hoc}</Text>
+          <Text style={styles.label}>Phone:</Text>
+          <Text style={styles.value}>
+            {student.sv_sinh_vien_sdt_nguoi_giam_ho}
+          </Text>
         </View>
         <View style={styles.infoRow}>
-          <Text style={styles.label}>Enrollment Date:</Text>
-          <Text style={styles.value}>{student.sv_sinh_vien_ngay_nhap_hoc}</Text>
+          <Text style={styles.label}>Email:</Text>
+          <Text style={styles.value}>
+            {student.sv_sinh_vien_email_nguoi_giam_ho}
+          </Text>
         </View>
       </View>
 
@@ -296,15 +338,12 @@ export default function StudentInfoScreen() {
         <View style={styles.modalOverlay}>
           <View style={styles.modalContainer}>
             <Text style={styles.modalTitle}>Change Profile Picture</Text>
-            {/* <Button title="Select from gallery" onPress={uploadImage} /> */}
             <View style={styles.buttonContainer}>
               <Button title="Cancel" onPress={closeModal} color="#888" />
             </View>
           </View>
         </View>
       </Modal>
-
-      {/* <Toast /> */}
     </ScrollView>
   );
 }
@@ -397,5 +436,18 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "center",
     marginTop: 16,
+  },
+  sectionContainer: {
+    marginVertical: 10,
+    padding: 10,
+    backgroundColor: "#f8f9fa",
+    borderRadius: 8,
+    elevation: 2,
+  },
+  sectionTitle: {
+    fontSize: 16,
+    fontWeight: "bold",
+    marginBottom: 5,
+    color: "#333",
   },
 });
