@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -6,54 +6,64 @@ import {
   FlatList,
   TouchableOpacity,
 } from "react-native";
+import axios from "axios";
 
 // Dữ liệu mẫu
 interface Course {
-  id: string;
-  name: string;
-  credits: number;
-  status: string;
+  ctdt_hoc_phan_id: string;
+  ctdt_hoc_phan_ten_tieng_viet: string;
+  ctdt_hoc_phan_so_tin_chi: string;
+  ctdt_hoc_phan_so_tiet_ly_thuyet: string;
+  ctdt_hoc_phan_so_tiet_thuc_hanh: string | null;
+  ctdt_hoc_phan_loai: string;
+  diem_hoc_phan_diem_chu: string | null;
 }
 
-const courseData: Record<string, Record<string, Course[]>> = {
-  "2024": {
-    "Học kỳ 1": [
-      { id: "1", name: "Giải tích 1", credits: 3, status: "*" },
-      { id: "2", name: "Lập trình cơ sở", credits: 3, status: "*" },
-      {
-        id: "3",
-        name: "Vật lý đại cương",
-        credits: 4,
-        status: "",
-      },
-    ],
-    "Học kỳ 2": [
-      { id: "4", name: "Giải tích 2", credits: 3, status: "" },
-      { id: "5", name: "Cấu trúc dữ liệu", credits: 3, status: "*" },
-      {
-        id: "6",
-        name: "Lý thuyết đồ thị",
-        credits: 3,
-        status: "*",
-      },
-    ],
-  },
-  "2025": {
-    "Học kỳ 1": [
-      { id: "7", name: "Hệ điều hành", credits: 3, status: "*" },
-      { id: "8", name: "Cơ sở dữ liệu", credits: 3, status: "" },
-      { id: "9", name: "Mạng máy tính", credits: 4, status: "*" },
-    ],
-  },
-};
+interface Semester {
+  semesterIndex: number;
+  ctdt_ke_hoach_hoc_tap_id: string;
+  ctdt_nganh_id: string;
+  ctdt_chuyen_nganh_id: string;
+  ctdt_hoc_phan_id: string;
+  ctdt_chuong_trinh_khung_nam_hoc: string;
+  ctdt_chuong_trinh_khung_hoc_ky: string;
+  sv_sinh_vien_id: string;
+  ctdt_hoc_phan: Course[];
+}
+
+interface Record {
+  nam_hoc: string;
+  hoc_ki: {
+    [key: string]: Semester;
+  };
+}
 
 const App: React.FC = () => {
   const [expandedYear, setExpandedYear] = useState<string | null>(null);
   const [expandedTerm, setExpandedTerm] = useState<string | null>(null);
-  // const [courseData, setCourseData] = useState<Record<
-  //   string,
-  //   Record<string, Course[]>
-  // > | null>(null);
+  const [courseData, setCourseData] = useState<Record[]>([]);
+
+  useEffect(() => {
+    axios
+      .get(
+        `http://10.10.4.43/studentsdnc-api/api/v1/sinhvien/khht/Kehoachhoctap`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            "DHNCT-API-KEY": "@cntt@dhnct@",
+            "DHNCT-Authorization":
+              "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJxbF9uZ3VvaV9kdW5nX2lkIjoiNTAwIiwicWxfbmd1b2lfZHVuZ19ob190ZW4iOiJOZ3V5XHUxZWM1biBWXHUwMTAzbiBQaG9uZyIsInFsX25ndW9pX2R1bmdfZW1haWwiOiJ0ZXN0MDNAZ21haWwuY29tIiwicWxfbmd1b2lfZHVuZ19hdmF0YXIiOiJ1cGxvYWRzXC9zdHVkZW50c1wvMTk4MTkxMTAwMDNcLzE5ODE5MTEwMDAzXzY3NDUyZTFmZTM1NmIuanBnIiwicWxfbmd1b2lfZHVuZ190b2tlbiI6bnVsbCwicWxfbmd1b2lfZHVuZ19sb2FpIjoiMSIsInFsX25ndW9pX2R1bmdfbmdheV90YW8iOiIyMDI0LTEwLTIyIDE1OjA5OjE3IiwicWxfbmd1b2lfZHVuZ19uZ2F5X2NhcF9uaGF0IjoiMjAyNC0xMi0wNCAxNjoxNjoyMSIsImFjdGl2ZV9mbGFnIjoiMSIsImNyZWF0ZWRfYXQiOiIyMDI0LTEwLTIyIDE1OjA5OjE3IiwidXBkYXRlZF9hdCI6IjIwMjQtMTItMDQgMTY6MTY6MjEiLCJxbF9uZ3VvaV9kdW5nX2lzX2FkbWluIjpudWxsLCJxbF9uZ3VvaV9kdW5nX2hvIjoiSFx1MWVlNyIsInFsX25ndW9pX2R1bmdfdGVuIjoiVFx1MDBlZHUiLCJzdGFydF90aW1lIjoxNzM0NTc1MzI0Ljc2ODkxNn0.GGgdo98oF6dSEr7qDROVDYUwe15gxGQeGlC9TSeBm1w",
+          },
+        }
+      )
+      .then((response) => {
+        setCourseData(response.data.data);
+        console.log(response.data.data);
+      })
+      .catch((error) => {
+        console.error("Error fetching data:", error);
+      });
+  }, []);
 
   const handleYearPress = (year: string) => {
     setExpandedYear(expandedYear === year ? null : year);
@@ -64,17 +74,17 @@ const App: React.FC = () => {
     setExpandedTerm(expandedTerm === term ? null : term);
   };
 
-  const renderYearItem = ({ item }: { item: string }) => (
+  const renderYearItem = ({ item }: { item: Record }) => (
     <View>
       <TouchableOpacity
         style={styles.yearItem}
-        onPress={() => handleYearPress(item)}
+        onPress={() => handleYearPress(item.nam_hoc)}
       >
-        <Text style={styles.yearText}>{item}</Text>
+        <Text style={styles.yearText}>{item.nam_hoc}</Text>
       </TouchableOpacity>
-      {expandedYear === item && (
+      {expandedYear === item.nam_hoc && (
         <FlatList
-          data={Object.keys(courseData[item])}
+          data={Object.keys(item.hoc_ki)}
           keyExtractor={(term) => term}
           renderItem={({ item: term }) => (
             <View>
@@ -82,7 +92,7 @@ const App: React.FC = () => {
                 style={styles.termItem}
                 onPress={() => handleTermPress(term)}
               >
-                <Text style={styles.termText}>{term}</Text>
+                <Text style={styles.termText}>Học kỳ {term}</Text>
               </TouchableOpacity>
               {expandedTerm === term && (
                 <View style={styles.coursesContainer}>
@@ -91,28 +101,37 @@ const App: React.FC = () => {
                       <Text style={styles.headerText}>STT</Text>
                     </View>
                     <View style={styles.columnName}>
-                      <Text style={styles.headerText}>Tên học phần</Text>
+                      <Text style={styles.headerText}>Học phần</Text>
                     </View>
                     <View style={styles.columnCredits}>
-                      <Text style={styles.headerText}>Số tín chỉ</Text>
+                      <Text style={styles.headerText}>Tín chỉ</Text>
                     </View>
                     <View style={styles.columnStatus}>
-                      <Text style={styles.headerText}>Trạng thái tích lũy</Text>
+                      <Text style={styles.headerText}>Tích lũy</Text>
                     </View>
                   </View>
-                  {courseData[item][term].map((course, index) => (
-                    <View key={course.id} style={styles.courseItem}>
+                  {item.hoc_ki[term].ctdt_hoc_phan.map((course, index) => (
+                    <View
+                      key={course.ctdt_hoc_phan_id}
+                      style={styles.courseItem}
+                    >
                       <View style={styles.columnIndex}>
                         <Text style={styles.courseText}>{index + 1}</Text>
                       </View>
                       <View style={styles.columnName}>
-                        <Text style={styles.courseText}>{course.name}</Text>
+                        <Text style={styles.courseText}>
+                          {course.ctdt_hoc_phan_ten_tieng_viet}
+                        </Text>
                       </View>
                       <View style={styles.columnCredits}>
-                        <Text style={styles.courseText}>{course.credits}</Text>
+                        <Text style={styles.courseText}>
+                          {course.ctdt_hoc_phan_so_tin_chi}
+                        </Text>
                       </View>
                       <View style={styles.columnStatus}>
-                        <Text style={styles.courseText}>{course.status}</Text>
+                        <Text style={styles.courseText}>
+                          {course.diem_hoc_phan_diem_chu ? "*" : ""}
+                        </Text>
                       </View>
                     </View>
                   ))}
@@ -129,8 +148,8 @@ const App: React.FC = () => {
     <View style={styles.container}>
       <Text style={styles.title}>Kế hoạch học tập</Text>
       <FlatList
-        data={Object.keys(courseData)}
-        keyExtractor={(item) => item}
+        data={courseData}
+        keyExtractor={(item, index) => `${item.nam_hoc}-${index}`}
         renderItem={renderYearItem}
       />
     </View>
@@ -175,7 +194,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     backgroundColor: "#f9f9f9",
     borderRadius: 5,
-    marginLeft: 30,
+    marginLeft: 15,
     elevation: 1,
   },
   tableHeader: {
@@ -203,7 +222,6 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   courseTextIndex: {
-    width: 40,
     fontWeight: "bold",
   },
   columnIndex: {

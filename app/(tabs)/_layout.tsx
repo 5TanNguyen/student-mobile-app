@@ -1,5 +1,5 @@
 import { Tabs } from "expo-router";
-import React from "react";
+import React, { useEffect } from "react";
 import { SafeAreaView } from "react-native-safe-area-context"; // SafeAreaView để xử lý vùng an toàn
 import {
   StyleSheet,
@@ -22,12 +22,16 @@ const changeLanguage = (language: string) => {
 const TabLayout: React.FC = () => {
   const colorScheme = useColorScheme();
 
+  useEffect(() => {
+    StatusBar.setBackgroundColor("#4b69c1", true);
+    StatusBar.setBarStyle("light-content", true);
+  }, []);
   return (
     <SafeAreaView
       style={styles.safeArea}
       edges={["top", "left", "right", "bottom"]}
     >
-      <StatusBar barStyle="light-content" backgroundColor="#1e272e" />
+      <StatusBar />
       <View style={styles.headerLayout}>
         <View style={styles.headerLeft}>
           {/* Chức năng đổi ngôn ngữ */}
@@ -80,7 +84,7 @@ const TabLayout: React.FC = () => {
           }}
         />
         <Tabs.Screen
-          name="acadamic_planning"
+          name="academic_planning"
           options={{
             title: "Planning",
             tabBarIcon: ({ color, focused }) => (
@@ -98,6 +102,18 @@ const TabLayout: React.FC = () => {
             tabBarIcon: ({ color, focused }) => (
               <TabBarIcon
                 name={focused ? "checkbox" : "checkbox-outline"}
+                color={color}
+              />
+            ),
+          }}
+        />
+        <Tabs.Screen
+          name="infor"
+          options={{
+            title: "Infor",
+            tabBarIcon: ({ color, focused }) => (
+              <TabBarIcon
+                name={focused ? "person" : "person-outline"}
                 color={color}
               />
             ),
