@@ -110,7 +110,7 @@ const TabLayout: React.FC = () => {
         <Tabs.Screen
           name="infor"
           options={{
-            title: "Infor",
+            title: "Information",
             tabBarIcon: ({ color, focused }) => (
               <TabBarIcon
                 name={focused ? "person" : "person-outline"}
