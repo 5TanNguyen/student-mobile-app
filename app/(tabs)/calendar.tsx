@@ -132,7 +132,7 @@ const App = () => {
 
   useEffect(() => {
     axios
-      .get(`http://10.10.3.82/CodeIgniter-3.1.13/api/getAllTodoCalendar`)
+      .get(`http://10.10.4.43/CodeIgniter-3.1.13/api/getAllTodoCalendar`)
       .then((response) => {
         // setEventData(response.data.data);
       })
@@ -142,7 +142,7 @@ const App = () => {
 
     axios
       .get(
-        `http://10.10.3.82/studentsdnc-api/api/v1/sinhvien/lichhoc/Lichhoc`,
+        `http://10.10.4.43/studentsdnc-api/api/v1/sinhvien/lichhoc/Lichhoc`,
         {
           headers: {
             "Content-Type": "application/json",
@@ -203,7 +203,7 @@ const App = () => {
           data={subject}
           keyExtractor={(item) => item.ctdt_hoc_phan_id.toString()}
           renderItem={({ item, index }) => (
-            <View style={[styles.subjectItem]}>
+            <View style={styles.subjectItem}>
               <View
                 style={[
                   styles.circleColor,
@@ -306,12 +306,14 @@ const styles = StyleSheet.create({
     padding: 10,
     marginVertical: 8,
     marginHorizontal: 10,
-    borderRadius: 10, // Bo tròn góc
-    shadowColor: "#000", // Màu của bóng
+    // shadowColor: "#000", // Màu của bóng
     // shadowOffset: { width: 0, height: 4 }, // Độ lệch của bóng (ngang, dọc)
-    shadowOpacity: 1, // Độ trong suốt của bóng
-    shadowRadius: 4, // Bán kính của bóng
-    elevation: 5, // Đổ bóng trên Android
+    // shadowOpacity: 1, // Độ trong suốt của bóng
+    // shadowRadius: 4, // Bán kính của bóng
+    // elevation: 1, // Đổ bóng trên Android
+    borderWidth: 1, // Độ trong suốt của bóng
+    borderRadius: 15, // Tạo hình tròn
+    borderStyle: "solid",
   },
   subjectText: {
     fontSize: 16,
@@ -387,15 +389,14 @@ const styles = StyleSheet.create({
   circleColor: {
     width: 30,
     height: 30,
-    borderRadius: 15, // Tạo hình tròn
     justifyContent: "center",
     alignItems: "center",
     marginRight: 10, // Khoảng cách giữa vòng tròn và tên môn học
-    shadowOpacity: 1, // Độ trong suốt của bóng
-    shadowRadius: 4, // Bán kính của bóng
-    // borderWidth: 1, // Độ trong suốt của bóng
-    // borderRadius: 15, // Tạo hình tròn
-    // borderStyle: "solid",
+    // shadowOpacity: 1, // Độ trong suốt của bóng
+    // shadowRadius: 4, // Bán kính của bóng
+    borderWidth: 1, // Độ trong suốt của bóng
+    borderRadius: 15, // Tạo hình tròn
+    borderStyle: "solid",
   },
 });
 

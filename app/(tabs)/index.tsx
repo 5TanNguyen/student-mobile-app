@@ -66,7 +66,7 @@ export default function StudentInfoScreen() {
 
     axios
       .get(
-        `http://10.10.3.82/studentsdnc-api/api/v1/common/keys/getPublicKey`,
+        `http://10.10.4.43/studentsdnc-api/api/v1/common/keys/getPublicKey`,
         {
           headers: {
             "Content-Type": "application/json",
@@ -81,7 +81,7 @@ export default function StudentInfoScreen() {
 
     axios
       .get(
-        `http://10.10.3.82/studentsdnc-api/api/v1/sinhvien/info/Thongtinsinhvien`,
+        `http://10.10.4.43/studentsdnc-api/api/v1/sinhvien/info/Thongtinsinhvien`,
         {
           headers: {
             "Content-Type": "application/json",
@@ -114,7 +114,7 @@ export default function StudentInfoScreen() {
   //   ? selectedImage
   //   : `${student.sv_sinh_vien_avatar}`;
   const avatarUri =
-    "http://10.10.3.82/studentsdnc-api/uploads/students/19819110003/19819110003_6763c471e05e3.jpg";
+    "http://10.10.4.43/studentsdnc-api/uploads/students/19819110003/19819110003_6763c471e05e3.jpg";
 
   const gender = student.sv_sinh_vien_gioi_tinh === "2" ? "Male" : "Female";
 

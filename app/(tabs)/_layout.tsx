@@ -7,6 +7,7 @@ import {
   Text,
   TextInput,
   TouchableOpacity,
+  StatusBar,
 } from "react-native";
 
 import { TabBarIcon } from "@/components/navigation/TabBarIcon";
@@ -26,6 +27,7 @@ const TabLayout: React.FC = () => {
       style={styles.safeArea}
       edges={["top", "left", "right", "bottom"]}
     >
+      <StatusBar barStyle="light-content" backgroundColor="#1e272e" />
       <View style={styles.headerLayout}>
         <View style={styles.headerLeft}>
           {/* Chức năng đổi ngôn ngữ */}
