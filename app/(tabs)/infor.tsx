@@ -20,20 +20,27 @@ export default function StudentInfoScreen() {
     sv_sinh_vien_ma: "",
     sv_sinh_vien_ten: "",
     sv_sinh_vien_ho: "",
+    sv_sinh_vien_ten_viet_tat: "",
     sv_sinh_vien_gioi_tinh: "",
     sv_sinh_vien_avatar: "",
+    sv_sinh_vien_ho_chieu: "",
+    sv_sinh_vien_ngay_cap_cccd: "",
+    sv_sinh_vien_noi_cap_cccd: "",
+    sv_sinh_vien_nguyen_quan: "",
     firstname: "",
     sv_lop_ma: "",
     sv_lop_ten_tieng_anh: "",
     sv_lop_ten_tieng_viet: "",
     sv_sinh_vien_ngay_sinh: "",
     sv_sinh_vien_email: "",
+    sv_sinh_vien_trang_thai: "",
     sv_sinh_vien_sdt: "",
     sv_sinh_vien_dia_chi_thuong_tru: "",
     sv_sinh_vien_cccd: "",
     dm_dan_toc_ten_tieng_anh: "",
     dm_ten_ton_giao_tieng_anh: "",
     quoc_tich_hien_tai_tieng_anh: "",
+    sv_sinh_vien_dia_chi_lien_lac: "",
     ctdt_khoa_hoc_nam_hoc: "",
     sv_sinh_vien_ngay_nhap_hoc: "",
     quoc_tich_goc_tieng_anh: "",
@@ -46,6 +53,9 @@ export default function StudentInfoScreen() {
     sv_sinh_vien_ten_nguoi_giam_ho: "",
     sv_sinh_vien_sdt_nguoi_giam_ho: "",
     sv_sinh_vien_email_nguoi_giam_ho: "",
+    sv_sinh_vien_ma_ho_so: "",
+    sv_sinh_vien_ma_bhyt: "",
+    sv_sinh_vien_ten_phong_ktx: "",
   });
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
@@ -94,8 +104,8 @@ export default function StudentInfoScreen() {
       .then((response) => {
         setStudent(response.data.data);
 
-        console.log("Load thông tin sinh viên");
-        console.log(response.data);
+        // console.log("Load thông tin sinh viên");
+        // console.log(response.data);
       })
       .catch((error) => {
         console.error("Error fetching student info:", error);
@@ -240,12 +250,8 @@ export default function StudentInfoScreen() {
       <View style={styles.infoContainer}>
         {/* Các thông tin chi tiết của sinh viên */}
         <View style={styles.infoRow}>
-          <Text style={styles.label}>Class Code:</Text>
-          <Text style={styles.value}>{student.sv_lop_ma}</Text>
-        </View>
-        <View style={styles.infoRow}>
-          <Text style={styles.label}>Class Name:</Text>
-          <Text style={styles.value}>{student.sv_lop_ten_tieng_viet}</Text>
+          <Text style={styles.label}>Nickname:</Text>
+          <Text style={styles.value}>{student.sv_sinh_vien_ten_viet_tat}</Text>
         </View>
         <View style={styles.infoRow}>
           <Text style={styles.label}>Gender:</Text>
@@ -256,18 +262,99 @@ export default function StudentInfoScreen() {
           <Text style={styles.value}>{student.sv_sinh_vien_ngay_sinh}</Text>
         </View>
         <View style={styles.infoRow}>
-          <Text style={styles.label}>Email:</Text>
-          <Text style={styles.value}>{student.sv_sinh_vien_email}</Text>
-        </View>
-        <View style={styles.infoRow}>
           <Text style={styles.label}>Phone:</Text>
           <Text style={styles.value}>{student.sv_sinh_vien_sdt}</Text>
+        </View>
+        <View style={styles.infoRow}>
+          <Text style={styles.label}>Passport:</Text>
+          <Text style={styles.value}>{student.sv_sinh_vien_cccd}</Text>
+        </View>
+        <View style={styles.infoRow}>
+          <Text style={styles.label}>Date of issue:</Text>
+          <Text style={styles.value}>{student.sv_sinh_vien_ngay_cap_cccd}</Text>
+        </View>
+        <View style={styles.infoRow}>
+          <Text style={styles.label}>Issuing authority:</Text>
+          <Text style={styles.value}>{student.sv_sinh_vien_noi_cap_cccd}</Text>
+        </View>
+        <View style={styles.infoRow}>
+          <Text style={styles.label}>Original Nationality:</Text>
+          <Text style={styles.value}>{student.quoc_tich_goc_tieng_anh}</Text>
+        </View>
+        <View style={styles.infoRow}>
+          <Text style={styles.label}>Current Nationality:</Text>
+          <Text style={styles.value}>
+            {student.quoc_tich_hien_tai_tieng_anh}
+          </Text>
+        </View>
+        <View style={styles.infoRow}>
+          <Text style={styles.label}>Ethnicity:</Text>
+          <Text style={styles.value}>{student.dm_dan_toc_ten_tieng_anh}</Text>
+        </View>
+        <View style={styles.infoRow}>
+          <Text style={styles.label}>Religion:</Text>
+          <Text style={styles.value}>{student.dm_ten_ton_giao_tieng_anh}</Text>
+        </View>
+        <View style={styles.infoRow}>
+          <Text style={styles.label}>Place of origin:</Text>
+          <Text style={styles.value}>{student.sv_sinh_vien_nguyen_quan}</Text>
         </View>
         <View style={styles.infoRow}>
           <Text style={styles.label}>Address:</Text>
           <Text style={styles.value}>
             {student.sv_sinh_vien_dia_chi_thuong_tru}
           </Text>
+        </View>
+        <View style={styles.infoRow}>
+          <Text style={styles.label}>Contact address:</Text>
+          <Text style={styles.value}>
+            {student.sv_sinh_vien_dia_chi_lien_lac}
+          </Text>
+        </View>
+      </View>
+
+      {/* Khối thông tin cha */}
+      <View style={styles.sectionContainer}>
+        <Text style={styles.sectionTitle}>Academic Information</Text>
+        <View style={styles.infoRow}>
+          <Text style={styles.label}>Email:</Text>
+          <Text style={styles.value}>{student.sv_sinh_vien_email}</Text>
+        </View>
+        <View style={styles.infoRow}>
+          <Text style={styles.label}>Class Code:</Text>
+          <Text style={styles.value}>{student.sv_lop_ma}</Text>
+        </View>
+        <View style={styles.infoRow}>
+          <Text style={styles.label}>Class Name:</Text>
+          <Text style={styles.value}>{student.sv_lop_ten_tieng_viet}</Text>
+        </View>
+        <View style={styles.infoRow}>
+          <Text style={styles.label}>Course:</Text>
+          <Text style={styles.value}>{student.ctdt_khoa_hoc_nam_hoc}</Text>
+        </View>
+        <View style={styles.infoRow}>
+          <Text style={styles.label}>Status:</Text>
+          <Text style={styles.value}>
+            {student.sv_sinh_vien_trang_thai === "1" && "Still studying"}
+            {student.sv_sinh_vien_trang_thai === "2" && "Dropped out"}
+            {student.sv_sinh_vien_trang_thai === "3" && "Deferred studies"}
+          </Text>
+        </View>
+        <View style={styles.infoRow}>
+          <Text style={styles.label}>Profile Code:</Text>
+          <Text style={styles.value}>{student.sv_sinh_vien_ma_ho_so}</Text>
+        </View>
+        <View style={styles.infoRow}>
+          <Text style={styles.label}>Enrollment Date:</Text>
+          <Text style={styles.value}>{student.sv_sinh_vien_ngay_nhap_hoc}</Text>
+        </View>
+        <View style={styles.infoRow}>
+          <Text style={styles.label}>Health insurance code:</Text>
+          <Text style={styles.value}>{student.sv_sinh_vien_ma_bhyt}</Text>
+        </View>
+        <View style={styles.infoRow}>
+          <Text style={styles.label}>Dormitory:</Text>
+          <Text style={styles.value}>{student.sv_sinh_vien_ten_phong_ktx}</Text>
         </View>
       </View>
 

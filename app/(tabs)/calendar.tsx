@@ -155,8 +155,8 @@ const App = () => {
       .then((response) => {
         setSubject(response.data.data);
         setEventData(response.data.calendar);
-        console.log("Load lịch học sinh viên");
-        console.log(response.data);
+        // console.log("Load lịch học sinh viên");
+        // console.log(response.data);
       })
       .catch((error) => {
         console.error("Error fetching student info:", error);

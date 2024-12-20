@@ -118,7 +118,7 @@ const App: React.FC = () => {
       })
       .then((response) => {
         setCourseData(response.data.data);
-        console.log(response.data.data);
+        // console.log(response.data.data);
       })
       .catch((error) => {
         console.error("Error fectching data:", error);
@@ -147,27 +147,51 @@ const App: React.FC = () => {
         item.diem_hoc_phan_nam_hoc + "-" + item.diem_hoc_phan_hoc_ky && (
         <View style={styles.coursesContainer}>
           <View style={styles.tableHeader}>
-            <Text style={styles.courseTextIndex}>STT</Text>
-            <Text style={styles.headerText}>Tên học phần</Text>
-            <Text style={styles.headerText}>Số tín chỉ</Text>
-            <Text style={styles.headerText}>Trạng thái</Text>
-            <Text style={styles.headerText}>Điểm</Text>
+            <View style={styles.columnIndex}>
+              <Text style={styles.courseTextIndex}>STT</Text>
+            </View>
+            <View style={styles.columnIndex}>
+              <Text style={styles.headerText}>Tên học phần</Text>
+            </View>
+            <View style={styles.columnIndex}>
+              <Text style={styles.headerText}>Số tín chỉ</Text>
+            </View>
+            <View style={styles.columnIndex}>
+              <Text style={styles.headerText}>Trạng thái</Text>
+            </View>
+            <View style={styles.columnIndex}>
+              <Text style={styles.headerText}>Điểm</Text>
+            </View>
           </View>
           {Object.values(item.diem_bang_diem).map((course, index) => (
-            <View key={course.diem_diem_hoc_phan_id} style={styles.courseItem}>
-              <Text style={styles.courseTextIndex}>{index + 1}</Text>
-              <Text style={styles.courseText}>
-                {course.ctdt_hoc_phan_ten_tieng_viet}
-              </Text>
-              <Text style={styles.courseTextCenter}>
-                {course.ctdt_hoc_phan_so_tin_chi}
-              </Text>
-              <Text style={styles.courseText}>
-                {course.diem_hoc_phan_diem_chu}
-              </Text>
-              <Text style={styles.courseTextGrade}>
-                {course.diem_hoc_phan_he_4}
-              </Text>
+            <View key={index} style={styles.courseItem}>
+              <View style={styles.columnIndex}>
+                <Text style={styles.courseText}>{index + 1}</Text>
+              </View>
+
+              <View style={styles.columnIndex}>
+                <Text style={styles.courseText}>
+                  {course.ctdt_hoc_phan_ten_tieng_viet}
+                </Text>
+              </View>
+
+              <View style={styles.columnIndex}>
+                <Text style={styles.courseTextCenter}>
+                  {course.ctdt_hoc_phan_so_tin_chi}
+                </Text>
+              </View>
+
+              <View style={styles.columnIndex}>
+                <Text style={styles.courseText}>
+                  {course.diem_hoc_phan_diem_chu}
+                </Text>
+              </View>
+
+              <View style={styles.columnIndex}>
+                <Text style={styles.courseTextGrade}>
+                  {course.diem_hoc_phan_he_4}
+                </Text>
+              </View>
             </View>
           ))}
         </View>
@@ -235,7 +259,8 @@ const styles = StyleSheet.create({
   },
   courseText: {
     flex: 1,
-    textAlign: "left",
+    justifyContent: "center",
+    alignItems: "center",
   },
   courseTextCenter: {
     flex: 1,
@@ -249,6 +274,16 @@ const styles = StyleSheet.create({
     flex: 1,
     textAlign: "left",
     paddingLeft: 20,
+  },
+  columnIndex: {
+    flex: 2,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  columnStatus: {
+    flex: 2,
+    justifyContent: "center",
+    alignItems: "center",
   },
 });
 

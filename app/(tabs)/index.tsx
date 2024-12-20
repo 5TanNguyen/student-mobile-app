@@ -94,8 +94,8 @@ export default function StudentInfoScreen() {
       .then((response) => {
         setStudent(response.data.data);
 
-        console.log("Load thông tin sinh viên");
-        console.log(response.data);
+        // console.log("Load thông tin sinh viên");
+        // console.log(response.data);
       })
       .catch((error) => {
         console.error("Error fetching student info:", error);
