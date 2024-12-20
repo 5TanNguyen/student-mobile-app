@@ -1,5 +1,5 @@
 import { Tabs } from "expo-router";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context"; // SafeAreaView để xử lý vùng an toàn
 import {
   StyleSheet,
@@ -9,6 +9,8 @@ import {
   TouchableOpacity,
   StatusBar,
   Image,
+  Modal,
+  Button,
 } from "react-native";
 
 import { TabBarIcon } from "@/components/navigation/TabBarIcon";
@@ -20,9 +22,14 @@ const changeLanguage = (language: string) => {
   console.log(`Ngôn ngữ được thay đổi sang: ${language}`);
 };
 
+const popUpImage = () => {
+  console.log("Mở Pop Up");
+};
+
 const TabLayout: React.FC = () => {
   const colorScheme = useColorScheme();
 
+  const [modalVisible, setModalVisible] = useState<boolean>(false); // Trạng thái modal
   useEffect(() => {
     StatusBar.setBackgroundColor("#4b69c1", true);
     StatusBar.setBarStyle("light-content", true);
@@ -50,12 +57,68 @@ const TabLayout: React.FC = () => {
         </View>
 
         <View style={styles.headerRight}>
-          <Image
-            source={require("../../assets/images/students/DNCLOGO.png")}
-            style={styles.imageCircle}
-          />
+          <TouchableOpacity onPress={() => setModalVisible(true)}>
+            <Image
+              source={require("../../assets/images/students/DNCLOGO.png")}
+              style={styles.imageCircle}
+            />
+          </TouchableOpacity>
         </View>
       </View>
+
+      <Modal
+        animationType="fade"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => setModalVisible(false)}
+      >
+        <View style={styles.modalBackground}>
+          <View style={styles.modalContainer}>
+            <View style={styles.header}>
+              <Text style={styles.headerText}>Course Information</Text>
+            </View>
+
+            <View style={styles.content}>
+              {/* <View style={styles.row}>
+                <Text style={styles.label}>📚 Course Name:</Text>
+                <Text style={styles.value}>
+                  {eventInfo.ctdt_hoc_phan_ten_tieng_viet}
+                </Text>
+              </View>
+
+              <View style={styles.row}>
+                <Text style={styles.label}>🎤 Lecturer:</Text>
+                <Text style={styles.value}>
+                  {eventInfo.nv_can_bo_ho} {eventInfo.nv_can_bo_ten}
+                </Text>
+              </View>
+
+              <View style={styles.row}>
+                <Text style={styles.label}>📍 Room:</Text>
+                <Text style={styles.value}>{eventInfo.qttb_phong_ten}</Text>
+              </View>
+
+              <View style={styles.row}>
+                <Text style={styles.label}>📅 Class Date:</Text>
+                <Text style={styles.value}>{eventInfo.tkb_ngay}</Text>
+              </View>
+
+              <View style={styles.row}>
+                <Text style={styles.label}>⏰ Class Time:</Text>
+                <Text style={styles.value}>{eventInfo.tkb_tiet_gio_vao}</Text>
+              </View>
+
+              <View style={styles.row}>
+                <Text style={styles.label}>📝 Notes:</Text>
+                <Text style={styles.value}>{eventInfo.tkb_ghi_chu}</Text>
+              </View> */}
+
+              <Button title="Close" onPress={() => setModalVisible(false)} />
+            </View>
+          </View>
+        </View>
+      </Modal>
+
       <Tabs
         screenOptions={{
           tabBarActiveTintColor: Colors[colorScheme ?? "light"].tint,
@@ -190,6 +253,36 @@ const styles = StyleSheet.create({
   imageCircle: {
     width: 30,
     height: 30,
+  },
+  modalBackground: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgba(0, 0, 0, 0.5)", // Màu nền mờ
+  },
+  modalContainer: {
+    backgroundColor: "white",
+    padding: 20,
+    borderRadius: 10,
+    elevation: 5, // Add shadow on Android
+    shadowColor: "#000", // Add shadow on iOS
+    shadowOffset: { width: 0, height: 2 }, // iOS shadow offset
+    shadowOpacity: 0.3, // iOS shadow opacity
+    shadowRadius: 4, // iOS shadow radius
+    position: "relative",
+    top: 10,
+    right: 10,
+  },
+  headerText: {
+    fontSize: 20,
+    fontWeight: "bold",
+  },
+  content: {
+    marginTop: 16,
+  },
+  modalImage: {
+    top: 0,
+    right: 0,
   },
 });
 
