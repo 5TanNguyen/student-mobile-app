@@ -148,19 +148,19 @@ const App: React.FC = () => {
         <View style={styles.coursesContainer}>
           <View style={styles.tableHeader}>
             <View style={styles.columnIndex}>
-              <Text style={styles.courseTextIndex}>STT</Text>
+              <Text style={styles.courseTextIndex}>No.</Text>
             </View>
             <View style={styles.columnIndex}>
-              <Text style={styles.headerText}>Học phần</Text>
+              <Text style={styles.headerText}>Course</Text>
             </View>
             <View style={styles.columnIndex}>
-              <Text style={styles.headerText}>Tín chỉ</Text>
+              <Text style={styles.headerText}>Credits</Text>
             </View>
             <View style={styles.columnIndex}>
-              <Text style={styles.headerText}>Điếm số</Text>
+              <Text style={styles.headerText}>Score</Text>
             </View>
             <View style={styles.columnIndex}>
-              <Text style={styles.headerText}>Điểm chữ</Text>
+              <Text style={styles.headerText}>Letter grade</Text>
             </View>
           </View>
           {Object.values(item.diem_bang_diem).map((course, index) => (

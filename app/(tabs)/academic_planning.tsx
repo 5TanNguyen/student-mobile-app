@@ -92,22 +92,22 @@ const App: React.FC = () => {
                 style={styles.termItem}
                 onPress={() => handleTermPress(term)}
               >
-                <Text style={styles.termText}>Học kỳ {term}</Text>
+                <Text style={styles.termText}>Semester {term}</Text>
               </TouchableOpacity>
               {expandedTerm === term && (
                 <View style={styles.coursesContainer}>
                   <View style={styles.tableHeader}>
                     <View style={styles.columnIndex}>
-                      <Text style={styles.headerText}>STT</Text>
+                      <Text style={styles.headerText}>No.</Text>
                     </View>
                     <View style={styles.columnName}>
-                      <Text style={styles.headerText}>Học phần</Text>
+                      <Text style={styles.headerText}>Course</Text>
                     </View>
                     <View style={styles.columnCredits}>
-                      <Text style={styles.headerText}>Tín chỉ</Text>
+                      <Text style={styles.headerText}>Credits</Text>
                     </View>
                     <View style={styles.columnStatus}>
-                      <Text style={styles.headerText}>Tích lũy</Text>
+                      <Text style={styles.headerText}>Earned Credits</Text>
                     </View>
                   </View>
                   {item.hoc_ki[term].ctdt_hoc_phan.map((course, index) => (
@@ -146,7 +146,7 @@ const App: React.FC = () => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Kế hoạch học tập</Text>
+      <Text style={styles.title}>Academic Planning</Text>
       <FlatList
         data={courseData}
         keyExtractor={(item, index) => `${item.nam_hoc}-${index}`}

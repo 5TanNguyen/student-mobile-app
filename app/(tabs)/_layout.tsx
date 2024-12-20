@@ -8,6 +8,7 @@ import {
   TextInput,
   TouchableOpacity,
   StatusBar,
+  Image,
 } from "react-native";
 
 import { TabBarIcon } from "@/components/navigation/TabBarIcon";
@@ -49,8 +50,10 @@ const TabLayout: React.FC = () => {
         </View>
 
         <View style={styles.headerRight}>
-          {/* Ô tròn màu xanh bên phải */}
-          <View style={styles.greenCircle} />
+          <Image
+            source={require("../../assets/images/students/DNCLOGO.png")}
+            style={styles.imageCircle}
+          />
         </View>
       </View>
       <Tabs
@@ -183,6 +186,10 @@ const styles = StyleSheet.create({
     height: 30,
     borderRadius: 15, // Tạo hình tròn
     backgroundColor: "green",
+  },
+  imageCircle: {
+    width: 30,
+    height: 30,
   },
 });
 
