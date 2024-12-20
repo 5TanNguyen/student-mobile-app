@@ -181,6 +181,7 @@ const App = () => {
 
   return (
     <View style={styles.container}>
+      <Text style={styles.title}>Calendar</Text>
       <Calendar
         style={styles.calendar}
         theme={{
@@ -281,11 +282,14 @@ const App = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    padding: 10,
+    backgroundColor: "#f5f5f5",
   },
   calendar: {
     borderWidth: 1,
     borderColor: "gray",
     height: "50%", // Chiếm 50% chiều cao màn hình
+    marginBottom: 10,
   },
   todoContainer: {
     flex: 1,
@@ -293,6 +297,7 @@ const styles = StyleSheet.create({
     padding: 10,
     borderTopWidth: 1,
     borderTopColor: "#ccc",
+    top: 20,
   },
   todoTitle: {
     fontSize: 18,
@@ -397,6 +402,11 @@ const styles = StyleSheet.create({
     borderWidth: 1, // Độ trong suốt của bóng
     borderRadius: 15, // Tạo hình tròn
     borderStyle: "solid",
+  },
+  title: {
+    fontSize: 24,
+    fontWeight: "bold",
+    marginBottom: 20,
   },
 });
 

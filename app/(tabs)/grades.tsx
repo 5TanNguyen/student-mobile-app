@@ -151,16 +151,16 @@ const App: React.FC = () => {
               <Text style={styles.courseTextIndex}>STT</Text>
             </View>
             <View style={styles.columnIndex}>
-              <Text style={styles.headerText}>Tên học phần</Text>
+              <Text style={styles.headerText}>Học phần</Text>
             </View>
             <View style={styles.columnIndex}>
-              <Text style={styles.headerText}>Số tín chỉ</Text>
+              <Text style={styles.headerText}>Tín chỉ</Text>
             </View>
             <View style={styles.columnIndex}>
-              <Text style={styles.headerText}>Trạng thái</Text>
+              <Text style={styles.headerText}>Điếm số</Text>
             </View>
             <View style={styles.columnIndex}>
-              <Text style={styles.headerText}>Điểm</Text>
+              <Text style={styles.headerText}>Điểm chữ</Text>
             </View>
           </View>
           {Object.values(item.diem_bang_diem).map((course, index) => (
@@ -183,13 +183,13 @@ const App: React.FC = () => {
 
               <View style={styles.columnIndex}>
                 <Text style={styles.courseText}>
-                  {course.diem_hoc_phan_diem_chu}
+                  {course.diem_hoc_phan_he_4}
                 </Text>
               </View>
 
               <View style={styles.columnIndex}>
                 <Text style={styles.courseTextGrade}>
-                  {course.diem_hoc_phan_he_4}
+                  {course.diem_hoc_phan_diem_chu}
                 </Text>
               </View>
             </View>
@@ -201,7 +201,7 @@ const App: React.FC = () => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Điểm số</Text>
+      <Text style={styles.title}>Grades</Text>
       <FlatList
         data={courseData}
         keyExtractor={(item, index) => `${item.diem_hoc_phan_nam_hoc}`}
@@ -214,7 +214,7 @@ const App: React.FC = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 20,
+    padding: 10,
     backgroundColor: "#f5f5f5",
   },
   title: {
@@ -231,6 +231,7 @@ const styles = StyleSheet.create({
   },
   termText: {
     fontSize: 18,
+    fontWeight: "bold",
   },
   coursesContainer: {
     padding: 10,
@@ -267,7 +268,8 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   courseTextIndex: {
-    width: 40,
+    flex: 1,
+    width: 30,
     fontWeight: "bold",
   },
   courseTextGrade: {

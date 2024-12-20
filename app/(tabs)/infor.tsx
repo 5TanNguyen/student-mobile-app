@@ -232,6 +232,7 @@ export default function StudentInfoScreen() {
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
+      <Text style={styles.title}>Student Information</Text>
       <View style={styles.profileContainer}>
         <Image source={{ uri: avatarUri }} style={styles.avatar} />
         <View style={styles.infoTextContainer}>
@@ -438,7 +439,7 @@ export default function StudentInfoScreen() {
 const styles = StyleSheet.create({
   container: {
     flexGrow: 1,
-    padding: 16,
+    padding: 10,
     backgroundColor: "#fff",
   },
   profileContainer: {
@@ -536,5 +537,10 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     marginBottom: 5,
     color: "#333",
+  },
+  title: {
+    fontSize: 24,
+    fontWeight: "bold",
+    marginBottom: 20,
   },
 });

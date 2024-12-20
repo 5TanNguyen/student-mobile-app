@@ -71,18 +71,20 @@ const TabLayout: React.FC = () => {
             ),
           }}
         />
+
         <Tabs.Screen
-          name="calendar"
+          name="infor"
           options={{
-            title: "Calendar",
+            title: "Information",
             tabBarIcon: ({ color, focused }) => (
               <TabBarIcon
-                name={focused ? "calendar" : "calendar-outline"}
+                name={focused ? "person" : "person-outline"}
                 color={color}
               />
             ),
           }}
         />
+
         <Tabs.Screen
           name="academic_planning"
           options={{
@@ -95,6 +97,20 @@ const TabLayout: React.FC = () => {
             ),
           }}
         />
+
+        <Tabs.Screen
+          name="calendar"
+          options={{
+            title: "Calendar",
+            tabBarIcon: ({ color, focused }) => (
+              <TabBarIcon
+                name={focused ? "calendar" : "calendar-outline"}
+                color={color}
+              />
+            ),
+          }}
+        />
+
         <Tabs.Screen
           name="grades"
           options={{
@@ -102,18 +118,6 @@ const TabLayout: React.FC = () => {
             tabBarIcon: ({ color, focused }) => (
               <TabBarIcon
                 name={focused ? "checkbox" : "checkbox-outline"}
-                color={color}
-              />
-            ),
-          }}
-        />
-        <Tabs.Screen
-          name="infor"
-          options={{
-            title: "Information",
-            tabBarIcon: ({ color, focused }) => (
-              <TabBarIcon
-                name={focused ? "person" : "person-outline"}
                 color={color}
               />
             ),
