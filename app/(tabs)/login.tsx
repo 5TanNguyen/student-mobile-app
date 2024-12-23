@@ -1,28 +1,25 @@
-import React, { useEffect, useState, useLayoutEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Image,
   StyleSheet,
-  ScrollView,
   TouchableOpacity,
   Modal,
   Button,
-  Platform,
   View,
   Text,
-  Alert,
   TextInput,
 } from "react-native";
 import axios from "axios";
 import { Icon } from "react-native-elements";
 import Toast from "react-native-toast-message";
-import JSEncrypt from "jsencrypt";
-import RNRSA from "react-native-rsa-native";
+const CryptoJS = require("crypto-js");
 
 export default function Login() {
   const [modalVisible, setModalVisible] = useState(false);
   const [publicKey, setPublicKey] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [token, setToken] = useState("");
 
   const openModal = () => {
     setModalVisible(true);
@@ -41,9 +38,36 @@ export default function Login() {
       });
     } else {
       try {
-        // Kiểm tra xem publicKey đã được truyền vào đúng format chưa
-        // const encryptedPassword = await RNRSA.encrypt(password, publicKey);
-        // console.log("Encrypted Password:", encryptedPassword);
+        const encryptedData = CryptoJS.AES.encrypt(
+          password,
+          publicKey
+        ).toString();
+        console.log("Encrypted Data: ", encryptedData);
+
+        axios
+          .post(
+            `http://10.10.4.43/studentsdnc-api/api/v1/authentication/login`,
+            {
+              // ql_nguoi_dung_email: email,
+              // ql_nguoi_dung_mat_khau: password
+              ql_nguoi_dung_email: "test03@gmail.com",
+              ql_nguoi_dung_mat_khau:
+                "XOCbyxTandfxBP724Ha9PeUoPirSTlL66konRArqnlPwYsV8jbXYUX/sa1lAII3kDvyV58PodjxhdXtrGPi9B07fS9ACuhY9lvxkL/UOr5wY7MwcXzpXAg8Y3yazV8a0OalaxSnkCCMFosFkI7lUYdAqdj4NoSUuJV4Y/s5AMbD2oO7/sli8c2wvgx80/81eUtw3rf2n70JoH0TtbVWpR2ZpVdPXvauUMvW2JWBWafSals9fRPHyF9xdMkpIaeB2PI3f3f1Ii2UYNvT3W30isHLRGnSkWbsCI8IspL2NmotZW46IOSsGhitfzYP/xldj4b2a1Bc2seUTGFl7JB2AGA==",
+            },
+            {
+              headers: {
+                "Content-Type": "application/json",
+                "DHNCT-API-KEY": "@cntt@dhnct@",
+              },
+            }
+          )
+          .then((response) => {
+            console.log(response.data.data.token);
+            setToken(response.data.data.token);
+          })
+          .catch((error) => {
+            console.error("Error getting public key:", error);
+          });
       } catch (error) {
         console.error("Encryption Error:", error);
       }
