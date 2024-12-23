@@ -1,0 +1,1 @@
+export const OPENSANS_REGULAR = "OpenSans=Regu;";
