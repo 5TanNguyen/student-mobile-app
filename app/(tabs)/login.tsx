@@ -14,9 +14,13 @@ import {
 } from "react-native";
 import axios from "axios";
 import { Icon } from "react-native-elements";
+import Toast from "react-native-toast-message";
+import JSEncrypt from "jsencrypt";
+import RNRSA from "react-native-rsa-native";
 
 export default function Login() {
   const [modalVisible, setModalVisible] = useState(false);
+  const [publicKey, setPublicKey] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -28,9 +32,43 @@ export default function Login() {
     setModalVisible(false);
   };
 
-  const postLogin = () => {
-    console.log("Email: " + email + ", " + "Password: " + password);
+  const postLogin = async () => {
+    if (email == "" || password == "") {
+      Toast.show({
+        type: "error",
+        text1: "NOTE",
+        text2: "Please fill in all the information!",
+      });
+    } else {
+      try {
+        // Kiểm tra xem publicKey đã được truyền vào đúng format chưa
+        // const encryptedPassword = await RNRSA.encrypt(password, publicKey);
+        // console.log("Encrypted Password:", encryptedPassword);
+      } catch (error) {
+        console.error("Encryption Error:", error);
+      }
+    }
   };
+
+  useEffect(() => {
+    axios
+      .get(
+        `http://10.10.4.43/studentsdnc-api/api/v1/common/keys/getPublicKey`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            "DHNCT-API-KEY": "@cntt@dhnct@",
+          },
+        }
+      )
+      .then((response) => {
+        console.log(response.data.publicKey);
+        setPublicKey(response.data.publicKey);
+      })
+      .catch((error) => {
+        console.error("Error getting public key:", error);
+      });
+  }, []);
 
   return (
     <View style={styles.container}>
@@ -40,6 +78,7 @@ export default function Login() {
             style={styles.imageLogin}
             source={require("../../assets/images/students/avatarLogin_2.jpg")}
           />
+          <Text style={styles.loginPageText}>LOGIN PAGE</Text>
           <View style={styles.inputField}>
             <Text style={styles.labelInput}>
               <Icon
@@ -80,6 +119,8 @@ export default function Login() {
           </TouchableOpacity>
         </View>
       </View>
+      <Toast />
+
       <Modal
         animationType="slide"
         transparent={true}
@@ -124,6 +165,15 @@ const styles = StyleSheet.create({
   loginContent: {
     marginTop: 10,
     width: "90%",
+    alignItems: "center",
+  },
+
+  loginPageText: {
+    fontSize: 24,
+    fontWeight: "bold",
+    color: "white",
+    position: "absolute",
+    top: 40,
   },
 
   imageLogin: {
@@ -132,9 +182,9 @@ const styles = StyleSheet.create({
     borderRadius: 50,
     // borderColor: "white",
     // borderWidth: 5,
-    left: "50%",
+    // left: "50%",
     top: -10,
-    transform: [{ translateX: "-50%" }, { translateY: "-50%" }],
+    transform: [{ translateX: 0 }, { translateY: "-50%" }],
   },
 
   inputField: {
