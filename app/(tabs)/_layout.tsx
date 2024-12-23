@@ -17,13 +17,9 @@ import { TabBarIcon } from "@/components/navigation/TabBarIcon";
 import { Colors } from "@/constants/Colors";
 import { useColorScheme } from "@/hooks/useColorScheme";
 
-// Hàm thay đổi ngôn ngữ
+// 0.76 phiên phản RN
 const changeLanguage = (language: string) => {
   console.log(`Ngôn ngữ được thay đổi sang: ${language}`);
-};
-
-const popUpImage = () => {
-  console.log("Mở Pop Up");
 };
 
 const TabLayout: React.FC = () => {
