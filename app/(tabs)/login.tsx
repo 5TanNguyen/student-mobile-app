@@ -12,7 +12,8 @@ import {
 import axios from "axios";
 import { Icon } from "react-native-elements";
 import Toast from "react-native-toast-message";
-const CryptoJS = require("crypto-js");
+import AsyncStorage from "@react-native-async-storage/async-storage";
+// const CryptoJS = require("crypto-js");
 
 export default function Login() {
   const [modalVisible, setModalVisible] = useState(false);
@@ -20,6 +21,7 @@ export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [token, setToken] = useState("");
+  const [storedValue, setStoredValue] = useState<string | null>(null);
 
   const openModal = () => {
     setModalVisible(true);
@@ -38,11 +40,11 @@ export default function Login() {
       });
     } else {
       try {
-        const encryptedData = CryptoJS.AES.encrypt(
-          password,
-          publicKey
-        ).toString();
-        console.log("Encrypted Data: ", encryptedData);
+        // const encryptedData = CryptoJS.AES.encrypt(
+        //   password,
+        //   publicKey
+        // ).toString();
+        // console.log("Encrypted Data: ", encryptedData);
 
         axios
           .post(
@@ -61,9 +63,10 @@ export default function Login() {
               },
             }
           )
-          .then((response) => {
+          .then(async (response) => {
             console.log(response.data.data.token);
             setToken(response.data.data.token);
+            await AsyncStorage.setItem("token", response.data.data.token);
           })
           .catch((error) => {
             console.error("Error getting public key:", error);
@@ -71,6 +74,40 @@ export default function Login() {
       } catch (error) {
         console.error("Encryption Error:", error);
       }
+    }
+  };
+
+  // Lưu giá trị vào AsyncStorage
+  const saveToStorage = async () => {
+    try {
+      await AsyncStorage.setItem("userToken", "abc123");
+      console.log("Value saved!");
+    } catch (e) {
+      console.error("Error saving value", e);
+    }
+  };
+
+  // Lấy giá trị từ AsyncStorage
+  const loadFromStorage = async () => {
+    try {
+      const value = await AsyncStorage.getItem("userToken");
+      if (value !== null) {
+        setStoredValue(value);
+      }
+    } catch (e) {
+      console.error("Error loading value", e);
+    }
+  };
+
+  // Xóa giá trị trong AsyncStorage
+  const removeFromStorage = async () => {
+    try {
+      await AsyncStorage.removeItem("userToken");
+      await AsyncStorage.removeItem("token");
+      console.log("Value removed!");
+      setStoredValue(null);
+    } catch (e) {
+      console.error("Error removing value", e);
     }
   };
 
@@ -141,8 +178,21 @@ export default function Login() {
           <TouchableOpacity style={styles.buttonLogin} onPress={postLogin}>
             <Text style={styles.textLogin}>LOGIN</Text>
           </TouchableOpacity>
+
+          <TouchableOpacity
+            style={[
+              styles.buttonLogin,
+              {
+                marginTop: 10,
+              },
+            ]}
+            onPress={removeFromStorage}
+          >
+            <Text style={styles.textLogin}>LOG OUT</Text>
+          </TouchableOpacity>
         </View>
       </View>
+
       <Toast />
 
       <Modal
@@ -269,5 +319,9 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "center",
     marginTop: 16,
+  },
+  text: {
+    marginBottom: 20,
+    fontSize: 18,
   },
 });

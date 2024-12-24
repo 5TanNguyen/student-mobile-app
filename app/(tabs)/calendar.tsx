@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import {
   View,
   Text,
@@ -11,6 +11,9 @@ import {
   TextInput,
 } from "react-native";
 import { Calendar, LocaleConfig } from "react-native-calendars";
+import { useFocusEffect } from "@react-navigation/native";
+import Toast from "react-native-toast-message";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 // Thiết lập LocaleConfig cho tiếng Anh
 LocaleConfig.locales["en"] = {
@@ -103,6 +106,7 @@ const App = () => {
   const [eventData, setEventData] = useState<EventData>({});
   const [subject, setSubject] = useState<subjectItem[]>([]);
   const colors = ["#FFCCCC", "#CCFFCC", "#CCCCFF", "#FFFFCC", "#CCFFFF"]; // Mảng màu
+  const [token, setToken] = useState("");
 
   const onDayPress = (day: { dateString: string }) => {
     const key = day.dateString;
@@ -130,54 +134,77 @@ const App = () => {
     selectedDotColor: "orange",
   };
 
-  useEffect(() => {
-    axios
-      .get(`http://10.10.4.43/CodeIgniter-3.1.13/api/getAllTodoCalendar`)
-      .then((response) => {
-        // setEventData(response.data.data);
-      })
-      .catch((error) => {
-        console.error("Error fetching student info:", error);
-      });
+  useFocusEffect(
+    useCallback(() => {
+      const fetchData = async () => {
+        try {
+          const storedToken = await AsyncStorage.getItem("token");
+          if (!storedToken) {
+            setSubject([]);
+            setEventData({});
 
-    axios
-      .get(
-        `http://10.10.4.43/studentsdnc-api/api/v1/sinhvien/lichhoc/Lichhoc`,
-        {
-          headers: {
-            "Content-Type": "application/json",
-            "DHNCT-API-KEY": "@cntt@dhnct@",
-            "DHNCT-Authorization":
-              "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJxbF9uZ3VvaV9kdW5nX2lkIjoiNTAwIiwicWxfbmd1b2lfZHVuZ19ob190ZW4iOiJOZ3V5XHUxZWM1biBWXHUwMTAzbiBQaG9uZyIsInFsX25ndW9pX2R1bmdfZW1haWwiOiJ0ZXN0MDNAZ21haWwuY29tIiwicWxfbmd1b2lfZHVuZ19hdmF0YXIiOiJ1cGxvYWRzXC9zdHVkZW50c1wvMTk4MTkxMTAwMDNcLzE5ODE5MTEwMDAzXzY3NDUyZTFmZTM1NmIuanBnIiwicWxfbmd1b2lfZHVuZ190b2tlbiI6bnVsbCwicWxfbmd1b2lfZHVuZ19sb2FpIjoiMSIsInFsX25ndW9pX2R1bmdfbmdheV90YW8iOiIyMDI0LTEwLTIyIDE1OjA5OjE3IiwicWxfbmd1b2lfZHVuZ19uZ2F5X2NhcF9uaGF0IjoiMjAyNC0xMi0wNCAxNjoxNjoyMSIsImFjdGl2ZV9mbGFnIjoiMSIsImNyZWF0ZWRfYXQiOiIyMDI0LTEwLTIyIDE1OjA5OjE3IiwidXBkYXRlZF9hdCI6IjIwMjQtMTItMDQgMTY6MTY6MjEiLCJxbF9uZ3VvaV9kdW5nX2lzX2FkbWluIjpudWxsLCJxbF9uZ3VvaV9kdW5nX2hvIjoiSFx1MWVlNyIsInFsX25ndW9pX2R1bmdfdGVuIjoiVFx1MDBlZHUiLCJzdGFydF90aW1lIjoxNzM0NTc1MzI0Ljc2ODkxNn0.GGgdo98oF6dSEr7qDROVDYUwe15gxGQeGlC9TSeBm1w",
-          },
+            Toast.show({
+              type: "error",
+              text1: "ERROR",
+              text2: "Please login to see calendar!",
+            });
+          } else {
+            const response = await axios.get(
+              `http://10.10.4.43/studentsdnc-api/api/v1/sinhvien/lichhoc/Lichhoc`,
+              {
+                headers: {
+                  "Content-Type": "application/json",
+                  "DHNCT-API-KEY": "@cntt@dhnct@",
+                  "DHNCT-Authorization": storedToken,
+                },
+              }
+            );
+
+            if (response.data && response.data.data) {
+              setEventData(response.data.calendar);
+              setSubject(response.data.data);
+            } else {
+              Toast.show({
+                type: "error",
+                text1: "ERROR",
+                text2: "Failed to fetch data!",
+              });
+            }
+          }
+        } catch (error) {
+          Toast.show({
+            type: "error",
+            text1: "ERROR",
+            text2: "Network or server error occurred!",
+          });
         }
-      )
-      .then((response) => {
-        setSubject(response.data.data);
-        setEventData(response.data.calendar);
-        // console.log("Load lịch học sinh viên");
-        // console.log(response.data);
-      })
-      .catch((error) => {
-        console.error("Error fetching student info:", error);
-      });
+      };
 
-    if (modalVisible) {
-      // Hiệu ứng fadeIn khi modal mở
-      Animated.timing(fadeAnim, {
-        toValue: 1,
-        duration: 300,
-        useNativeDriver: true,
-      }).start();
-    } else {
-      // Hiệu ứng fadeOut khi modal đóng
-      Animated.timing(fadeAnim, {
-        toValue: 0,
-        duration: 300,
-        useNativeDriver: true,
-      }).start();
-    }
-  }, [modalVisible]);
+      fetchData();
+
+      // Kiểm tra và hiển thị hiệu ứng modal nếu modalVisible là true
+      if (modalVisible) {
+        // Hiệu ứng fadeIn khi modal mở
+        Animated.timing(fadeAnim, {
+          toValue: 1,
+          duration: 300,
+          useNativeDriver: true,
+        }).start();
+      } else {
+        // Hiệu ứng fadeOut khi modal đóng
+        Animated.timing(fadeAnim, {
+          toValue: 0,
+          duration: 300,
+          useNativeDriver: true,
+        }).start();
+      }
+
+      // Cleanup nếu cần khi tab không còn được focus
+      return () => {
+        console.log("Cleanup when tab is unfocused");
+      };
+    }, [modalVisible]) // Gọi lại mỗi khi modalVisible thay đổi
+  );
 
   return (
     <View style={styles.container}>
@@ -275,6 +302,7 @@ const App = () => {
           </View>
         </View>
       </Modal>
+      <Toast />
     </View>
   );
 };

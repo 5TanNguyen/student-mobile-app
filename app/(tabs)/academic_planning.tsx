@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import {
   View,
   Text,
@@ -7,6 +7,9 @@ import {
   TouchableOpacity,
 } from "react-native";
 import axios from "axios";
+import { useFocusEffect } from "@react-navigation/native";
+import Toast from "react-native-toast-message";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 // Dữ liệu mẫu
 interface Course {
@@ -42,28 +45,61 @@ const App: React.FC = () => {
   const [expandedYear, setExpandedYear] = useState<string | null>(null);
   const [expandedTerm, setExpandedTerm] = useState<string | null>(null);
   const [courseData, setCourseData] = useState<Record[]>([]);
+  const [token, setToken] = useState("");
 
-  useEffect(() => {
-    axios
-      .get(
-        `http://10.10.4.43/studentsdnc-api/api/v1/sinhvien/khht/Kehoachhoctap`,
-        {
-          headers: {
-            "Content-Type": "application/json",
-            "DHNCT-API-KEY": "@cntt@dhnct@",
-            "DHNCT-Authorization":
-              "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJxbF9uZ3VvaV9kdW5nX2lkIjoiNTAwIiwicWxfbmd1b2lfZHVuZ19ob190ZW4iOiJOZ3V5XHUxZWM1biBWXHUwMTAzbiBQaG9uZyIsInFsX25ndW9pX2R1bmdfZW1haWwiOiJ0ZXN0MDNAZ21haWwuY29tIiwicWxfbmd1b2lfZHVuZ19hdmF0YXIiOiJ1cGxvYWRzXC9zdHVkZW50c1wvMTk4MTkxMTAwMDNcLzE5ODE5MTEwMDAzXzY3NDUyZTFmZTM1NmIuanBnIiwicWxfbmd1b2lfZHVuZ190b2tlbiI6bnVsbCwicWxfbmd1b2lfZHVuZ19sb2FpIjoiMSIsInFsX25ndW9pX2R1bmdfbmdheV90YW8iOiIyMDI0LTEwLTIyIDE1OjA5OjE3IiwicWxfbmd1b2lfZHVuZ19uZ2F5X2NhcF9uaGF0IjoiMjAyNC0xMi0wNCAxNjoxNjoyMSIsImFjdGl2ZV9mbGFnIjoiMSIsImNyZWF0ZWRfYXQiOiIyMDI0LTEwLTIyIDE1OjA5OjE3IiwidXBkYXRlZF9hdCI6IjIwMjQtMTItMDQgMTY6MTY6MjEiLCJxbF9uZ3VvaV9kdW5nX2lzX2FkbWluIjpudWxsLCJxbF9uZ3VvaV9kdW5nX2hvIjoiSFx1MWVlNyIsInFsX25ndW9pX2R1bmdfdGVuIjoiVFx1MDBlZHUiLCJzdGFydF90aW1lIjoxNzM0NTc1MzI0Ljc2ODkxNn0.GGgdo98oF6dSEr7qDROVDYUwe15gxGQeGlC9TSeBm1w",
-          },
+  useFocusEffect(
+    useCallback(() => {
+      // Hàm bất đồng bộ xử lý việc lấy token và gọi API
+      const fetchData = async () => {
+        try {
+          const storedToken = await AsyncStorage.getItem("token");
+          if (!storedToken) {
+            setCourseData([]);
+
+            Toast.show({
+              type: "error",
+              text1: "ERROR",
+              text2: "Please login to see academic planning!",
+            });
+          } else {
+            const response = await axios.get(
+              `http://10.10.4.43/studentsdnc-api/api/v1/sinhvien/khht/Kehoachhoctap`,
+              {
+                headers: {
+                  "Content-Type": "application/json",
+                  "DHNCT-API-KEY": "@cntt@dhnct@",
+                  "DHNCT-Authorization": storedToken,
+                },
+              }
+            );
+            if (response.data && response.data.data) {
+              setCourseData(response.data.data);
+            } else {
+              Toast.show({
+                type: "error",
+                text1: "ERROR",
+                text2: "Failed to fetch data!",
+              });
+            }
+          }
+        } catch (error) {
+          Toast.show({
+            type: "error",
+            text1: "ERROR",
+            text2: "Network or server error occurred!",
+          });
         }
-      )
-      .then((response) => {
-        setCourseData(response.data.data);
-        // console.log(response.data.data);
-      })
-      .catch((error) => {
-        console.error("Error fetching data:", error);
-      });
-  }, []);
+      };
+
+      fetchData();
+
+      // Cleanup nếu cần
+      return () => {
+        console.log("Cleanup when tab is unfocused");
+        Toast.hide();
+      };
+    }, [])
+  );
 
   const handleYearPress = (year: string) => {
     setExpandedYear(expandedYear === year ? null : year);
@@ -152,6 +188,7 @@ const App: React.FC = () => {
         keyExtractor={(item, index) => `${item.nam_hoc}-${index}`}
         renderItem={renderYearItem}
       />
+      <Toast />
     </View>
   );
 };

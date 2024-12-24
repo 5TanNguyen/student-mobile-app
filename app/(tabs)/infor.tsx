@@ -1,4 +1,9 @@
-import React, { useEffect, useState, useLayoutEffect } from "react";
+import React, {
+  useEffect,
+  useState,
+  useLayoutEffect,
+  useCallback,
+} from "react";
 import {
   Image,
   StyleSheet,
@@ -12,7 +17,9 @@ import {
   Alert,
 } from "react-native";
 import axios from "axios";
-// import Toast from "react-native-toast-message";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useFocusEffect } from "@react-navigation/native";
+import Toast from "react-native-toast-message";
 // import * as ImagePicker from "expo-image-picker";
 
 export default function StudentInfoScreen() {
@@ -60,6 +67,7 @@ export default function StudentInfoScreen() {
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const [publicKey, setPublicKey] = useState("");
+  const [token, setToken] = useState("");
 
   // const requestPermission = async () => {
   //   const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
@@ -71,46 +79,100 @@ export default function StudentInfoScreen() {
   const useIsomorphicLayoutEffect =
     typeof window !== "undefined" ? useLayoutEffect : useEffect;
 
-  useIsomorphicLayoutEffect(() => {
-    // requestPermission();
+  useFocusEffect(
+    useCallback(() => {
+      // Hàm bất đồng bộ xử lý việc lấy token và gọi API
+      const fetchData = async () => {
+        try {
+          const storedToken = await AsyncStorage.getItem("token");
+          if (!storedToken) {
+            setStudent({
+              sv_sinh_vien_ma: "",
+              sv_sinh_vien_ten: "",
+              sv_sinh_vien_ho: "",
+              sv_sinh_vien_ten_viet_tat: "",
+              sv_sinh_vien_gioi_tinh: "",
+              sv_sinh_vien_avatar: "",
+              sv_sinh_vien_ho_chieu: "",
+              sv_sinh_vien_ngay_cap_cccd: "",
+              sv_sinh_vien_noi_cap_cccd: "",
+              sv_sinh_vien_nguyen_quan: "",
+              firstname: "",
+              sv_lop_ma: "",
+              sv_lop_ten_tieng_anh: "",
+              sv_lop_ten_tieng_viet: "",
+              sv_sinh_vien_ngay_sinh: "",
+              sv_sinh_vien_email: "",
+              sv_sinh_vien_trang_thai: "",
+              sv_sinh_vien_sdt: "",
+              sv_sinh_vien_dia_chi_thuong_tru: "",
+              sv_sinh_vien_cccd: "",
+              dm_dan_toc_ten_tieng_anh: "",
+              dm_ten_ton_giao_tieng_anh: "",
+              quoc_tich_hien_tai_tieng_anh: "",
+              sv_sinh_vien_dia_chi_lien_lac: "",
+              ctdt_khoa_hoc_nam_hoc: "",
+              sv_sinh_vien_ngay_nhap_hoc: "",
+              quoc_tich_goc_tieng_anh: "",
+              sv_sinh_vien_ten_cha: "",
+              sv_sinh_vien_sdt_cha: "",
+              sv_sinh_vien_email_cha: "",
+              sv_sinh_vien_ten_me: "",
+              sv_sinh_vien_sdt_me: "",
+              sv_sinh_vien_email_me: "",
+              sv_sinh_vien_ten_nguoi_giam_ho: "",
+              sv_sinh_vien_sdt_nguoi_giam_ho: "",
+              sv_sinh_vien_email_nguoi_giam_ho: "",
+              sv_sinh_vien_ma_ho_so: "",
+              sv_sinh_vien_ma_bhyt: "",
+              sv_sinh_vien_ten_phong_ktx: "",
+            });
 
-    axios
-      .get(
-        `http://10.10.4.43/studentsdnc-api/api/v1/common/keys/getPublicKey`,
-        {
-          headers: {
-            "Content-Type": "application/json",
-            "DHNCT-API-KEY": "@cntt@dhnct@",
-          },
+            Toast.show({
+              type: "error",
+              text1: "ERROR",
+              text2: "Please login to see information!",
+            });
+          } else {
+            // Gọi API để lấy thông tin sinh viên sau khi lấy token
+            const response = await axios.get(
+              "http://10.10.4.43/studentsdnc-api/api/v1/sinhvien/info/Thongtinsinhvien",
+              {
+                headers: {
+                  "Content-Type": "application/json",
+                  "DHNCT-API-KEY": "@cntt@dhnct@",
+                  "DHNCT-Authorization": storedToken, // Sử dụng token từ AsyncStorage
+                },
+              }
+            );
+
+            if (response.data && response.data.data) {
+              setStudent(response.data.data);
+            } else {
+              Toast.show({
+                type: "error",
+                text1: "ERROR",
+                text2: "Failed to fetch data!",
+              });
+            }
+          }
+        } catch (error) {
+          Toast.show({
+            type: "error",
+            text1: "ERROR",
+            text2: "Please login to see information!",
+          });
         }
-      )
-      .then((response) => {})
-      .catch((error) => {
-        console.error("Error getting public key:", error);
-      });
+      };
 
-    axios
-      .get(
-        `http://10.10.4.43/studentsdnc-api/api/v1/sinhvien/info/Thongtinsinhvien`,
-        {
-          headers: {
-            "Content-Type": "application/json",
-            "DHNCT-API-KEY": "@cntt@dhnct@",
-            "DHNCT-Authorization":
-              "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJxbF9uZ3VvaV9kdW5nX2lkIjoiNTAwIiwicWxfbmd1b2lfZHVuZ19ob190ZW4iOiJOZ3V5XHUxZWM1biBWXHUwMTAzbiBQaG9uZyIsInFsX25ndW9pX2R1bmdfZW1haWwiOiJ0ZXN0MDNAZ21haWwuY29tIiwicWxfbmd1b2lfZHVuZ19hdmF0YXIiOiJ1cGxvYWRzXC9zdHVkZW50c1wvMTk4MTkxMTAwMDNcLzE5ODE5MTEwMDAzXzY3NDUyZTFmZTM1NmIuanBnIiwicWxfbmd1b2lfZHVuZ190b2tlbiI6bnVsbCwicWxfbmd1b2lfZHVuZ19sb2FpIjoiMSIsInFsX25ndW9pX2R1bmdfbmdheV90YW8iOiIyMDI0LTEwLTIyIDE1OjA5OjE3IiwicWxfbmd1b2lfZHVuZ19uZ2F5X2NhcF9uaGF0IjoiMjAyNC0xMi0wNCAxNjoxNjoyMSIsImFjdGl2ZV9mbGFnIjoiMSIsImNyZWF0ZWRfYXQiOiIyMDI0LTEwLTIyIDE1OjA5OjE3IiwidXBkYXRlZF9hdCI6IjIwMjQtMTItMDQgMTY6MTY6MjEiLCJxbF9uZ3VvaV9kdW5nX2lzX2FkbWluIjpudWxsLCJxbF9uZ3VvaV9kdW5nX2hvIjoiSFx1MWVlNyIsInFsX25ndW9pX2R1bmdfdGVuIjoiVFx1MDBlZHUiLCJzdGFydF90aW1lIjoxNzM0NTc1MzI0Ljc2ODkxNn0.GGgdo98oF6dSEr7qDROVDYUwe15gxGQeGlC9TSeBm1w",
-          },
-        }
-      )
-      .then((response) => {
-        setStudent(response.data.data);
+      fetchData();
 
-        // console.log("Load thông tin sinh viên");
-        // console.log(response.data);
-      })
-      .catch((error) => {
-        console.error("Error fetching student info:", error);
-      });
-  }, []);
+      // Cleanup nếu cần
+      return () => {
+        console.log("Cleanup when tab is unfocused");
+      };
+    }, []) // Chạy effect chỉ 1 lần sau khi component mount
+  );
 
   if (!student) {
     return (
@@ -415,6 +477,7 @@ export default function StudentInfoScreen() {
           </Text>
         </View>
       </View>
+      <Toast />
 
       {/* Modal để chọn ảnh đại diện */}
       <Modal
