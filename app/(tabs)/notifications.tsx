@@ -8,6 +8,7 @@ import {
   Modal,
   Button,
   Dimensions,
+  Platform,
 } from "react-native";
 import axios from "axios";
 const { width, height } = Dimensions.get("window");
@@ -45,7 +46,7 @@ const NotificationPage: React.FC = () => {
         styles.notificationItem,
         {
           borderWidth: 1,
-          borderColor: item.ql_thong_bao_loai == "1" ? "#20bf6b" : "#eb3b5a",
+          borderColor: item.ql_thong_bao_loai == "1" ? "#198754" : "#eb3b5a",
         },
       ]}
       onPress={() =>
@@ -83,7 +84,7 @@ const NotificationPage: React.FC = () => {
             )}{" "}
           </Text>
           <Text style={{ fontStyle: "italic" }}>
-            {item.ql_thong_bao_ngay_gui}
+            {formatDate(item.ql_thong_bao_ngay_gui)}
           </Text>
         </View>
         <Text style={styles.notificationTitle}>
@@ -103,6 +104,36 @@ const NotificationPage: React.FC = () => {
       </View>
     </TouchableOpacity>
   );
+
+  const formatDate = (date: string) => {
+    const months = [
+      "January",
+      "February",
+      "March",
+      "April",
+      "May",
+      "June",
+      "July",
+      "August",
+      "September",
+      "October",
+      "November",
+      "December",
+    ];
+
+    const dateSplit = date
+      .replace(date.slice(date.indexOf(" "), date.length), "")
+      .split("-");
+
+    const newDate =
+      months[parseInt(dateSplit[1], 10) - 1] +
+      " " +
+      dateSplit[2] +
+      ", " +
+      dateSplit[0];
+
+    return <Text>{newDate}</Text>;
+  };
 
   const handleNotificationPress = (
     id: string,
@@ -291,14 +322,14 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   thongbao: {
-    backgroundColor: "#20bf6b",
-    padding: 5,
+    backgroundColor: "#198754",
+    padding: Platform.OS === "android" ? 10 : 5,
     borderRadius: "10%",
     color: "white",
   },
   nhacnho: {
     backgroundColor: "#eb3b5a",
-    padding: 5,
+    padding: Platform.OS === "android" ? 10 : 5,
     borderRadius: "10%",
     color: "white",
   },
