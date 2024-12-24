@@ -16,6 +16,7 @@ import {
 import { TabBarIcon } from "@/components/navigation/TabBarIcon";
 import { Colors } from "@/constants/Colors";
 import { useColorScheme } from "@/hooks/useColorScheme";
+import { Icon } from "react-native-elements";
 
 // 0.76 phiên phản RN
 const changeLanguage = (language: string) => {
@@ -36,28 +37,29 @@ const TabLayout: React.FC = () => {
       edges={["top", "left", "right", "bottom"]}
     >
       <StatusBar />
-      <View style={styles.headerLayout}>
-        <View style={styles.headerLeft}>
-          {/* Chức năng đổi ngôn ngữ */}
-          <TouchableOpacity onPress={() => changeLanguage("en")}>
-            <Text style={styles.language}>EN</Text>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => changeLanguage("vi")}>
-            <Text style={styles.language}>VI</Text>
-          </TouchableOpacity>
-        </View>
+      <View style={styles.header}>
+        <TouchableOpacity style={styles.iconButton}>
+          {/* Icon menu */}
+          <Icon name="menu" size={30} color="#000" />
+        </TouchableOpacity>
 
-        <View style={styles.headerCenter}>
-          {/* Tìm kiếm */}
-          <TextInput style={styles.searchInput} placeholder="Search" />
-        </View>
+        {/* Ô tìm kiếm */}
+        <TextInput
+          style={styles.searchInput}
+          placeholder="Tìm kiếm..."
+          placeholderTextColor="#aaa"
+        />
 
+        {/* Các icon bên phải */}
         <View style={styles.headerRight}>
-          <TouchableOpacity onPress={() => setModalVisible(true)}>
-            <Image
-              source={require("../../assets/images/students/DNCLOGO.png")}
-              style={styles.imageCircle}
-            />
+          <TouchableOpacity style={styles.headerIcon}>
+            <Icon name="notifications" size={25} color="#000" />
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.headerIcon}>
+            <Icon name="language" size={25} color="#000" />
+          </TouchableOpacity>
+          <TouchableOpacity>
+            <Icon name="account-circle" size={30} color="#000" />
           </TouchableOpacity>
         </View>
       </View>
@@ -221,13 +223,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#ffffff",
   },
-  header: {
-    backgroundColor: "#4b69c1", // Màu nền cho header
-    paddingVertical: 10, // Khoảng cách dọc để header không bị sát camera giọt nước
-    paddingHorizontal: 20, // Khoảng cách ngang
-    alignItems: "center",
-    justifyContent: "center",
-  },
+
   headerTitle: {
     color: "#fff",
     fontSize: 20,
@@ -253,18 +249,6 @@ const styles = StyleSheet.create({
     flex: 1, // Để ô tìm kiếm chiếm hết không gian còn lại
     justifyContent: "center", // Căn giữa theo chiều dọc
     alignItems: "center", // Căn giữa theo chiều ngang
-  },
-  searchInput: {
-    width: "80%", // Chiếm 80% chiều ngang của header
-    padding: 5,
-    borderRadius: 20,
-    backgroundColor: "#fff",
-    paddingHorizontal: 15,
-    fontSize: 16,
-  },
-  headerRight: {
-    justifyContent: "center",
-    alignItems: "center",
   },
   greenCircle: {
     width: 30,
@@ -305,6 +289,40 @@ const styles = StyleSheet.create({
   modalImage: {
     top: 0,
     right: 0,
+  },
+
+  header: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    backgroundColor: "#fff",
+    paddingHorizontal: 10,
+    paddingVertical: 5,
+    elevation: 3,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 3,
+  },
+  iconButton: {
+    marginRight: 10,
+  },
+  searchInput: {
+    flex: 1,
+    backgroundColor: "#f5f5f5",
+    paddingVertical: 8,
+    paddingHorizontal: 10,
+    borderRadius: 5,
+    marginHorizontal: 10,
+    fontSize: 14,
+    color: "#000",
+  },
+  headerRight: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  headerIcon: {
+    marginHorizontal: 5,
   },
 });
 
