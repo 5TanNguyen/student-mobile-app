@@ -185,6 +185,32 @@ const TabLayout: React.FC = () => {
             ),
           }}
         />
+
+        <Tabs.Screen
+          name="notifications"
+          options={{
+            title: "Notifications",
+            tabBarIcon: ({ color, focused }) => (
+              <TabBarIcon
+                name={focused ? "notifications" : "notifications-outline"}
+                color={color}
+              />
+            ),
+          }}
+        />
+
+        <Tabs.Screen
+          name="login"
+          options={{
+            title: "Login",
+            tabBarIcon: ({ color, focused }) => (
+              <TabBarIcon
+                name={focused ? "log-in" : "log-in-outline"}
+                color={color}
+              />
+            ),
+          }}
+        />
       </Tabs>
     </SafeAreaView>
   );
