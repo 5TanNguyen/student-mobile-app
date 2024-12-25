@@ -60,6 +60,9 @@ const TabLayout: React.FC = () => {
 
   useFocusEffect(
     useCallback(() => {
+      StatusBar.setBackgroundColor("#4b69c1", true);
+      StatusBar.setBarStyle("light-content", true);
+
       const checkToken = async () => {
         const storedToken = await AsyncStorage.getItem("token");
         setToken(storedToken || "");
@@ -67,6 +70,9 @@ const TabLayout: React.FC = () => {
       checkToken();
 
       const interval = setInterval(() => {
+        StatusBar.setBackgroundColor("#4b69c1", true);
+        StatusBar.setBarStyle("light-content", true);
+
         checkToken();
       }, 3000);
 
