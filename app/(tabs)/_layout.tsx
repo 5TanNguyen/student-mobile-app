@@ -40,7 +40,6 @@ const Tab = createBottomTabNavigator();
 
 const TabLayout: React.FC = () => {
   const router = useRouter();
-  const colorScheme = useColorScheme();
   const [modalVisible, setModalVisible] = useState<boolean>(false); // Trạng thái modal
   const [token, setToken] = useState("");
 
@@ -49,6 +48,7 @@ const TabLayout: React.FC = () => {
       await AsyncStorage.removeItem("token");
       setToken("");
       setModalVisible(false);
+      router.push("/login");
     } catch (error) {
       Toast.show({
         type: "error",
@@ -64,17 +64,15 @@ const TabLayout: React.FC = () => {
         const storedToken = await AsyncStorage.getItem("token");
         setToken(storedToken || "");
       };
-
       checkToken();
+
+      const interval = setInterval(() => {
+        checkToken();
+      }, 3000);
+
+      return () => clearInterval(interval);
     }, [])
   );
-
-  useEffect(() => {
-    if (token) {
-      // Chuyển hướng khi token đã có
-      router.push("/infor");
-    }
-  }, [token, router]);
 
   return (
     <SafeAreaView
