@@ -314,10 +314,16 @@ const styles = StyleSheet.create({
     backgroundColor: "#f5f5f5",
   },
   calendar: {
-    borderWidth: 1,
-    borderColor: "gray",
-    height: "50%", // Chiếm 50% chiều cao màn hình
-    marginBottom: 10,
+    borderWidth: 1, // Độ dày viền
+    borderColor: "#cccccc", // Màu viền
+    borderRadius: 10, // Bo góc
+    shadowColor: "#000", // Màu đổ bóng
+    shadowOffset: { width: 0, height: 2 }, // Độ lệch bóng (ngang, dọc)
+    shadowOpacity: 0.25, // Độ mờ bóng
+    shadowRadius: 3.84, // Bán kính bóng
+    elevation: 5, // Độ nổi (chỉ dành cho Android)
+    backgroundColor: "#ffffff", // Nền cho calendar
+    margin: 10, // Khoảng cách từ calendar đến các phần tử khác
   },
   todoContainer: {
     flex: 1,

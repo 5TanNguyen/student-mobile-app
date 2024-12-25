@@ -89,7 +89,7 @@ const TabLayout: React.FC = () => {
         {/* Ô tìm kiếm */}
         <TextInput
           style={styles.searchInput}
-          placeholder="Tìm kiếm..."
+          placeholder="Search..."
           placeholderTextColor="#aaa"
         />
 
@@ -119,15 +119,23 @@ const TabLayout: React.FC = () => {
         <View style={styles.modalBackground}>
           <View style={styles.modalContainer}>
             <View style={styles.header}>
-              <Text style={styles.headerText}>Course Information</Text>
+              <Text style={styles.headerText}>Action</Text>
             </View>
 
             <View style={styles.content}>
               <TouchableOpacity style={{ marginBottom: 10 }}>
-                <Button title="Log out" onPress={() => logOut()} />
+                <Button
+                  title="Log out"
+                  color="#e15f41"
+                  onPress={() => logOut()}
+                />
               </TouchableOpacity>
 
-              <Button title="Close" onPress={() => setModalVisible(false)} />
+              <Button
+                title="Close"
+                onPress={() => setModalVisible(false)}
+                color="#a4b0be" // Màu sắc của nút
+              />
             </View>
           </View>
         </View>
@@ -292,7 +300,7 @@ const styles = StyleSheet.create({
     backgroundColor: "rgba(0, 0, 0, 0.5)", // Màu nền mờ
   },
   modalContainer: {
-    backgroundColor: "white",
+    backgroundColor: "#dfe4ea",
     padding: 20,
     borderRadius: 10,
     elevation: 5, // Add shadow on Android
@@ -303,10 +311,13 @@ const styles = StyleSheet.create({
     position: "relative",
     top: 10,
     right: 10,
+    width: "40%",
   },
   headerText: {
     fontSize: 20,
     fontWeight: "bold",
+    textAlign: "center",
+    flex: 1,
   },
   content: {
     marginTop: 16,
@@ -320,14 +331,10 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    backgroundColor: "#fff",
+    backgroundColor: "none",
     paddingHorizontal: 10,
     paddingVertical: 5,
     elevation: 3,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 3,
   },
   iconButton: {
     marginRight: 10,
@@ -348,6 +355,13 @@ const styles = StyleSheet.create({
   },
   headerIcon: {
     marginHorizontal: 5,
+  },
+  button: {
+    backgroundColor: "#d9534f", // Màu nền của button
+    paddingVertical: 10, // Khoảng cách dọc bên trong
+    paddingHorizontal: 20, // Khoảng cách ngang bên trong
+    borderRadius: 5, // Bo tròn góc button
+    color: "#fff", // Màu chữ trên button
   },
 });
 

@@ -173,18 +173,6 @@ export default function Login() {
           <TouchableOpacity style={styles.buttonLogin} onPress={postLogin}>
             <Text style={styles.textLogin}>LOGIN</Text>
           </TouchableOpacity>
-
-          <TouchableOpacity
-            style={[
-              styles.buttonLogin,
-              {
-                marginTop: 10,
-              },
-            ]}
-            onPress={removeFromStorage}
-          >
-            <Text style={styles.textLogin}>LOG OUT</Text>
-          </TouchableOpacity>
         </View>
       </View>
 
