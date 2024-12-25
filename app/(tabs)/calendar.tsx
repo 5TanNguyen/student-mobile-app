@@ -208,7 +208,7 @@ const App = () => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Calendar</Text>
+      <Text style={styles.title}>Schedule</Text>
       <Calendar
         style={styles.calendar}
         theme={{

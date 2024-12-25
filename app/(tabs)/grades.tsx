@@ -107,6 +107,23 @@ const App: React.FC = () => {
       {expandedTerm ===
         item.diem_hoc_phan_nam_hoc + "-" + item.diem_hoc_phan_hoc_ky && (
         <View style={styles.coursesContainer}>
+          <View style={styles.tableHeader}>
+            <View style={styles.columnIndex}>
+              <Text style={styles.courseTextIndex}>No.</Text>
+            </View>
+            <View style={styles.columnIndex}>
+              <Text style={styles.headerText}>Course</Text>
+            </View>
+            <View style={styles.columnIndex}>
+              <Text style={styles.headerText}>Credits</Text>
+            </View>
+            <View style={styles.columnIndex}>
+              <Text style={styles.headerText}>Score</Text>
+            </View>
+            <View style={styles.columnIndex}>
+              <Text style={styles.headerText}>Letter grade</Text>
+            </View>
+          </View>
           {Object.values(item.diem_bang_diem).map((course, index) => (
             <View key={index} style={styles.courseItem}>
               <View style={styles.columnIndex}>
@@ -204,6 +221,24 @@ const styles = StyleSheet.create({
     flex: 2,
     justifyContent: "center",
     alignItems: "center",
+  },
+  tableHeader: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    borderBottomWidth: 1,
+    borderBottomColor: "#ccc",
+    paddingBottom: 10,
+    marginBottom: 5,
+  },
+  headerText: {
+    flex: 1,
+    fontWeight: "bold",
+    textAlign: "center",
+  },
+  courseTextIndex: {
+    flex: 1,
+    width: 30,
+    fontWeight: "bold",
   },
 });
 

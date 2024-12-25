@@ -12,18 +12,31 @@ import {
   Modal,
   Button,
 } from "react-native";
-
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import { TabBarIcon } from "@/components/navigation/TabBarIcon";
 import { Colors } from "@/constants/Colors";
+import { useRouter } from "expo-router";
 import { useColorScheme } from "@/hooks/useColorScheme";
+import { NavigationContainer } from "@react-navigation/native";
 import { Icon } from "react-native-elements";
+import Index from "./index";
+import Infor from "./infor";
+import AcademicPlanning from "./academic_planning";
+import Calendar from "./calendar";
+import Grades from "./grades";
+import Notifications from "./notifications";
+import LogIn from "./login";
 
 // 0.76 phiên phản RN
 const changeLanguage = (language: string) => {
   console.log(`Ngôn ngữ được thay đổi sang: ${language}`);
 };
 
+const Tab = createBottomTabNavigator();
+
 const TabLayout: React.FC = () => {
+  const router = useRouter();
   const colorScheme = useColorScheme();
 
   const [modalVisible, setModalVisible] = useState<boolean>(false); // Trạng thái modal
@@ -52,7 +65,10 @@ const TabLayout: React.FC = () => {
 
         {/* Các icon bên phải */}
         <View style={styles.headerRight}>
-          <TouchableOpacity style={styles.headerIcon}>
+          <TouchableOpacity
+            style={styles.headerIcon}
+            onPress={() => router.push("/notifications")}
+          >
             <Icon name="notifications" size={25} color="#000" />
           </TouchableOpacity>
           <TouchableOpacity style={styles.headerIcon}>
@@ -117,27 +133,28 @@ const TabLayout: React.FC = () => {
         </View>
       </Modal>
 
-      <Tabs
-        screenOptions={{
-          tabBarActiveTintColor: Colors[colorScheme ?? "light"].tint,
-          headerShown: false, // Không dùng header mặc định
-        }}
-      >
-        <Tabs.Screen
+      <Tab.Navigator>
+        <Tab.Screen
           name="index"
+          component={Index}
           options={{
-            title: "Home",
+            title: "Dashboard", // Hoặc có thể sử dụng "" nếu muốn
             tabBarIcon: ({ color, focused }) => (
               <TabBarIcon
                 name={focused ? "home" : "home-outline"}
                 color={color}
               />
             ),
+            headerTitleStyle: {
+              fontSize: 24, // Kích thước chữ
+              fontWeight: "bold", // Định dạng chữ (tùy chọn)
+            }, // Ẩn tiêu đề
+            headerShown: false,
           }}
         />
-
-        <Tabs.Screen
+        <Tab.Screen
           name="infor"
+          component={Infor}
           options={{
             title: "Information",
             tabBarIcon: ({ color, focused }) => (
@@ -146,11 +163,12 @@ const TabLayout: React.FC = () => {
                 color={color}
               />
             ),
+            headerShown: false,
           }}
         />
-
-        <Tabs.Screen
+        <Tab.Screen
           name="academic_planning"
+          component={AcademicPlanning}
           options={{
             title: "Planning",
             tabBarIcon: ({ color, focused }) => (
@@ -159,24 +177,27 @@ const TabLayout: React.FC = () => {
                 color={color}
               />
             ),
+            headerShown: false,
           }}
         />
-
-        <Tabs.Screen
-          name="calendar"
+        <Tab.Screen
+          name="calendar" // Tên này phải giống với tên được sử dụng trong navigate
+          component={Calendar}
           options={{
-            title: "Calendar",
+            title: "Schedule",
             tabBarIcon: ({ color, focused }) => (
               <TabBarIcon
                 name={focused ? "calendar" : "calendar-outline"}
                 color={color}
               />
             ),
+            headerShown: false,
           }}
         />
 
-        <Tabs.Screen
+        <Tab.Screen
           name="grades"
+          component={Grades}
           options={{
             title: "Grades",
             tabBarIcon: ({ color, focused }) => (
@@ -185,11 +206,13 @@ const TabLayout: React.FC = () => {
                 color={color}
               />
             ),
+            headerShown: false,
           }}
         />
 
-        <Tabs.Screen
+        <Tab.Screen
           name="notifications"
+          component={Notifications}
           options={{
             title: "Notifications",
             tabBarIcon: ({ color, focused }) => (
@@ -198,11 +221,13 @@ const TabLayout: React.FC = () => {
                 color={color}
               />
             ),
+            headerShown: false,
           }}
         />
 
-        <Tabs.Screen
+        <Tab.Screen
           name="login"
+          component={LogIn}
           options={{
             title: "Login",
             tabBarIcon: ({ color, focused }) => (
@@ -211,9 +236,10 @@ const TabLayout: React.FC = () => {
                 color={color}
               />
             ),
+            headerShown: false, // Ẩn tiêu đề
           }}
         />
-      </Tabs>
+      </Tab.Navigator>
     </SafeAreaView>
   );
 };

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useCallback, useState } from "react";
 import {
   StyleSheet,
   Text,
@@ -8,58 +8,98 @@ import {
   FlatList,
   ScrollView,
 } from "react-native";
-import Icon from "react-native-vector-icons/MaterialIcons";
+import { useFocusEffect, useNavigation } from "@react-navigation/native";
+import Toast from "react-native-toast-message";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import axios from "axios";
+import { StackNavigationProp } from "@react-navigation/stack";
+import { RootStackParamList } from "./types";
+
+type NavigationProp = StackNavigationProp<
+  RootStackParamList,
+  "calendar" | "academic_planning" | "notifications"
+>;
+interface Course {
+  ctdt_hoc_phan_id: string;
+  ctdt_hoc_phan_ten_tieng_anh: string;
+  ctdt_hoc_phan_ten_tieng_viet: string;
+  nv_can_bo_ho: string;
+  nv_can_bo_ten: string;
+  tkb_ngay: string;
+  qttb_phong_ten: string;
+}
 
 function DashboardScreen() {
-  const subjects = [
-    {
-      id: "1",
-      name: "Toán cao cấp",
-      teacher: "Nguyễn Văn A",
-      time: "Thứ Hai, 8:00",
-      location: "Phòng C3-01",
-      bgColor: "#e0f7fa",
-    },
-    {
-      id: "2",
-      name: "Lập trình C++",
-      teacher: "Trần Thị B",
-      time: "Thứ Ba, 10:00",
-      location: "Phòng C3-02",
-      bgColor: "#ffecb3",
-    },
-    {
-      id: "3",
-      name: "Hệ điều hành",
-      teacher: "Phạm Văn C",
-      time: "Thứ Tư, 13:00",
-      location: "Phòng C3-03",
-      bgColor: "#ffe0b2",
-    },
-    {
-      id: "4",
-      name: "Kỹ thuật phần mềm",
-      teacher: "Lê Thị D",
-      time: "Thứ Năm, 15:00",
-      location: "Phòng C3-04",
-      bgColor: "#c8e6c9",
-    },
-    {
-      id: "5",
-      name: "Mạng máy tính",
-      teacher: "Hoàng Văn E",
-      time: "Thứ Sáu, 9:00",
-      location: "Phòng C3-05",
-      bgColor: "#d1c4e9",
-    },
-  ];
+  const navigation = useNavigation<NavigationProp>();
+  const [course, setCourse] = useState<Course[]>([]);
 
-  const renderSubject = ({ item }) => (
-    <View style={[styles.subjectBox, { backgroundColor: item.bgColor }]}>
-      <Text style={styles.subjectName}>{item.name}</Text>
-      <Text style={styles.subjectDetails}>👨‍🏫 {item.teacher}</Text>
-      <Text style={styles.subjectDetails}>🕒 {item.time}</Text>
-      <Text style={styles.subjectDetails}>📍 {item.location}</Text>
+  // Kiểm tra token khi tab được focus
+  useFocusEffect(
+    useCallback(() => {
+      const fetchData = async () => {
+        try {
+          const storedToken = await AsyncStorage.getItem("token");
+          if (!storedToken) {
+            setCourse([]);
+
+            Toast.show({
+              type: "error",
+              text1: "ERROR",
+              text2: "Please login to see grades!",
+            });
+          } else {
+            const response = await axios.get(
+              `http://10.10.4.43/studentsdnc-api/api/v1/sinhvien/sinhvien/showdashboard`,
+              {
+                headers: {
+                  "Content-Type": "application/json",
+                  "DHNCT-API-KEY": "@cntt@dhnct@",
+                  "DHNCT-Authorization": storedToken,
+                },
+              }
+            );
+
+            if (response.data && response.data.data) {
+              console.log(response.data.data.tkb_lop_hoc_phan);
+              setCourse(response.data.data.tkb_lop_hoc_phan);
+            } else {
+              Toast.show({
+                type: "error",
+                text1: "ERROR",
+                text2: "Failed to fetch data!",
+              });
+            }
+          }
+        } catch (error) {
+          Toast.show({
+            type: "error",
+            text1: "ERROR",
+            text2: "Network or server error occurred!",
+          });
+        }
+      };
+
+      fetchData();
+
+      // Cleanup khi tab không còn được focus
+      return () => {
+        console.log("Cleanup when tab is unfocused");
+      };
+    }, []) // Không cần phụ thuộc vào state, chỉ cần check token khi tab focus
+  );
+
+  const renderSubject = ({ item }: { item: Course }) => (
+    <View style={[styles.subjectBox, { backgroundColor: "white" }]}>
+      <Text style={styles.subjectName}>
+        {item.ctdt_hoc_phan_ten_tieng_anh
+          ? item.ctdt_hoc_phan_ten_tieng_anh
+          : item.ctdt_hoc_phan_ten_tieng_viet}
+      </Text>
+      <Text style={styles.subjectDetails}>
+        👨‍🏫 {item.nv_can_bo_ho} {item.nv_can_bo_ten}
+      </Text>
+      <Text style={styles.subjectDetails}>🕒 {item.tkb_ngay}</Text>
+      <Text style={styles.subjectDetails}>📍 {item.qttb_phong_ten}</Text>
     </View>
   );
 
@@ -75,20 +115,25 @@ function DashboardScreen() {
           Hãy nghỉ ngơi giữ gìn sức khỏe cho những ngày học tiếp theo. Đừng quên
           thực hiện các bài tập và các yêu cầu của giảng viên nhé!
         </Text>
-        <TouchableOpacity style={styles.noticeButton}>
+        <TouchableOpacity
+          style={styles.noticeButton}
+          onPress={() => navigation.navigate("calendar")}
+        >
           <Text style={styles.noticeButtonText}>Xem lịch học</Text>
         </TouchableOpacity>
       </View>
       <View style={styles.sectionHeader}>
         <Text style={styles.sectionTitle}>Học phần học kỳ này</Text>
-        <TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => navigation.navigate("academic_planning")}
+        >
           <Text style={styles.sectionLink}>Xem tất cả</Text>
         </TouchableOpacity>
       </View>
       <FlatList
-        data={subjects}
+        data={course}
         renderItem={renderSubject}
-        keyExtractor={(item) => item.id}
+        keyExtractor={(item) => item.ctdt_hoc_phan_id}
       />
     </ScrollView>
   );
