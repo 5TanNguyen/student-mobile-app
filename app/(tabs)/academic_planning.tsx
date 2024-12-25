@@ -95,7 +95,7 @@ const App: React.FC = () => {
 
       // Cleanup nếu cần
       return () => {
-        console.log("Cleanup when tab is unfocused");
+        // console.log("Cleanup when tab is unfocused");
         Toast.hide();
       };
     }, [])

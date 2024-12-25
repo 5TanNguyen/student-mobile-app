@@ -60,7 +60,7 @@ function DashboardScreen() {
             );
 
             if (response.data && response.data.data) {
-              console.log(response.data.data.tkb_lop_hoc_phan);
+              // console.log(response.data.data.tkb_lop_hoc_phan);
               setCourse(response.data.data.tkb_lop_hoc_phan);
             } else {
               Toast.show({
@@ -83,7 +83,7 @@ function DashboardScreen() {
 
       // Cleanup khi tab không còn được focus
       return () => {
-        console.log("Cleanup when tab is unfocused");
+        // console.log("Cleanup when tab is unfocused");
       };
     }, []) // Không cần phụ thuộc vào state, chỉ cần check token khi tab focus
   );

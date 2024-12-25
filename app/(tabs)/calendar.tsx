@@ -201,7 +201,7 @@ const App = () => {
 
       // Cleanup nếu cần khi tab không còn được focus
       return () => {
-        console.log("Cleanup when tab is unfocused");
+        // console.log("Cleanup when tab is unfocused");
       };
     }, [modalVisible]) // Gọi lại mỗi khi modalVisible thay đổi
   );

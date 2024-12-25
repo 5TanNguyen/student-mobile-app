@@ -13,6 +13,8 @@ import axios from "axios";
 import { Icon } from "react-native-elements";
 import Toast from "react-native-toast-message";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useRouter } from "expo-router";
+
 // const CryptoJS = require("crypto-js");
 
 export default function Login() {
@@ -22,6 +24,8 @@ export default function Login() {
   const [password, setPassword] = useState("");
   const [token, setToken] = useState("");
   const [storedValue, setStoredValue] = useState<string | null>(null);
+
+  const router = useRouter();
 
   const openModal = () => {
     setModalVisible(true);
@@ -64,9 +68,10 @@ export default function Login() {
             }
           )
           .then(async (response) => {
-            console.log(response.data.data.token);
+            // console.log(response.data.data.token);
             setToken(response.data.data.token);
             await AsyncStorage.setItem("token", response.data.data.token);
+            router.push("/infor");
           })
           .catch((error) => {
             console.error("Error getting public key:", error);
@@ -74,16 +79,6 @@ export default function Login() {
       } catch (error) {
         console.error("Encryption Error:", error);
       }
-    }
-  };
-
-  // Lưu giá trị vào AsyncStorage
-  const saveToStorage = async () => {
-    try {
-      await AsyncStorage.setItem("userToken", "abc123");
-      console.log("Value saved!");
-    } catch (e) {
-      console.error("Error saving value", e);
     }
   };
 
@@ -104,7 +99,7 @@ export default function Login() {
     try {
       await AsyncStorage.removeItem("userToken");
       await AsyncStorage.removeItem("token");
-      console.log("Value removed!");
+      // console.log("Value removed!");
       setStoredValue(null);
     } catch (e) {
       console.error("Error removing value", e);
@@ -123,7 +118,7 @@ export default function Login() {
         }
       )
       .then((response) => {
-        console.log(response.data.publicKey);
+        // console.log(response.data.publicKey);
         setPublicKey(response.data.publicKey);
       })
       .catch((error) => {

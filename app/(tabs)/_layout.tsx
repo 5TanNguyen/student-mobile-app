@@ -1,5 +1,5 @@
 import { Tabs } from "expo-router";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { SafeAreaView } from "react-native-safe-area-context"; // SafeAreaView để xử lý vùng an toàn
 import {
   StyleSheet,
@@ -20,6 +20,8 @@ import { useRouter } from "expo-router";
 import { useColorScheme } from "@/hooks/useColorScheme";
 import { NavigationContainer } from "@react-navigation/native";
 import { Icon } from "react-native-elements";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+
 import Index from "./index";
 import Infor from "./infor";
 import AcademicPlanning from "./academic_planning";
@@ -27,6 +29,7 @@ import Calendar from "./calendar";
 import Grades from "./grades";
 import Notifications from "./notifications";
 import LogIn from "./login";
+import Toast from "react-native-toast-message";
 
 // 0.76 phiên phản RN
 const changeLanguage = (language: string) => {
@@ -38,12 +41,41 @@ const Tab = createBottomTabNavigator();
 const TabLayout: React.FC = () => {
   const router = useRouter();
   const colorScheme = useColorScheme();
-
   const [modalVisible, setModalVisible] = useState<boolean>(false); // Trạng thái modal
+  const [token, setToken] = useState("");
+
+  const logOut = async () => {
+    try {
+      await AsyncStorage.removeItem("token");
+      setToken("");
+      setModalVisible(false);
+    } catch (error) {
+      Toast.show({
+        type: "error",
+        text1: "ERROR",
+        text2: "Log out failed!",
+      });
+    }
+  };
+
+  useFocusEffect(
+    useCallback(() => {
+      const checkToken = async () => {
+        const storedToken = await AsyncStorage.getItem("token");
+        setToken(storedToken || "");
+      };
+
+      checkToken();
+    }, [])
+  );
+
   useEffect(() => {
-    StatusBar.setBackgroundColor("#4b69c1", true);
-    StatusBar.setBarStyle("light-content", true);
-  }, []);
+    if (token) {
+      // Chuyển hướng khi token đã có
+      router.push("/infor");
+    }
+  }, [token, router]);
+
   return (
     <SafeAreaView
       style={styles.safeArea}
@@ -74,7 +106,7 @@ const TabLayout: React.FC = () => {
           <TouchableOpacity style={styles.headerIcon}>
             <Icon name="language" size={25} color="#000" />
           </TouchableOpacity>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={() => setModalVisible(true)}>
             <Icon name="account-circle" size={30} color="#000" />
           </TouchableOpacity>
         </View>
@@ -93,39 +125,9 @@ const TabLayout: React.FC = () => {
             </View>
 
             <View style={styles.content}>
-              {/* <View style={styles.row}>
-                <Text style={styles.label}>📚 Course Name:</Text>
-                <Text style={styles.value}>
-                  {eventInfo.ctdt_hoc_phan_ten_tieng_viet}
-                </Text>
-              </View>
-
-              <View style={styles.row}>
-                <Text style={styles.label}>🎤 Lecturer:</Text>
-                <Text style={styles.value}>
-                  {eventInfo.nv_can_bo_ho} {eventInfo.nv_can_bo_ten}
-                </Text>
-              </View>
-
-              <View style={styles.row}>
-                <Text style={styles.label}>📍 Room:</Text>
-                <Text style={styles.value}>{eventInfo.qttb_phong_ten}</Text>
-              </View>
-
-              <View style={styles.row}>
-                <Text style={styles.label}>📅 Class Date:</Text>
-                <Text style={styles.value}>{eventInfo.tkb_ngay}</Text>
-              </View>
-
-              <View style={styles.row}>
-                <Text style={styles.label}>⏰ Class Time:</Text>
-                <Text style={styles.value}>{eventInfo.tkb_tiet_gio_vao}</Text>
-              </View>
-
-              <View style={styles.row}>
-                <Text style={styles.label}>📝 Notes:</Text>
-                <Text style={styles.value}>{eventInfo.tkb_ghi_chu}</Text>
-              </View> */}
+              <TouchableOpacity style={{ marginBottom: 10 }}>
+                <Button title="Log out" onPress={() => logOut()} />
+              </TouchableOpacity>
 
               <Button title="Close" onPress={() => setModalVisible(false)} />
             </View>
@@ -134,24 +136,38 @@ const TabLayout: React.FC = () => {
       </Modal>
 
       <Tab.Navigator>
-        <Tab.Screen
-          name="index"
-          component={Index}
-          options={{
-            title: "Dashboard", // Hoặc có thể sử dụng "" nếu muốn
-            tabBarIcon: ({ color, focused }) => (
-              <TabBarIcon
-                name={focused ? "home" : "home-outline"}
-                color={color}
-              />
-            ),
-            headerTitleStyle: {
-              fontSize: 24, // Kích thước chữ
-              fontWeight: "bold", // Định dạng chữ (tùy chọn)
-            }, // Ẩn tiêu đề
-            headerShown: false,
-          }}
-        />
+        {token ? (
+          <Tab.Screen
+            name="index"
+            component={Index}
+            options={{
+              title: "Dashboard",
+              tabBarIcon: ({ color, focused }) => (
+                <TabBarIcon
+                  name={focused ? "home" : "home-outline"}
+                  color={color}
+                />
+              ),
+              headerShown: false,
+            }}
+          />
+        ) : (
+          <Tab.Screen
+            name="login"
+            component={LogIn}
+            options={{
+              title: "Login",
+              tabBarIcon: ({ color, focused }) => (
+                <TabBarIcon
+                  name={focused ? "log-in" : "log-in-outline"}
+                  color={color}
+                />
+              ),
+              headerShown: false,
+            }}
+          />
+        )}
+
         <Tab.Screen
           name="infor"
           component={Infor}
@@ -222,21 +238,6 @@ const TabLayout: React.FC = () => {
               />
             ),
             headerShown: false,
-          }}
-        />
-
-        <Tab.Screen
-          name="login"
-          component={LogIn}
-          options={{
-            title: "Login",
-            tabBarIcon: ({ color, focused }) => (
-              <TabBarIcon
-                name={focused ? "log-in" : "log-in-outline"}
-                color={color}
-              />
-            ),
-            headerShown: false, // Ẩn tiêu đề
           }}
         />
       </Tab.Navigator>

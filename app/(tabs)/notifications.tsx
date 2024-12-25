@@ -208,7 +208,7 @@ const NotificationPage: React.FC = () => {
 
       // Cleanup khi tab không còn được focus
       return () => {
-        console.log("Cleanup when tab is unfocused");
+        // console.log("Cleanup when tab is unfocused");
       };
     }, [])
   );
