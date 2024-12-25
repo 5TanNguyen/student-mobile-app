@@ -7,7 +7,7 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { useFocusEffect } from "@react-navigation/native";
-import Toast from "react-native-toast-message";
+// import Toast from "react-native-toast-message";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 
@@ -41,11 +41,11 @@ const App: React.FC = () => {
           if (!storedToken) {
             setCourseData([]);
 
-            Toast.show({
-              type: "error",
-              text1: "ERROR",
-              text2: "Please login to see grades!",
-            });
+            // Toast.show({
+            //   type: "error",
+            //   text1: "ERROR",
+            //   text2: "Please login to see grades!",
+            // });
           } else {
             const response = await axios.get(
               `http://10.10.4.43/studentsdnc-api/api/v1/sinhvien/diem/Diemso`,
@@ -61,19 +61,19 @@ const App: React.FC = () => {
             if (response.data && response.data.data) {
               setCourseData(response.data.data);
             } else {
-              Toast.show({
-                type: "error",
-                text1: "ERROR",
-                text2: "Failed to fetch data!",
-              });
+              // Toast.show({
+              //   type: "error",
+              //   text1: "ERROR",
+              //   text2: "Failed to fetch data!",
+              // });
             }
           }
         } catch (error) {
-          Toast.show({
-            type: "error",
-            text1: "ERROR",
-            text2: "Network or server error occurred!",
-          });
+          // Toast.show({
+          //   type: "error",
+          //   text1: "ERROR",
+          //   text2: "Network or server error occurred!",
+          // });
         }
       };
 
@@ -164,7 +164,7 @@ const App: React.FC = () => {
         keyExtractor={(item, index) => `${item.diem_hoc_phan_nam_hoc}`}
         renderItem={renderTermItem}
       />
-      <Toast />
+      {/* <Toast /> */}
     </View>
   );
 };

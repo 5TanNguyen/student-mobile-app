@@ -9,7 +9,7 @@ import {
   ScrollView,
 } from "react-native";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
-import Toast from "react-native-toast-message";
+// import Toast from "react-native-toast-message";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 import { StackNavigationProp } from "@react-navigation/stack";
@@ -81,11 +81,11 @@ function DashboardScreen() {
             if (!storedToken) {
               setCourse([]);
 
-              Toast.show({
-                type: "error",
-                text1: "ERROR",
-                text2: "Please login to see grades!",
-              });
+              // Toast.show({
+              //   type: "error",
+              //   text1: "ERROR",
+              //   text2: "Please login to see grades!",
+              // });
             } else {
               const response = await axios.get(
                 `http://10.10.4.43/studentsdnc-api/api/v1/sinhvien/sinhvien/showdashboard`,
@@ -110,28 +110,28 @@ function DashboardScreen() {
 
                   if (item.tkb_ngay == year + "-" + month + "-" + day) {
                     setScheduleState(true);
-                    console.log("Có lịch học!");
+                    // console.log("Có lịch học!");
                     return;
                   }
                 });
 
                 if (!scheduleState) {
-                  console.log("Không có lịch học");
+                  // console.log("Không có lịch học");
                 }
               } else {
-                Toast.show({
-                  type: "error",
-                  text1: "ERROR",
-                  text2: "Failed to fetch data!",
-                });
+                // Toast.show({
+                //   type: "error",
+                //   text1: "ERROR",
+                //   text2: "Failed to fetch data!",
+                // });
               }
             }
           } catch (error) {
-            Toast.show({
-              type: "error",
-              text1: "ERROR",
-              text2: "Network or server error occurred!",
-            });
+            // Toast.show({
+            //   type: "error",
+            //   text1: "ERROR",
+            //   text2: "Network or server error occurred!",
+            // });
           }
         };
 
@@ -208,6 +208,7 @@ function DashboardScreen() {
         data={course}
         renderItem={renderSubject}
         keyExtractor={(item) => item.ctdt_hoc_phan_id}
+        scrollEnabled={false}
       />
     </ScrollView>
   );

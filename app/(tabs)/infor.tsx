@@ -19,7 +19,7 @@ import {
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useFocusEffect } from "@react-navigation/native";
-import Toast from "react-native-toast-message";
+// import Toast from "react-native-toast-message";
 // import * as ImagePicker from "expo-image-picker";
 
 export default function StudentInfoScreen() {
@@ -128,11 +128,11 @@ export default function StudentInfoScreen() {
               sv_sinh_vien_ten_phong_ktx: "",
             });
 
-            Toast.show({
-              type: "error",
-              text1: "ERROR",
-              text2: "Please login to see information!",
-            });
+            // Toast.show({
+            //   type: "error",
+            //   text1: "ERROR",
+            //   text2: "Please login to see information!",
+            // });
           } else {
             // Gọi API để lấy thông tin sinh viên sau khi lấy token
             const response = await axios.get(
@@ -149,19 +149,19 @@ export default function StudentInfoScreen() {
             if (response.data && response.data.data) {
               setStudent(response.data.data);
             } else {
-              Toast.show({
-                type: "error",
-                text1: "ERROR",
-                text2: "Failed to fetch data!",
-              });
+              // Toast.show({
+              //   type: "error",
+              //   text1: "ERROR",
+              //   text2: "Failed to fetch data!",
+              // });
             }
           }
         } catch (error) {
-          Toast.show({
-            type: "error",
-            text1: "ERROR",
-            text2: "Please login to see information!",
-          });
+          // Toast.show({
+          //   type: "error",
+          //   text1: "ERROR",
+          //   text2: "Please login to see information!",
+          // });
         }
       };
 
@@ -169,7 +169,7 @@ export default function StudentInfoScreen() {
 
       // Cleanup nếu cần
       return () => {
-        console.log("Cleanup when tab is unfocused");
+        // console.log("Cleanup when tab is unfocused");
       };
     }, []) // Chạy effect chỉ 1 lần sau khi component mount
   );
@@ -477,7 +477,7 @@ export default function StudentInfoScreen() {
           </Text>
         </View>
       </View>
-      <Toast />
+      {/* <Toast /> */}
 
       {/* Modal để chọn ảnh đại diện */}
       <Modal

@@ -29,7 +29,7 @@ import Calendar from "./calendar";
 import Grades from "./grades";
 import Notifications from "./notifications";
 import LogIn from "./login";
-import Toast from "react-native-toast-message";
+// import Toast from "react-native-toast-message";
 
 // 0.76 phiên phản RN
 const changeLanguage = (language: string) => {
@@ -50,11 +50,11 @@ const TabLayout: React.FC = () => {
       setModalVisible(false);
       router.push("/login");
     } catch (error) {
-      Toast.show({
-        type: "error",
-        text1: "ERROR",
-        text2: "Log out failed!",
-      });
+      // Toast.show({
+      //   type: "error",
+      //   text1: "ERROR",
+      //   text2: "Log out failed!",
+      // });
     }
   };
 

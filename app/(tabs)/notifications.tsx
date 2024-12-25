@@ -12,7 +12,7 @@ import {
 } from "react-native";
 import axios from "axios";
 import { useFocusEffect } from "@react-navigation/native";
-import Toast from "react-native-toast-message";
+// import Toast from "react-native-toast-message";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 const { width, height } = Dimensions.get("window");
 
@@ -168,11 +168,11 @@ const NotificationPage: React.FC = () => {
           if (!storedToken) {
             setNotifications([]);
 
-            Toast.show({
-              type: "error",
-              text1: "ERROR",
-              text2: "Please login to see notifications !",
-            });
+            // Toast.show({
+            //   type: "error",
+            //   text1: "ERROR",
+            //   text2: "Please login to see notifications !",
+            // });
           } else {
             const response = await axios.get(
               `http://10.10.4.43/studentsdnc-api/api/v1/notifications`,
@@ -188,19 +188,19 @@ const NotificationPage: React.FC = () => {
             if (response.data && response.data.data) {
               setNotifications(response.data.data.notifications);
             } else {
-              Toast.show({
-                type: "error",
-                text1: "ERROR",
-                text2: "Failed to fetch data!",
-              });
+              // Toast.show({
+              //   type: "error",
+              //   text1: "ERROR",
+              //   text2: "Failed to fetch data!",
+              // });
             }
           }
         } catch (error) {
-          Toast.show({
-            type: "error",
-            text1: "ERROR",
-            text2: "Network or server error occurred!",
-          });
+          // Toast.show({
+          //   type: "error",
+          //   text1: "ERROR",
+          //   text2: "Network or server error occurred!",
+          // });
         }
       };
 
@@ -259,7 +259,7 @@ const NotificationPage: React.FC = () => {
           </View>
         </View>
       </Modal>
-      <Toast />
+      {/* <Toast /> */}
     </View>
   );
 };

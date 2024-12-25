@@ -11,7 +11,7 @@ import {
 } from "react-native";
 import axios from "axios";
 import { Icon } from "react-native-elements";
-import Toast from "react-native-toast-message";
+// import Toast from "react-native-toast-message";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useRouter } from "expo-router";
 
@@ -37,11 +37,11 @@ export default function Login() {
 
   const postLogin = async () => {
     if (email == "" || password == "") {
-      Toast.show({
-        type: "error",
-        text1: "NOTE",
-        text2: "Please fill in all the information!",
-      });
+      // Toast.show({
+      //   type: "error",
+      //   text1: "NOTE",
+      //   text2: "Please fill in all the information!",
+      // });
     } else {
       try {
         // const encryptedData = CryptoJS.AES.encrypt(
@@ -176,7 +176,7 @@ export default function Login() {
         </View>
       </View>
 
-      <Toast />
+      {/* <Toast /> */}
 
       <Modal
         animationType="slide"

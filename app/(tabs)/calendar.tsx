@@ -12,7 +12,7 @@ import {
 } from "react-native";
 import { Calendar, LocaleConfig } from "react-native-calendars";
 import { useFocusEffect } from "@react-navigation/native";
-import Toast from "react-native-toast-message";
+// import Toast from "react-native-toast-message";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 // Thiết lập LocaleConfig cho tiếng Anh
@@ -143,11 +143,11 @@ const App = () => {
             setSubject([]);
             setEventData({});
 
-            Toast.show({
-              type: "error",
-              text1: "ERROR",
-              text2: "Please login to see calendar!",
-            });
+            // Toast.show({
+            //   type: "error",
+            //   text1: "ERROR",
+            //   text2: "Please login to see calendar!",
+            // });
           } else {
             const response = await axios.get(
               `http://10.10.4.43/studentsdnc-api/api/v1/sinhvien/lichhoc/Lichhoc`,
@@ -164,19 +164,19 @@ const App = () => {
               setEventData(response.data.calendar);
               setSubject(response.data.data);
             } else {
-              Toast.show({
-                type: "error",
-                text1: "ERROR",
-                text2: "Failed to fetch data!",
-              });
+              // Toast.show({
+              //   type: "error",
+              //   text1: "ERROR",
+              //   text2: "Failed to fetch data!",
+              // });
             }
           }
         } catch (error) {
-          Toast.show({
-            type: "error",
-            text1: "ERROR",
-            text2: "Network or server error occurred!",
-          });
+          // Toast.show({
+          //   type: "error",
+          //   text1: "ERROR",
+          //   text2: "Network or server error occurred!",
+          // });
         }
       };
 
@@ -302,7 +302,7 @@ const App = () => {
           </View>
         </View>
       </Modal>
-      <Toast />
+      {/* <Toast /> */}
     </View>
   );
 };
