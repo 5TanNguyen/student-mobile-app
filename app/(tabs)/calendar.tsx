@@ -105,7 +105,11 @@ const App = () => {
   const [eventData, setEventData] = useState<EventData>({});
   const [subject, setSubject] = useState<subjectItem[]>([]);
   const colors = ["#FFCCCC", "#CCFFCC", "#CCCCFF", "#FFFFCC", "#CCFFFF"]; // Mảng màu
-  const [token, setToken] = useState("");
+
+  const tkbLopHocPhanId: string[] = [];
+  const tkblistLopHocPhanId: string[] = [];
+  const lopHocPhan: EventData = {};
+  const listLopHocPhan: subjectItem[] = [];
 
   const onDayPress = (day: { dateString: string }) => {
     const key = day.dateString;
@@ -159,9 +163,27 @@ const App = () => {
               }
             );
 
+            console.log(response.data);
+
             if (response.data && response.data.data) {
               setEventData(response.data.calendar);
-              setSubject(response.data.data);
+
+              response.data.data.forEach((item: any) => {
+                if (!tkblistLopHocPhanId.includes(item.tkb_lop_hoc_phan_id)) {
+                  listLopHocPhan.push({
+                    ctdt_hoc_phan_id: item.ctdt_hoc_phan_id,
+                    ctdt_hoc_phan_ten_tieng_anh:
+                      item.ctdt_hoc_phan_ten_tieng_anh,
+                    ctdt_hoc_phan_ten_tieng_viet:
+                      item.ctdt_hoc_phan_ten_tieng_viet,
+                    dkhp_dang_ky_nam_hoc: item.dkhp_dang_ky_nam_hoc,
+                    dkhp_dang_ky_hoc_ky: item.dkhp_dang_ky_hoc_ky,
+                  });
+
+                  tkblistLopHocPhanId.push(item.tkb_lop_hoc_phan_id);
+                }
+              });
+              setSubject(listLopHocPhan);
             } else {
               // Toast.show({
               //   type: "error",

@@ -149,7 +149,7 @@ export default function StudentInfoScreen() {
 
             if (response.data && response.data.data) {
               setStudent(response.data.data);
-              console.log(response.data.data);
+              // console.log(response.data.data);
             } else {
               // Toast.show({
               //   type: "error",
