@@ -8,14 +8,14 @@ import {
   View,
   Text,
   TextInput,
+  Platform,
 } from "react-native";
 import axios from "axios";
 import { Icon } from "react-native-elements";
-// import Toast from "react-native-toast-message";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useRouter } from "expo-router";
-
 // const CryptoJS = require("crypto-js");
+// import Toast from "react-native-toast-message";
 
 export default function Login() {
   const [modalVisible, setModalVisible] = useState(false);
@@ -23,20 +23,15 @@ export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [token, setToken] = useState("");
-  const [storedValue, setStoredValue] = useState<string | null>(null);
-
   const router = useRouter();
 
-  const openModal = () => {
-    setModalVisible(true);
-  };
-
-  const closeModal = () => {
-    setModalVisible(false);
+  const showModal = (modalVisible: any) => {
+    setModalVisible(modalVisible);
   };
 
   const postLogin = async () => {
     if (email == "" || password == "") {
+      showModal(true);
       // Toast.show({
       //   type: "error",
       //   text1: "NOTE",
@@ -44,12 +39,6 @@ export default function Login() {
       // });
     } else {
       try {
-        // const encryptedData = CryptoJS.AES.encrypt(
-        //   password,
-        //   publicKey
-        // ).toString();
-        // console.log("Encrypted Data: ", encryptedData);
-
         axios
           .post(
             `http://10.10.4.43/studentsdnc-api/api/v1/authentication/login`,
@@ -79,30 +68,6 @@ export default function Login() {
       } catch (error) {
         console.error("Encryption Error:", error);
       }
-    }
-  };
-
-  // Lấy giá trị từ AsyncStorage
-  const loadFromStorage = async () => {
-    try {
-      const value = await AsyncStorage.getItem("userToken");
-      if (value !== null) {
-        setStoredValue(value);
-      }
-    } catch (e) {
-      console.error("Error loading value", e);
-    }
-  };
-
-  // Xóa giá trị trong AsyncStorage
-  const removeFromStorage = async () => {
-    try {
-      await AsyncStorage.removeItem("userToken");
-      await AsyncStorage.removeItem("token");
-      // console.log("Value removed!");
-      setStoredValue(null);
-    } catch (e) {
-      console.error("Error removing value", e);
     }
   };
 
@@ -179,16 +144,22 @@ export default function Login() {
       {/* <Toast /> */}
 
       <Modal
-        animationType="slide"
+        animationType="fade"
         transparent={true}
         visible={modalVisible}
-        onRequestClose={closeModal}
+        onRequestClose={() => showModal(modalVisible)}
       >
         <View style={styles.modalOverlay}>
           <View style={styles.modalContainer}>
-            <Text style={styles.modalTitle}>Change Profile Picture</Text>
+            <Text style={styles.modalTitle}>
+              Please enter the login information
+            </Text>
             <View style={styles.buttonContainer}>
-              <Button title="Cancel" onPress={closeModal} color="#888" />
+              <Button
+                title="Close"
+                onPress={() => showModal(!modalVisible)}
+                color="#888"
+              />
             </View>
           </View>
         </View>
