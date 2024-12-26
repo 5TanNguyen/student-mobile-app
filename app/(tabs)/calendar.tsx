@@ -106,9 +106,7 @@ const App = () => {
   const [subject, setSubject] = useState<subjectItem[]>([]);
   const colors = ["#FFCCCC", "#CCFFCC", "#CCCCFF", "#FFFFCC", "#CCFFFF"]; // Mảng màu
 
-  const tkbLopHocPhanId: string[] = [];
   const tkblistLopHocPhanId: string[] = [];
-  const lopHocPhan: EventData = {};
   const listLopHocPhan: subjectItem[] = [];
 
   const onDayPress = (day: { dateString: string }) => {

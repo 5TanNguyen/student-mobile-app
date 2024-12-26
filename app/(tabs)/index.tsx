@@ -30,6 +30,9 @@ interface Course {
   qttb_phong_ten: string;
 }
 
+const tkblistHocPhanId: string[] = [];
+const listHocPhan: Course[] = [];
+
 function DashboardScreen() {
   const navigation = useNavigation<NavigationProp>();
   const [course, setCourse] = useState<Course[]>([]);
@@ -100,8 +103,26 @@ function DashboardScreen() {
               );
 
               if (response.data && response.data.data) {
-                // console.log(response.data.data.tkb_lop_hoc_phan);
-                setCourse(response.data.data.tkb_lop_hoc_phan);
+                console.log(response.data.data.tkb_lop_hoc_phan);
+
+                response.data.data.tkb_lop_hoc_phan.forEach((item: any) => {
+                  if (!tkblistHocPhanId.includes(item.tkb_lop_hoc_phan_id)) {
+                    listHocPhan.push({
+                      ctdt_hoc_phan_id: item.ctdt_hoc_phan_id,
+                      ctdt_hoc_phan_ten_tieng_anh:
+                        item.ctdt_hoc_phan_ten_tieng_anh,
+                      ctdt_hoc_phan_ten_tieng_viet:
+                        item.ctdt_hoc_phan_ten_tieng_viet,
+                      nv_can_bo_ho: item.nv_can_bo_ho,
+                      nv_can_bo_ten: item.nv_can_bo_ten,
+                      tkb_ngay: item.tkb_ngay,
+                      qttb_phong_ten: item.qttb_phong_ten,
+                    });
+
+                    tkblistHocPhanId.push(item.tkb_lop_hoc_phan_id);
+                  }
+                });
+                setCourse(listHocPhan);
 
                 response.data.data.tkb_lop_hoc_phan.forEach((item: any) => {
                   const currentDate = new Date();
