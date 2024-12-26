@@ -12,9 +12,9 @@ import {
 } from "react-native";
 import axios from "axios";
 import { useFocusEffect } from "@react-navigation/native";
-// import Toast from "react-native-toast-message";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-const { width, height } = Dimensions.get("window");
+import config from "../../constants/config";
+// import Toast from "react-native-toast-message";
 
 interface Notification {
   ql_thong_bao_id: string;
@@ -174,16 +174,13 @@ const NotificationPage: React.FC = () => {
             //   text2: "Please login to see notifications !",
             // });
           } else {
-            const response = await axios.get(
-              `http://10.10.4.43/studentsdnc-api/api/v1/notifications`,
-              {
-                headers: {
-                  "Content-Type": "application/json",
-                  "DHNCT-API-KEY": "@cntt@dhnct@",
-                  "DHNCT-Authorization": storedToken,
-                },
-              }
-            );
+            const response = await axios.get(`${config.API_URL}notifications`, {
+              headers: {
+                "Content-Type": "application/json",
+                "DHNCT-API-KEY": "@cntt@dhnct@",
+                "DHNCT-Authorization": storedToken,
+              },
+            });
 
             if (response.data && response.data.data) {
               setNotifications(response.data.data.notifications);

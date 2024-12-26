@@ -14,7 +14,7 @@ import { Calendar, LocaleConfig } from "react-native-calendars";
 import { useFocusEffect } from "@react-navigation/native";
 // import Toast from "react-native-toast-message";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-
+import config from "../../constants/config";
 // Thiết lập LocaleConfig cho tiếng Anh
 LocaleConfig.locales["en"] = {
   monthNames: [
@@ -102,7 +102,6 @@ const App = () => {
     tkb_ghi_chu: "",
   });
   const fadeAnim = useRef(new Animated.Value(0)).current; // Khởi tạo giá trị hoạt hình cho fade
-
   const [eventData, setEventData] = useState<EventData>({});
   const [subject, setSubject] = useState<subjectItem[]>([]);
   const colors = ["#FFCCCC", "#CCFFCC", "#CCCCFF", "#FFFFCC", "#CCFFFF"]; // Mảng màu
@@ -150,7 +149,7 @@ const App = () => {
             // });
           } else {
             const response = await axios.get(
-              `http://10.10.4.43/studentsdnc-api/api/v1/sinhvien/lichhoc/Lichhoc`,
+              `${config.API_URL}sinhvien/lichhoc/Lichhoc`,
               {
                 headers: {
                   "Content-Type": "application/json",
@@ -182,7 +181,6 @@ const App = () => {
 
       fetchData();
 
-      // Kiểm tra và hiển thị hiệu ứng modal nếu modalVisible là true
       if (modalVisible) {
         // Hiệu ứng fadeIn khi modal mở
         Animated.timing(fadeAnim, {

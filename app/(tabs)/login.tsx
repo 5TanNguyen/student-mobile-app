@@ -14,6 +14,7 @@ import axios from "axios";
 import { Icon } from "react-native-elements";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useRouter } from "expo-router";
+import config from "../../constants/config";
 // const CryptoJS = require("crypto-js");
 // import Toast from "react-native-toast-message";
 
@@ -41,13 +42,17 @@ export default function Login() {
       try {
         axios
           .post(
-            `http://10.10.4.43/studentsdnc-api/api/v1/authentication/login`,
+            // `${config.API_URL}authentication/login`,
+            // {
+            //   ql_nguoi_dung_email: "test03@gmail.com",
+            //   ql_nguoi_dung_mat_khau:
+            //     "XOCbyxTandfxBP724Ha9PeUoPirSTlL66konRArqnlPwYsV8jbXYUX/sa1lAII3kDvyV58PodjxhdXtrGPi9B07fS9ACuhY9lvxkL/UOr5wY7MwcXzpXAg8Y3yazV8a0OalaxSnkCCMFosFkI7lUYdAqdj4NoSUuJV4Y/s5AMbD2oO7/sli8c2wvgx80/81eUtw3rf2n70JoH0TtbVWpR2ZpVdPXvauUMvW2JWBWafSals9fRPHyF9xdMkpIaeB2PI3f3f1Ii2UYNvT3W30isHLRGnSkWbsCI8IspL2NmotZW46IOSsGhitfzYP/xldj4b2a1Bc2seUTGFl7JB2AGA==",
+            // },
+            `${config.API_URL}authentication/login`,
             {
-              // ql_nguoi_dung_email: email,
-              // ql_nguoi_dung_mat_khau: password
-              ql_nguoi_dung_email: "test03@gmail.com",
+              ql_nguoi_dung_email: "y240001@gmail.com",
               ql_nguoi_dung_mat_khau:
-                "XOCbyxTandfxBP724Ha9PeUoPirSTlL66konRArqnlPwYsV8jbXYUX/sa1lAII3kDvyV58PodjxhdXtrGPi9B07fS9ACuhY9lvxkL/UOr5wY7MwcXzpXAg8Y3yazV8a0OalaxSnkCCMFosFkI7lUYdAqdj4NoSUuJV4Y/s5AMbD2oO7/sli8c2wvgx80/81eUtw3rf2n70JoH0TtbVWpR2ZpVdPXvauUMvW2JWBWafSals9fRPHyF9xdMkpIaeB2PI3f3f1Ii2UYNvT3W30isHLRGnSkWbsCI8IspL2NmotZW46IOSsGhitfzYP/xldj4b2a1Bc2seUTGFl7JB2AGA==",
+                "wEvruQ4Fr/sWzY+ttxDHOjacjNRkrRhO6ApVh7CUxffeHbT2qUu6vcYyPelHKQcyHrjhsxzOtA5XYHd3M2xoN8Wq6GDhlJppwKNHJTQEZFhdsiDaW2/ulrlQZFpM+HKeN6uek5uqU6KVhS7YtgOmWs7JRtQw8tSvae+F3b//hN6Gq4/HJAUBN15PmraqkC9tv8nCnnedYu5MM9LxD6LnbxWLaYocXc/X85JH+3h1xYqBNHy4dk3VFzDjQsk4QI3Br1vK6oDtn7LeVnx6GNYl1cl0dekPOd1KgsZ+Os3cqdJ79F9jwojXZQ70c/5qtGNUKSS7XzaRfg2bHGHquarA+g==",
             },
             {
               headers: {

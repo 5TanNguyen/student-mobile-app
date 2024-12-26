@@ -14,6 +14,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { RootStackParamList } from "./types";
+import config from "../../constants/config";
 
 type NavigationProp = StackNavigationProp<
   RootStackParamList,
@@ -88,7 +89,7 @@ function DashboardScreen() {
               // });
             } else {
               const response = await axios.get(
-                `http://10.10.4.43/studentsdnc-api/api/v1/sinhvien/sinhvien/showdashboard`,
+                `${config.API_URL}sinhvien/sinhvien/showdashboard`,
                 {
                   headers: {
                     "Content-Type": "application/json",

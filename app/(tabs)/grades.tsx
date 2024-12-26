@@ -10,6 +10,7 @@ import { useFocusEffect } from "@react-navigation/native";
 // import Toast from "react-native-toast-message";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
+import config from "../../constants/config";
 
 // Kiểu dữ liệu cho một khóa học
 interface Course {
@@ -48,7 +49,7 @@ const App: React.FC = () => {
             // });
           } else {
             const response = await axios.get(
-              `http://10.10.4.43/studentsdnc-api/api/v1/sinhvien/diem/Diemso`,
+              `${config.API_URL}sinhvien/diem/Diemso`,
               {
                 headers: {
                   "Content-Type": "application/json",

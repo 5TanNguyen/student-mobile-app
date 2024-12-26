@@ -19,6 +19,7 @@ import {
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useFocusEffect } from "@react-navigation/native";
+import config from "../../constants/config";
 // import Toast from "react-native-toast-message";
 // import * as ImagePicker from "expo-image-picker";
 
@@ -136,7 +137,7 @@ export default function StudentInfoScreen() {
           } else {
             // Gọi API để lấy thông tin sinh viên sau khi lấy token
             const response = await axios.get(
-              "http://10.10.4.43/studentsdnc-api/api/v1/sinhvien/info/Thongtinsinhvien",
+              `${config.API_URL}sinhvien/info/Thongtinsinhvien`,
               {
                 headers: {
                   "Content-Type": "application/json",
@@ -148,6 +149,7 @@ export default function StudentInfoScreen() {
 
             if (response.data && response.data.data) {
               setStudent(response.data.data);
+              console.log(response.data.data);
             } else {
               // Toast.show({
               //   type: "error",
@@ -167,11 +169,10 @@ export default function StudentInfoScreen() {
 
       fetchData();
 
-      // Cleanup nếu cần
       return () => {
         // console.log("Cleanup when tab is unfocused");
       };
-    }, []) // Chạy effect chỉ 1 lần sau khi component mount
+    }, [])
   );
 
   if (!student) {
@@ -186,7 +187,11 @@ export default function StudentInfoScreen() {
   //   ? selectedImage
   //   : `${student.sv_sinh_vien_avatar}`;
   const avatarUri =
-    "http://10.10.4.43/studentsdnc-api/uploads/students/19819110003/19819110003_6763c471e05e3.jpg";
+    `${config.API_IMAGE_URL}` +
+    student.sv_sinh_vien_avatar.slice(
+      student.sv_sinh_vien_avatar.indexOf("uploads"),
+      student.sv_sinh_vien_avatar.length
+    );
 
   const gender = student.sv_sinh_vien_gioi_tinh === "2" ? "Male" : "Female";
 

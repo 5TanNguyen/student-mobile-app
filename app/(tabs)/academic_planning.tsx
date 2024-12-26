@@ -8,8 +8,9 @@ import {
 } from "react-native";
 import axios from "axios";
 import { useFocusEffect } from "@react-navigation/native";
-// import Toast from "react-native-toast-message";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import config from "../../constants/config";
+// import Toast from "react-native-toast-message";
 
 // Dữ liệu mẫu
 interface Course {
@@ -49,7 +50,6 @@ const App: React.FC = () => {
 
   useFocusEffect(
     useCallback(() => {
-      // Hàm bất đồng bộ xử lý việc lấy token và gọi API
       const fetchData = async () => {
         try {
           const storedToken = await AsyncStorage.getItem("token");
@@ -63,7 +63,7 @@ const App: React.FC = () => {
             // });
           } else {
             const response = await axios.get(
-              `http://10.10.4.43/studentsdnc-api/api/v1/sinhvien/khht/Kehoachhoctap`,
+              `${config.API_URL}sinhvien/khht/Kehoachhoctap`,
               {
                 headers: {
                   "Content-Type": "application/json",
@@ -93,7 +93,6 @@ const App: React.FC = () => {
 
       fetchData();
 
-      // Cleanup nếu cần
       return () => {
         // console.log("Cleanup when tab is unfocused");
         // Toast.hide();
