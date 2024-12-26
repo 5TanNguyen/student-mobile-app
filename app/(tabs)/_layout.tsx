@@ -29,6 +29,7 @@ import Calendar from "./calendar";
 import Grades from "./grades";
 import Notifications from "./notifications";
 import LogIn from "./login";
+import LogIn2 from "./login_2";
 // import Toast from "react-native-toast-message";
 
 // 0.76 phiên phản RN
@@ -246,6 +247,20 @@ const TabLayout: React.FC = () => {
             tabBarIcon: ({ color, focused }) => (
               <TabBarIcon
                 name={focused ? "notifications" : "notifications-outline"}
+                color={color}
+              />
+            ),
+            headerShown: false,
+          }}
+        />
+        <Tab.Screen
+          name="test"
+          component={LogIn2}
+          options={{
+            title: "Test login with google",
+            tabBarIcon: ({ color, focused }) => (
+              <TabBarIcon
+                name={focused ? "log-in" : "log-in-outline"}
                 color={color}
               />
             ),

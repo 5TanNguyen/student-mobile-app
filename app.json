@@ -37,6 +37,8 @@
     "experiments": {
       "typedRoutes": true
     },
-    "permissions": ["CAMERA", "MEDIA_LIBRARY"]
+    "permissions": ["CAMERA", "MEDIA_LIBRARY"],
+    "owner": "5tan",
+    "platforms": ["ios", "android", "web"]
   }
 }
