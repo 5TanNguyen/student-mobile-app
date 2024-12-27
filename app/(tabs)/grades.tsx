@@ -13,6 +13,7 @@ import axios from "axios";
 import { Icon } from "react-native-elements";
 import config from "../../constants/config";
 import styles from "../../styles/grades";
+import language from "../../assets/images/lang/language";
 
 // Kiểu dữ liệu cho một khóa học
 interface Course {
@@ -34,12 +35,22 @@ interface Record {
 const App: React.FC = () => {
   const [expandedTerm, setExpandedTerm] = useState<string | null>(null);
   const [courseData, setCourseData] = useState<Record[]>([]);
+  const [lang, setLang] = useState(true);
 
   // Kiểm tra token khi tab được focus
   useFocusEffect(
     useCallback(() => {
       const fetchData = async () => {
         try {
+          setInterval(async () => {
+            const storedLang = await AsyncStorage.getItem("lang");
+            if (storedLang === "true") {
+              setLang(true);
+            } else {
+              setLang(false);
+            }
+          }, 500);
+
           const storedToken = await AsyncStorage.getItem("token");
           if (!storedToken) {
             setCourseData([]);
@@ -89,6 +100,20 @@ const App: React.FC = () => {
     }, []) // Không cần phụ thuộc vào state, chỉ cần check token khi tab focus
   );
 
+  const translate = (stringTranslate: string) => {
+    for (const key in language) {
+      if (key == stringTranslate) {
+        if (lang) {
+          return language[key as keyof typeof language].split("__")[0];
+        } else {
+          return language[key as keyof typeof language].split("__")[1];
+        }
+      }
+    }
+
+    return null;
+  };
+
   const handleTermPress = (term: string) => {
     setExpandedTerm(expandedTerm === term ? null : term);
   };
@@ -123,19 +148,19 @@ const App: React.FC = () => {
         <View style={styles.coursesContainer}>
           <View style={styles.tableHeader}>
             <View style={styles.columnIndex}>
-              <Text style={styles.courseTextIndex}>No.</Text>
+              <Text style={styles.courseTextIndex}>{translate("noDot")}</Text>
             </View>
             <View style={styles.columnIndex}>
-              <Text style={styles.headerText}>Course</Text>
+              <Text style={styles.headerText}>{translate("courseAP")}</Text>
             </View>
             <View style={styles.columnIndex}>
-              <Text style={styles.headerText}>Credits</Text>
+              <Text style={styles.headerText}>{translate("credits")}</Text>
             </View>
             <View style={styles.columnIndex}>
-              <Text style={styles.headerText}>Score</Text>
+              <Text style={styles.headerText}>{translate("score")}</Text>
             </View>
             <View style={styles.columnIndex}>
-              <Text style={styles.headerText}>Letter grade</Text>
+              <Text style={styles.headerText}>{translate("letterGrade")}</Text>
             </View>
           </View>
           {Object.values(item.diem_bang_diem).map((course, index) => (
@@ -172,7 +197,7 @@ const App: React.FC = () => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Grades</Text>
+      <Text style={styles.title}>{translate("grades")}</Text>
       <FlatList
         data={courseData}
         keyExtractor={(item, index) => `${item.diem_hoc_phan_nam_hoc}`}

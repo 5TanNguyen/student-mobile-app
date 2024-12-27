@@ -30,19 +30,37 @@ import Grades from "./grades";
 import Notifications from "./notifications";
 import LogIn from "./login";
 import LogIn2 from "./login_2";
+import language from "../../assets/images/lang/language";
 // import Toast from "react-native-toast-message";
 
 // 0.76 phiên phản RN
-const changeLanguage = (language: string) => {
-  console.log(`_layout | Ngôn ngữ được thay đổi sang: ${language}`);
-};
-
 const Tab = createBottomTabNavigator();
 
 const TabLayout: React.FC = () => {
   const router = useRouter();
   const [modalVisible, setModalVisible] = useState<boolean>(false); // Trạng thái modal
   const [token, setToken] = useState("");
+  const [lang, setLang] = useState(true);
+
+  const changeLanguage = async (lang: boolean) => {
+    setLang(lang);
+    await AsyncStorage.setItem("lang", lang ? "true" : "false");
+    // console.log(`_layout | Ngôn ngữ được thay đổi sang: ${lang}`);
+  };
+
+  const translate = (stringTranslate: string) => {
+    for (const key in language) {
+      if (key == stringTranslate) {
+        if (lang) {
+          return language[key as keyof typeof language].split("__")[0];
+        } else {
+          return language[key as keyof typeof language].split("__")[1];
+        }
+      }
+    }
+
+    return null;
+  };
 
   const logOut = async () => {
     try {
@@ -64,18 +82,27 @@ const TabLayout: React.FC = () => {
       StatusBar.setBackgroundColor("#4b69c1", true);
       StatusBar.setBarStyle("light-content", true);
 
-      const checkToken = async () => {
+      const checkTokenAndLanguage = async () => {
         const storedToken = await AsyncStorage.getItem("token");
         setToken(storedToken || "");
+
+        const langToken = await AsyncStorage.getItem("lang");
+        if (!langToken || langToken == "true") {
+          await AsyncStorage.setItem("lang", "true");
+          setLang(true);
+        } else {
+          await AsyncStorage.setItem("lang", "false");
+          setLang(false);
+        }
       };
-      checkToken();
+      checkTokenAndLanguage();
 
       const interval = setInterval(() => {
         StatusBar.setBackgroundColor("#4b69c1", true);
         StatusBar.setBarStyle("light-content", true);
 
-        checkToken();
-      }, 3000);
+        checkTokenAndLanguage();
+      }, 1000);
 
       return () => clearInterval(interval);
     }, [])
@@ -108,8 +135,21 @@ const TabLayout: React.FC = () => {
           >
             <Icon name="notifications" size={25} color="#000" />
           </TouchableOpacity>
-          <TouchableOpacity style={styles.headerIcon}>
-            <Icon name="language" size={25} color="#000" />
+          <TouchableOpacity
+            style={styles.headerIcon}
+            onPress={() => changeLanguage(!lang)}
+          >
+            {lang ? (
+              <Image
+                style={styles.imageLang}
+                source={require("../../assets/images/lang/uk-flag.webp")}
+              />
+            ) : (
+              <Image
+                style={styles.imageLang}
+                source={require("../../assets/images/lang/vi-flag.png")}
+              />
+            )}
           </TouchableOpacity>
           <TouchableOpacity onPress={() => setModalVisible(true)}>
             <Icon name="account-circle" size={30} color="#000" />
@@ -126,7 +166,7 @@ const TabLayout: React.FC = () => {
         <View style={styles.modalBackground}>
           <View style={styles.modalContainer}>
             <View style={styles.header}>
-              <Text style={styles.headerText}>Action</Text>
+              <Text style={styles.headerText}>{translate("action")}</Text>
             </View>
 
             <View style={styles.content}>
@@ -380,6 +420,10 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20, // Khoảng cách ngang bên trong
     borderRadius: 5, // Bo tròn góc button
     color: "#fff", // Màu chữ trên button
+  },
+  imageLang: {
+    width: 35,
+    height: 23,
   },
 });
 

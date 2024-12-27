@@ -1,21 +1,13 @@
 import axios from "axios";
 import React, { useState, useEffect, useRef, useCallback } from "react";
-import {
-  View,
-  Text,
-  StyleSheet,
-  Modal,
-  Button,
-  FlatList,
-  Animated,
-  TextInput,
-} from "react-native";
+import { View, Text, Modal, Button, FlatList, Animated } from "react-native";
 import { Calendar, LocaleConfig } from "react-native-calendars";
 import { useFocusEffect } from "@react-navigation/native";
 // import Toast from "react-native-toast-message";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import config from "../../constants/config";
 import styles from "@/styles/calendar";
+import language from "../../assets/images/lang/language";
 
 // Thiết lập LocaleConfig cho tiếng Anh
 LocaleConfig.locales["en"] = {
@@ -66,6 +58,7 @@ LocaleConfig.defaultLocale = "en";
 interface EventData {
   [tkb_ngay: string]: {
     ctdt_hoc_phan_ten_tieng_viet: string;
+    ctdt_hoc_phan_ten_tieng_anh: string;
     nv_can_bo_ho: string;
     nv_can_bo_ten: string;
     qttb_phong_ten: string;
@@ -88,6 +81,7 @@ const App = () => {
   const [modalVisible, setModalVisible] = useState<boolean>(false); // Trạng thái modal
   const [eventInfo, setEventInfo] = useState<{
     ctdt_hoc_phan_ten_tieng_viet: string;
+    ctdt_hoc_phan_ten_tieng_anh: string;
     nv_can_bo_ho: string;
     nv_can_bo_ten: string;
     qttb_phong_ten: string;
@@ -96,6 +90,7 @@ const App = () => {
     tkb_ghi_chu: string;
   }>({
     ctdt_hoc_phan_ten_tieng_viet: "",
+    ctdt_hoc_phan_ten_tieng_anh: "",
     nv_can_bo_ho: "",
     nv_can_bo_ten: "",
     qttb_phong_ten: "",
@@ -107,6 +102,7 @@ const App = () => {
   const [eventData, setEventData] = useState<EventData>({});
   const [subject, setSubject] = useState<subjectItem[]>([]);
   const colors = ["#FFCCCC", "#CCFFCC", "#CCCCFF", "#FFFFCC", "#CCFFFF"]; // Mảng màu
+  const [lang, setLang] = useState(true);
 
   const tkblistLopHocPhanId: string[] = [];
   const listLopHocPhan: subjectItem[] = [];
@@ -137,10 +133,33 @@ const App = () => {
     selectedDotColor: "orange",
   };
 
+  const translate = (stringTranslate: string) => {
+    for (const key in language) {
+      if (key == stringTranslate) {
+        if (lang) {
+          return language[key as keyof typeof language].split("__")[0];
+        } else {
+          return language[key as keyof typeof language].split("__")[1];
+        }
+      }
+    }
+
+    return null;
+  };
+
   useFocusEffect(
     useCallback(() => {
       const fetchData = async () => {
         try {
+          setInterval(async () => {
+            const storedLang = await AsyncStorage.getItem("lang");
+            if (storedLang === "true") {
+              setLang(true);
+            } else {
+              setLang(false);
+            }
+          }, 500);
+
           const storedToken = await AsyncStorage.getItem("token");
           if (!storedToken) {
             setSubject([]);
@@ -165,6 +184,7 @@ const App = () => {
 
             if (response.data && response.data.data) {
               setEventData(response.data.calendar);
+              // console.log(response.data.calendar);
 
               response.data.data.forEach((item: any) => {
                 if (!tkblistLopHocPhanId.includes(item.tkb_lop_hoc_phan_id)) {
@@ -226,7 +246,7 @@ const App = () => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Schedule</Text>
+      <Text style={styles.title}>{translate("schedule")}</Text>
       <Calendar
         style={styles.calendar}
         theme={{
@@ -244,7 +264,7 @@ const App = () => {
       />
 
       <View style={styles.todoContainer}>
-        <Text style={styles.todoTitle}>Subject's List</Text>
+        <Text style={styles.todoTitle}>{translate("subjectsList")}</Text>
         <FlatList
           data={subject}
           keyExtractor={(item) => item.ctdt_hoc_phan_id.toString()}
@@ -261,7 +281,9 @@ const App = () => {
                 <Text style={styles.indexText}></Text>
               </View>
               <Text style={styles.subjectText}>
-                {item.ctdt_hoc_phan_ten_tieng_viet}
+                {lang
+                  ? item.ctdt_hoc_phan_ten_tieng_anh
+                  : item.ctdt_hoc_phan_ten_tieng_viet}
               </Text>
             </View>
           )}
@@ -277,41 +299,43 @@ const App = () => {
         <View style={styles.modalBackground}>
           <View style={styles.modalContainer}>
             <View style={styles.header}>
-              <Text style={styles.headerText}>Course Information</Text>
+              <Text style={styles.headerText}>
+                {translate("courseInformation")}
+              </Text>
             </View>
 
             <View style={styles.content}>
               <View style={styles.row}>
-                <Text style={styles.label}>📚 Course Name:</Text>
+                <Text style={styles.label}>📚 {translate("courseName")}:</Text>
                 <Text style={styles.value}>
                   {eventInfo.ctdt_hoc_phan_ten_tieng_viet}
                 </Text>
               </View>
 
               <View style={styles.row}>
-                <Text style={styles.label}>🎤 Lecturer:</Text>
+                <Text style={styles.label}>🎤 {translate("lecturer")}:</Text>
                 <Text style={styles.value}>
                   {eventInfo.nv_can_bo_ho} {eventInfo.nv_can_bo_ten}
                 </Text>
               </View>
 
               <View style={styles.row}>
-                <Text style={styles.label}>📍 Room:</Text>
+                <Text style={styles.label}>📍 {translate("room")}:</Text>
                 <Text style={styles.value}>{eventInfo.qttb_phong_ten}</Text>
               </View>
 
               <View style={styles.row}>
-                <Text style={styles.label}>📅 Class Date:</Text>
+                <Text style={styles.label}>📅 {translate("classDate")}:</Text>
                 <Text style={styles.value}>{eventInfo.tkb_ngay}</Text>
               </View>
 
               <View style={styles.row}>
-                <Text style={styles.label}>⏰ Class Time:</Text>
+                <Text style={styles.label}>⏰ {translate("classTime")}:</Text>
                 <Text style={styles.value}>{eventInfo.tkb_tiet_gio_vao}</Text>
               </View>
 
               <View style={styles.row}>
-                <Text style={styles.label}>📝 Notes:</Text>
+                <Text style={styles.label}>📝 {translate("notes")}:</Text>
                 <Text style={styles.value}>{eventInfo.tkb_ghi_chu}</Text>
               </View>
 

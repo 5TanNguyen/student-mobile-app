@@ -21,6 +21,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useFocusEffect } from "@react-navigation/native";
 import config from "../../constants/config";
 import styles from "../../styles/infor";
+import language from "../../assets/images/lang/language";
 // import Toast from "react-native-toast-message";
 // import * as ImagePicker from "expo-image-picker";
 
@@ -65,10 +66,15 @@ export default function StudentInfoScreen() {
     sv_sinh_vien_ma_ho_so: "",
     sv_sinh_vien_ma_bhyt: "",
     sv_sinh_vien_ten_phong_ktx: "",
+    quoc_tich_goc: "",
+    quoc_tich_hien_tai: "",
+    dm_dan_toc_ten_tieng_viet: "",
+    dm_ton_giao_ten_tieng_viet: "",
   });
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const [publicKey, setPublicKey] = useState("");
+  const [lang, setLang] = useState(true);
 
   // const requestPermission = async () => {
   //   const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
@@ -85,6 +91,15 @@ export default function StudentInfoScreen() {
       // Hàm bất đồng bộ xử lý việc lấy token và gọi API
       const fetchData = async () => {
         try {
+          setInterval(async () => {
+            const storedLang = await AsyncStorage.getItem("lang");
+            if (storedLang === "true") {
+              setLang(true);
+            } else {
+              setLang(false);
+            }
+          }, 500);
+
           const storedToken = await AsyncStorage.getItem("token");
           if (!storedToken) {
             setStudent({
@@ -127,6 +142,10 @@ export default function StudentInfoScreen() {
               sv_sinh_vien_ma_ho_so: "",
               sv_sinh_vien_ma_bhyt: "",
               sv_sinh_vien_ten_phong_ktx: "",
+              quoc_tich_goc: "",
+              quoc_tich_hien_tai: "",
+              dm_dan_toc_ten_tieng_viet: "",
+              dm_ton_giao_ten_tieng_viet: "",
             });
 
             // Toast.show({
@@ -201,6 +220,20 @@ export default function StudentInfoScreen() {
 
   const closeModal = () => {
     setModalVisible(false);
+  };
+
+  const translate = (stringTranslate: string) => {
+    for (const key in language) {
+      if (key == stringTranslate) {
+        if (lang) {
+          return language[key as keyof typeof language].split("__")[0];
+        } else {
+          return language[key as keyof typeof language].split("__")[1];
+        }
+      }
+    }
+
+    return null;
   };
 
   // const uploadImage = async () => {
@@ -299,7 +332,7 @@ export default function StudentInfoScreen() {
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      <Text style={styles.title}>Personal Information</Text>
+      <Text style={styles.title}>{translate("personalInformation")}</Text>
       <View style={styles.profileContainer}>
         <Image source={{ uri: avatarUri }} style={styles.avatar} />
         <View style={styles.infoTextContainer}>
@@ -307,10 +340,12 @@ export default function StudentInfoScreen() {
             {student.sv_sinh_vien_ten} {student.sv_sinh_vien_ho}
           </Text>
           <Text style={styles.studentId}>
-            Student ID: {student.sv_sinh_vien_ma}
+            {translate("studentID")}: {student.sv_sinh_vien_ma}
           </Text>
           <TouchableOpacity style={styles.changeButton} onPress={openModal}>
-            <Text style={styles.changeButtonText}>Change profile picture</Text>
+            <Text style={styles.changeButtonText}>
+              {translate("changeProfilePicture")}
+            </Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -318,63 +353,75 @@ export default function StudentInfoScreen() {
       <View style={styles.infoContainer}>
         {/* Các thông tin chi tiết của sinh viên */}
         <View style={styles.infoRow}>
-          <Text style={styles.label}>Nickname:</Text>
+          <Text style={styles.label}>{translate("nickname")}:</Text>
           <Text style={styles.value}>{student.sv_sinh_vien_ten_viet_tat}</Text>
         </View>
         <View style={styles.infoRow}>
-          <Text style={styles.label}>Gender:</Text>
+          <Text style={styles.label}>{translate("gender")}:</Text>
           <Text style={styles.value}>{gender}</Text>
         </View>
         <View style={styles.infoRow}>
-          <Text style={styles.label}>Date of Birth:</Text>
+          <Text style={styles.label}>{translate("dateofBirth")}:</Text>
           <Text style={styles.value}>{student.sv_sinh_vien_ngay_sinh}</Text>
         </View>
         <View style={styles.infoRow}>
-          <Text style={styles.label}>Phone:</Text>
+          <Text style={styles.label}>{translate("phone")}:</Text>
           <Text style={styles.value}>{student.sv_sinh_vien_sdt}</Text>
         </View>
         <View style={styles.infoRow}>
-          <Text style={styles.label}>Passport:</Text>
+          <Text style={styles.label}>{translate("passport")}:</Text>
           <Text style={styles.value}>{student.sv_sinh_vien_cccd}</Text>
         </View>
         <View style={styles.infoRow}>
-          <Text style={styles.label}>Date of issue:</Text>
+          <Text style={styles.label}>{translate("dateofIssue")}:</Text>
           <Text style={styles.value}>{student.sv_sinh_vien_ngay_cap_cccd}</Text>
         </View>
         <View style={styles.infoRow}>
-          <Text style={styles.label}>Issuing authority:</Text>
+          <Text style={styles.label}>{translate("issuingAuthority")}:</Text>
           <Text style={styles.value}>{student.sv_sinh_vien_noi_cap_cccd}</Text>
         </View>
         <View style={styles.infoRow}>
-          <Text style={styles.label}>Original Nationality:</Text>
-          <Text style={styles.value}>{student.quoc_tich_goc_tieng_anh}</Text>
-        </View>
-        <View style={styles.infoRow}>
-          <Text style={styles.label}>Current Nationality:</Text>
+          <Text style={styles.label}>{translate("originalNationality")}:</Text>
           <Text style={styles.value}>
-            {student.quoc_tich_hien_tai_tieng_anh}
+            {lang ? student.quoc_tich_goc_tieng_anh : student.quoc_tich_goc}
           </Text>
         </View>
         <View style={styles.infoRow}>
-          <Text style={styles.label}>Ethnicity:</Text>
-          <Text style={styles.value}>{student.dm_dan_toc_ten_tieng_anh}</Text>
+          <Text style={styles.label}>{translate("currentNationality")}:</Text>
+          <Text style={styles.value}>
+            {lang
+              ? student.quoc_tich_hien_tai_tieng_anh
+              : student.quoc_tich_hien_tai}
+          </Text>
         </View>
         <View style={styles.infoRow}>
-          <Text style={styles.label}>Religion:</Text>
-          <Text style={styles.value}>{student.dm_ten_ton_giao_tieng_anh}</Text>
+          <Text style={styles.label}>{translate("ethnicity")}:</Text>
+          <Text style={styles.value}>
+            {lang
+              ? student.dm_dan_toc_ten_tieng_anh
+              : student.dm_dan_toc_ten_tieng_viet}
+          </Text>
         </View>
         <View style={styles.infoRow}>
-          <Text style={styles.label}>Place of origin:</Text>
+          <Text style={styles.label}>{translate("religion")}:</Text>
+          <Text style={styles.value}>
+            {lang
+              ? student.dm_ten_ton_giao_tieng_anh
+              : student.dm_ton_giao_ten_tieng_viet}
+          </Text>
+        </View>
+        <View style={styles.infoRow}>
+          <Text style={styles.label}>{translate("placeofOrigin")}:</Text>
           <Text style={styles.value}>{student.sv_sinh_vien_nguyen_quan}</Text>
         </View>
         <View style={styles.infoRow}>
-          <Text style={styles.label}>Address:</Text>
+          <Text style={styles.label}>{translate("address")}:</Text>
           <Text style={styles.value}>
             {student.sv_sinh_vien_dia_chi_thuong_tru}
           </Text>
         </View>
         <View style={styles.infoRow}>
-          <Text style={styles.label}>Contact address:</Text>
+          <Text style={styles.label}>{translate("contactAddress")}:</Text>
           <Text style={styles.value}>
             {student.sv_sinh_vien_dia_chi_lien_lac}
           </Text>
@@ -383,25 +430,27 @@ export default function StudentInfoScreen() {
 
       {/* Khối thông tin cha */}
       <View style={styles.sectionContainer}>
-        <Text style={styles.sectionTitle}>Academic Information</Text>
+        <Text style={styles.sectionTitle}>
+          {translate("academicInformation")}
+        </Text>
         <View style={styles.infoRow}>
-          <Text style={styles.label}>Email:</Text>
+          <Text style={styles.label}>{translate("email")}:</Text>
           <Text style={styles.value}>{student.sv_sinh_vien_email}</Text>
         </View>
         <View style={styles.infoRow}>
-          <Text style={styles.label}>Class Code:</Text>
+          <Text style={styles.label}>{translate("classCode")}:</Text>
           <Text style={styles.value}>{student.sv_lop_ma}</Text>
         </View>
         <View style={styles.infoRow}>
-          <Text style={styles.label}>Class Name:</Text>
+          <Text style={styles.label}>{translate("className")}:</Text>
           <Text style={styles.value}>{student.sv_lop_ten_tieng_viet}</Text>
         </View>
         <View style={styles.infoRow}>
-          <Text style={styles.label}>Course:</Text>
+          <Text style={styles.label}>{translate("course")}:</Text>
           <Text style={styles.value}>{student.ctdt_khoa_hoc_nam_hoc}</Text>
         </View>
         <View style={styles.infoRow}>
-          <Text style={styles.label}>Status:</Text>
+          <Text style={styles.label}>{translate("status")}:</Text>
           <Text style={styles.value}>
             {student.sv_sinh_vien_trang_thai === "1" && "Still studying"}
             {student.sv_sinh_vien_trang_thai === "2" && "Dropped out"}
@@ -409,74 +458,80 @@ export default function StudentInfoScreen() {
           </Text>
         </View>
         <View style={styles.infoRow}>
-          <Text style={styles.label}>Profile Code:</Text>
+          <Text style={styles.label}>{translate("profileCode")}:</Text>
           <Text style={styles.value}>{student.sv_sinh_vien_ma_ho_so}</Text>
         </View>
         <View style={styles.infoRow}>
-          <Text style={styles.label}>Enrollment Date:</Text>
+          <Text style={styles.label}>{translate("enrollmentDate")}:</Text>
           <Text style={styles.value}>{student.sv_sinh_vien_ngay_nhap_hoc}</Text>
         </View>
         <View style={styles.infoRow}>
-          <Text style={styles.label}>Health insurance code:</Text>
+          <Text style={styles.label}>{translate("healthInsuranceCode")}:</Text>
           <Text style={styles.value}>{student.sv_sinh_vien_ma_bhyt}</Text>
         </View>
         <View style={styles.infoRow}>
-          <Text style={styles.label}>Dormitory:</Text>
+          <Text style={styles.label}>{translate("dormitory")}:</Text>
           <Text style={styles.value}>{student.sv_sinh_vien_ten_phong_ktx}</Text>
         </View>
       </View>
 
       {/* Khối thông tin cha */}
       <View style={styles.sectionContainer}>
-        <Text style={styles.sectionTitle}>Father's Information</Text>
+        <Text style={styles.sectionTitle}>
+          {translate("fathersInformation")}
+        </Text>
         <View style={styles.infoRow}>
-          <Text style={styles.label}>Name:</Text>
+          <Text style={styles.label}>{translate("name")}:</Text>
           <Text style={styles.value}>{student.sv_sinh_vien_ten_cha}</Text>
         </View>
         <View style={styles.infoRow}>
-          <Text style={styles.label}>Phone:</Text>
+          <Text style={styles.label}>{translate("phone")}:</Text>
           <Text style={styles.value}>{student.sv_sinh_vien_sdt_cha}</Text>
         </View>
         <View style={styles.infoRow}>
-          <Text style={styles.label}>Email:</Text>
+          <Text style={styles.label}>{translate("email")}:</Text>
           <Text style={styles.value}>{student.sv_sinh_vien_email_cha}</Text>
         </View>
       </View>
 
       {/* Khối thông tin mẹ */}
       <View style={styles.sectionContainer}>
-        <Text style={styles.sectionTitle}>Mother's Information</Text>
+        <Text style={styles.sectionTitle}>
+          {translate("motherInformation")}
+        </Text>
         <View style={styles.infoRow}>
-          <Text style={styles.label}>Name:</Text>
+          <Text style={styles.label}>{translate("name")}:</Text>
           <Text style={styles.value}>{student.sv_sinh_vien_ten_me}</Text>
         </View>
         <View style={styles.infoRow}>
-          <Text style={styles.label}>Phone:</Text>
+          <Text style={styles.label}>{translate("phone")}:</Text>
           <Text style={styles.value}>{student.sv_sinh_vien_sdt_me}</Text>
         </View>
         <View style={styles.infoRow}>
-          <Text style={styles.label}>Email:</Text>
+          <Text style={styles.label}>{translate("email")}:</Text>
           <Text style={styles.value}>{student.sv_sinh_vien_email_me}</Text>
         </View>
       </View>
 
       {/* Khối thông tin người giám hộ */}
       <View style={styles.sectionContainer}>
-        <Text style={styles.sectionTitle}>Guardian's Information</Text>
+        <Text style={styles.sectionTitle}>
+          {translate("guardiansInformation")}
+        </Text>
         <View style={styles.infoRow}>
-          <Text style={styles.label}>Name:</Text>
+          <Text style={styles.label}>{translate("name")}:</Text>
           <Text style={styles.value}>
             {student.sv_sinh_vien_ten_nguoi_giam_ho}
           </Text>
         </View>
         <View style={styles.infoRow}>
-          <Text style={styles.label}>Phone:</Text>
+          <Text style={styles.label}>{translate("phone")}:</Text>
           <Text style={styles.value}>
             {student.sv_sinh_vien_sdt_nguoi_giam_ho}
           </Text>
         </View>
         <View style={styles.infoRow}>
-          <Text style={styles.label}>Email:</Text>
+          <Text style={styles.label}>{translate("email")}:</Text>
           <Text style={styles.value}>
             {student.sv_sinh_vien_email_nguoi_giam_ho}
           </Text>
@@ -493,7 +548,9 @@ export default function StudentInfoScreen() {
       >
         <View style={styles.modalOverlay}>
           <View style={styles.modalContainer}>
-            <Text style={styles.modalTitle}>Change Profile Picture</Text>
+            <Text style={styles.modalTitle}>
+              {translate("changeProfilePicture")}
+            </Text>
             <View style={styles.buttonContainer}>
               <Button title="Cancel" onPress={closeModal} color="#888" />
             </View>

@@ -16,6 +16,7 @@ import { StackNavigationProp } from "@react-navigation/stack";
 import { RootStackParamList } from "./types";
 import config from "../../constants/config";
 import styles from "../../styles/index";
+import language from "../../assets/images/lang/language";
 
 type NavigationProp = StackNavigationProp<
   RootStackParamList,
@@ -39,6 +40,7 @@ function DashboardScreen() {
   const navigation = useNavigation<NavigationProp>();
   const [course, setCourse] = useState<Course[]>([]);
   const [scheduleState, setScheduleState] = useState(false);
+  const [lang, setLang] = useState(true);
 
   const getCurrentDate = () => {
     const months = [
@@ -66,15 +68,45 @@ function DashboardScreen() {
       "Saturday",
     ];
 
+    const ngayTrongTuan = [
+      "Chủ Nhật",
+      "Thứ hai",
+      "Thứ ba",
+      "Thứ tư",
+      "Thứ năm",
+      "Thứ sáu",
+      "Thứ bảy",
+    ];
+
     const currentDate = new Date();
     const year = currentDate.getFullYear();
     const month = currentDate.getMonth();
     const date = currentDate.getDate();
     const day = currentDate.getDay();
 
-    return (
-      `${daysOfWeek[day - 1]} - ` + months[month] + " " + date + ", " + year
-    );
+    if (lang) {
+      return (
+        `${daysOfWeek[day - 1]} - ` + months[month] + " " + date + ", " + year
+      );
+    } else {
+      return (
+        `${ngayTrongTuan[day - 1]} - ` + date + "/" + (month + 1) + "/" + year
+      );
+    }
+  };
+
+  const translate = (stringTranslate: string) => {
+    for (const key in language) {
+      if (key == stringTranslate) {
+        if (lang) {
+          return language[key as keyof typeof language].split("__")[0];
+        } else {
+          return language[key as keyof typeof language].split("__")[1];
+        }
+      }
+    }
+
+    return null;
   };
 
   // Kiểm tra token khi tab được focus
@@ -83,6 +115,15 @@ function DashboardScreen() {
       if (typeof window !== "undefined") {
         const fetchData = async () => {
           try {
+            setInterval(async () => {
+              const storedLang = await AsyncStorage.getItem("lang");
+              if (storedLang === "true") {
+                setLang(true);
+              } else {
+                setLang(false);
+              }
+            }, 500);
+
             const storedToken = await AsyncStorage.getItem("token");
             if (!storedToken) {
               setCourse([]);
@@ -175,8 +216,10 @@ function DashboardScreen() {
       ]}
     >
       <Text style={styles.subjectName}>
-        {item.ctdt_hoc_phan_ten_tieng_anh
+        {lang
           ? item.ctdt_hoc_phan_ten_tieng_anh
+            ? item.ctdt_hoc_phan_ten_tieng_anh
+            : item.ctdt_hoc_phan_ten_tieng_viet
           : item.ctdt_hoc_phan_ten_tieng_viet}
       </Text>
       <Text style={styles.subjectDetails}>
@@ -190,46 +233,38 @@ function DashboardScreen() {
   return (
     <ScrollView style={styles.container}>
       <View style={styles.welcomeBox}>
-        <Text style={styles.welcomeText}>👋 Hi!</Text>
+        <Text style={styles.welcomeText}>👋 {translate("greating")}!</Text>
         <Text style={styles.dateText}>{getCurrentDate()}</Text>
       </View>
       <View style={styles.noticeBox}>
         {scheduleState ? (
           <>
-            <Text style={styles.noticeText}>
-              Today, you have a class scheduled!
-            </Text>
-            <Text style={styles.noticeSubText}>
-              Be prepared and arrange your time to arrive at class on time.
-              Don't forget to bring all the necessary materials and study tools.
-              Start your day with enthusiasm for learning and positive energy!
-            </Text>
+            <Text style={styles.noticeText}>{translate("hasSchedule")}</Text>
+            <Text style={styles.noticeSubText}>{translate("prepare")}</Text>
             <TouchableOpacity
               style={styles.noticeButton}
               onPress={() => navigation.navigate("calendar")}
             >
-              <Text style={styles.noticeButtonText}>Check your schedule</Text>
+              <Text style={styles.noticeButtonText}>
+                {translate("checkSchedule")}
+              </Text>
             </TouchableOpacity>
           </>
         ) : (
           <>
-            <Text style={styles.noticeText}>
-              You don't have any classes today!
-            </Text>
-            <Text style={styles.noticeSubText}>
-              Take a rest and take care of your health for the upcoming study
-              days. Don't forget to complete your homework or any assignments
-              from your instructors!
-            </Text>
+            <Text style={styles.noticeText}>{translate("hasNoSchedule")}</Text>
+            <Text style={styles.noticeSubText}>{translate("noPrepare")}</Text>
           </>
         )}
       </View>
       <View style={styles.sectionHeader}>
-        <Text style={styles.sectionTitle}>Courses This Semester</Text>
+        <Text style={styles.sectionTitle}>
+          {translate("coursesThisSemester")}
+        </Text>
         <TouchableOpacity
           onPress={() => navigation.navigate("academic_planning")}
         >
-          <Text style={styles.sectionLink}>View all</Text>
+          <Text style={styles.sectionLink}>{translate("viewAll")}</Text>
         </TouchableOpacity>
       </View>
       <FlatList

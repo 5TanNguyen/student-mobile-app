@@ -15,6 +15,7 @@ import { useFocusEffect } from "@react-navigation/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import config from "../../constants/config";
 import styles from "@/styles/notifications";
+import language from "../../assets/images/lang/language";
 // import Toast from "react-native-toast-message";
 
 interface Notification {
@@ -33,16 +34,21 @@ const NotificationPage: React.FC = () => {
   const [notiInfo, setNotiInfo] = useState<{
     ql_thong_bao_id: string;
     ql_thong_bao_tieu_de: string;
+    ql_thong_bao_tieu_de_tieng_anh: string;
     ql_thong_bao_noi_dung: string;
+    ql_thong_bao_noi_dung_tieng_anh: string;
     ql_thong_bao_ngay_gui: string;
     ql_thong_bao_loai: string;
   }>({
     ql_thong_bao_id: "",
     ql_thong_bao_tieu_de: "",
+    ql_thong_bao_tieu_de_tieng_anh: "",
     ql_thong_bao_noi_dung: "",
+    ql_thong_bao_noi_dung_tieng_anh: "",
     ql_thong_bao_ngay_gui: "",
     ql_thong_bao_loai: "",
   });
+  const [lang, setLang] = useState(true);
 
   const renderNotification = ({ item }: { item: Notification }) => (
     <TouchableOpacity
@@ -56,9 +62,17 @@ const NotificationPage: React.FC = () => {
       onPress={() =>
         handleNotificationPress(
           item.ql_thong_bao_id,
+          item.ql_thong_bao_tieu_de.replace("<p>", "").replace("</p>", ""),
           item.ql_thong_bao_tieu_de_tieng_anh
             .replace("<p>", "")
             .replace("</p>", ""),
+          item.ql_thong_bao_noi_dung.replace(
+            item.ql_thong_bao_noi_dung_tieng_anh.slice(
+              item.ql_thong_bao_noi_dung_tieng_anh.indexOf("See details"),
+              item.ql_thong_bao_noi_dung_tieng_anh.length
+            ),
+            ""
+          ),
           item.ql_thong_bao_noi_dung_tieng_anh.replace(
             item.ql_thong_bao_noi_dung_tieng_anh.slice(
               item.ql_thong_bao_noi_dung_tieng_anh.indexOf("See details"),
@@ -82,9 +96,9 @@ const NotificationPage: React.FC = () => {
         >
           <Text>
             {item.ql_thong_bao_loai == "1" ? (
-              <Text style={styles.thongbao}>Notifications</Text>
+              <Text style={styles.thongbao}>{translate("notifications")}</Text>
             ) : (
-              <Text style={styles.nhacnho}>Reminds</Text>
+              <Text style={styles.nhacnho}>{translate("reminds")}</Text>
             )}{" "}
           </Text>
           <Text style={{ fontStyle: "italic" }}>
@@ -92,18 +106,30 @@ const NotificationPage: React.FC = () => {
           </Text>
         </View>
         <Text style={styles.notificationTitle}>
-          {item.ql_thong_bao_tieu_de_tieng_anh
-            .replace("<p>", "")
-            .replace("</p>", "")}
+          {lang
+            ? item.ql_thong_bao_tieu_de_tieng_anh
+              ? item.ql_thong_bao_tieu_de_tieng_anh
+                  .replace("<p>", "")
+                  .replace("</p>", "")
+              : item.ql_thong_bao_tieu_de.replace("<p>", "").replace("</p>", "")
+            : item.ql_thong_bao_tieu_de.replace("<p>", "").replace("</p>", "")}
         </Text>
         <Text style={styles.notificationDescription}>
-          {item.ql_thong_bao_noi_dung_tieng_anh.replace(
-            item.ql_thong_bao_noi_dung_tieng_anh.slice(
-              item.ql_thong_bao_noi_dung_tieng_anh.indexOf("See details"),
-              item.ql_thong_bao_noi_dung_tieng_anh.length
-            ),
-            ""
-          )}
+          {lang
+            ? item.ql_thong_bao_noi_dung_tieng_anh.replace(
+                item.ql_thong_bao_noi_dung_tieng_anh.slice(
+                  item.ql_thong_bao_noi_dung_tieng_anh.indexOf("See details"),
+                  item.ql_thong_bao_noi_dung_tieng_anh.length
+                ),
+                ""
+              )
+            : item.ql_thong_bao_noi_dung.replace(
+                item.ql_thong_bao_noi_dung.slice(
+                  item.ql_thong_bao_noi_dung.indexOf("Xem chi tiết"),
+                  item.ql_thong_bao_noi_dung.length
+                ),
+                ""
+              )}
         </Text>
       </View>
     </TouchableOpacity>
@@ -136,13 +162,17 @@ const NotificationPage: React.FC = () => {
       ", " +
       dateSplit[0];
 
-    return <Text>{newDate}</Text>;
+    const ngayMoi = dateSplit[2] + "/" + dateSplit[1] + "/" + dateSplit[0];
+
+    return <Text>{lang ? newDate : ngayMoi}</Text>;
   };
 
   const handleNotificationPress = (
     id: string,
     tieude: string,
+    tieudeTA: string,
     noidung: string,
+    noidungTA: string,
     loai: string,
     ngaygui: string
   ) => {
@@ -151,7 +181,9 @@ const NotificationPage: React.FC = () => {
     const notiModal = {
       ql_thong_bao_id: id,
       ql_thong_bao_tieu_de: tieude,
+      ql_thong_bao_tieu_de_tieng_anh: tieudeTA,
       ql_thong_bao_noi_dung: noidung,
+      ql_thong_bao_noi_dung_tieng_anh: noidungTA,
       ql_thong_bao_ngay_gui: ngaygui,
       ql_thong_bao_loai: loai,
     };
@@ -161,10 +193,33 @@ const NotificationPage: React.FC = () => {
     // console.log(notiModal);
   };
 
+  const translate = (stringTranslate: string) => {
+    for (const key in language) {
+      if (key == stringTranslate) {
+        if (lang) {
+          return language[key as keyof typeof language].split("__")[0];
+        } else {
+          return language[key as keyof typeof language].split("__")[1];
+        }
+      }
+    }
+
+    return null;
+  };
+
   useFocusEffect(
     useCallback(() => {
       const fetchData = async () => {
         try {
+          setInterval(async () => {
+            const storedLang = await AsyncStorage.getItem("lang");
+            if (storedLang === "true") {
+              setLang(true);
+            } else {
+              setLang(false);
+            }
+          }, 500);
+
           const storedToken = await AsyncStorage.getItem("token");
           if (!storedToken) {
             setNotifications([]);
@@ -185,6 +240,7 @@ const NotificationPage: React.FC = () => {
 
             if (response.data && response.data.data) {
               setNotifications(response.data.data.notifications);
+              // console.log(response.data.data.notifications);
             } else {
               // Toast.show({
               //   type: "error",
@@ -213,7 +269,7 @@ const NotificationPage: React.FC = () => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Notifications</Text>
+      <Text style={styles.title}>{translate("notifications")}</Text>
       <FlatList
         data={notifications}
         renderItem={renderNotification}
@@ -231,14 +287,18 @@ const NotificationPage: React.FC = () => {
           <View style={styles.modalContainer}>
             <View style={styles.header}>
               <Text style={styles.headerText}>
-                {notiInfo.ql_thong_bao_tieu_de}
+                {lang
+                  ? notiInfo.ql_thong_bao_tieu_de_tieng_anh
+                    ? notiInfo.ql_thong_bao_tieu_de_tieng_anh
+                    : notiInfo.ql_thong_bao_tieu_de
+                  : notiInfo.ql_thong_bao_tieu_de}
               </Text>
             </View>
 
             <View style={styles.content}>
               {/* Date sent ở góc trái trên */}
               <View style={styles.dateSentContainer}>
-                <Text style={styles.label}>📅 Date sent: </Text>
+                <Text style={styles.label}>📅 {translate("dateSent")}: </Text>
                 <Text style={styles.value}>
                   {notiInfo.ql_thong_bao_ngay_gui}
                 </Text>
@@ -246,9 +306,13 @@ const NotificationPage: React.FC = () => {
 
               {/* Content dạng textarea chiếm full width */}
               <View style={styles.textareaContainer}>
-                <Text style={styles.label}>📚 Content:</Text>
+                <Text style={styles.label}>📚 {translate("content")}:</Text>
                 <Text style={styles.textarea}>
-                  {notiInfo.ql_thong_bao_noi_dung}
+                  {lang
+                    ? notiInfo.ql_thong_bao_noi_dung_tieng_anh
+                      ? notiInfo.ql_thong_bao_noi_dung_tieng_anh
+                      : notiInfo.ql_thong_bao_noi_dung
+                    : notiInfo.ql_thong_bao_noi_dung}
                 </Text>
               </View>
 

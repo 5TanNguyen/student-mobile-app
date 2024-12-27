@@ -19,6 +19,8 @@ const styles = StyleSheet.create({
         elevation: 2,
         flexDirection: "row",
         justifyContent: "space-between",
+        borderLeftColor: "#3AB9F3",
+        borderLeftWidth: 7
       },
       termText: {
         fontSize: 18,
@@ -57,11 +59,12 @@ const styles = StyleSheet.create({
       },
       tableHeader: {
         flexDirection: "row",
-        justifyContent: "space-between",
         borderBottomWidth: 1,
         borderBottomColor: "#ccc",
         paddingBottom: 10,
         marginBottom: 5,
+        backgroundColor: '#3AB9F3',
+        borderRadius: 5
       },
       headerText: {
         flex: 1,

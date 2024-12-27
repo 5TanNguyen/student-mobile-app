@@ -12,12 +12,14 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Icon } from "react-native-elements";
 import config from "../../constants/config";
 import styles from "../../styles/academic_planning";
+import language from "../../assets/images/lang/language";
 // import Toast from "react-native-toast-message";
 
 // Dữ liệu mẫu
 interface Course {
   ctdt_hoc_phan_id: string;
   ctdt_hoc_phan_ten_tieng_viet: string;
+  ctdt_hoc_phan_ten_tieng_anh: string;
   ctdt_hoc_phan_so_tin_chi: string;
   ctdt_hoc_phan_so_tiet_ly_thuyet: string;
   ctdt_hoc_phan_so_tiet_thuc_hanh: string | null;
@@ -48,11 +50,35 @@ const App: React.FC = () => {
   const [expandedYear, setExpandedYear] = useState<string | null>(null);
   const [expandedTerm, setExpandedTerm] = useState<string | null>(null);
   const [courseData, setCourseData] = useState<Record[]>([]);
+  const [lang, setLang] = useState(true);
+
+  const translate = (stringTranslate: string) => {
+    for (const key in language) {
+      if (key == stringTranslate) {
+        if (lang) {
+          return language[key as keyof typeof language].split("__")[0];
+        } else {
+          return language[key as keyof typeof language].split("__")[1];
+        }
+      }
+    }
+
+    return null;
+  };
 
   useFocusEffect(
     useCallback(() => {
       const fetchData = async () => {
         try {
+          setInterval(async () => {
+            const storedLang = await AsyncStorage.getItem("lang");
+            if (storedLang === "true") {
+              setLang(true);
+            } else {
+              setLang(false);
+            }
+          }, 500);
+
           const storedToken = await AsyncStorage.getItem("token");
           if (!storedToken) {
             setCourseData([]);
@@ -138,22 +164,32 @@ const App: React.FC = () => {
                 style={styles.termItem}
                 onPress={() => handleTermPress(term)}
               >
-                <Text style={styles.termText}>Semester {term}</Text>
+                <Text style={styles.termText}>
+                  {translate("semester")} {term}
+                </Text>
               </TouchableOpacity>
               {expandedTerm === term && (
                 <View style={styles.coursesContainer}>
                   <View style={styles.tableHeader}>
                     <View style={styles.columnIndex}>
-                      <Text style={styles.headerText}>No.</Text>
+                      <Text style={styles.headerText}>
+                        {translate("noDot")}
+                      </Text>
                     </View>
                     <View style={styles.columnName}>
-                      <Text style={styles.headerText}>Course</Text>
+                      <Text style={styles.headerText}>
+                        {translate("courseAP")}
+                      </Text>
                     </View>
                     <View style={styles.columnCredits}>
-                      <Text style={styles.headerText}>Credits</Text>
+                      <Text style={styles.headerText}>
+                        {translate("credits")}
+                      </Text>
                     </View>
                     <View style={styles.columnStatus}>
-                      <Text style={styles.headerText}>Earned Credits</Text>
+                      <Text style={styles.headerText}>
+                        {translate("earnedCredits")}
+                      </Text>
                     </View>
                   </View>
                   {item.hoc_ki[term].ctdt_hoc_phan.map((course, index) => (
@@ -166,7 +202,11 @@ const App: React.FC = () => {
                       </View>
                       <View style={styles.columnName}>
                         <Text style={styles.courseText}>
-                          {course.ctdt_hoc_phan_ten_tieng_viet}
+                          {lang
+                            ? course.ctdt_hoc_phan_ten_tieng_anh
+                              ? course.ctdt_hoc_phan_ten_tieng_anh
+                              : course.ctdt_hoc_phan_ten_tieng_viet
+                            : course.ctdt_hoc_phan_ten_tieng_viet}
                         </Text>
                       </View>
                       <View style={styles.columnCredits}>
@@ -192,7 +232,7 @@ const App: React.FC = () => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Academic Planning</Text>
+      <Text style={styles.title}>{translate("academicPlanning")}</Text>
       <FlatList
         data={courseData}
         keyExtractor={(item, index) => `${item.nam_hoc}-${index}`}

@@ -19,14 +19,16 @@ const styles = StyleSheet.create({
         elevation: 2,
         flexDirection: "row",
         justifyContent: "space-between",
+        borderLeftColor: "#3AB9F3",
+        borderLeftWidth: 7
       },
       yearText: {
         fontSize: 20,
         fontWeight: "bold",
       },
       termItem: {
-        padding: 15,
-        backgroundColor: "#e9e9e9",
+        padding: 10,
+        backgroundColor: "#d1d8e0",
         marginBottom: 10,
         borderRadius: 5,
         marginLeft: 15,
@@ -49,6 +51,8 @@ const styles = StyleSheet.create({
         borderBottomColor: "#ccc",
         paddingBottom: 10,
         marginBottom: 5,
+        backgroundColor: '#3AB9F3',
+        borderRadius: 5
       },
       headerText: {
         fontWeight: "bold",
@@ -80,7 +84,7 @@ const styles = StyleSheet.create({
         justifyContent: "center",
       },
       columnCredits: {
-        flex: 1,
+        flex: 2,
         justifyContent: "center",
         alignItems: "center",
       },

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import {
   Image,
   StyleSheet,
@@ -12,10 +12,12 @@ import {
 } from "react-native";
 import axios from "axios";
 import { Icon } from "react-native-elements";
+import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useRouter } from "expo-router";
 import config from "../../constants/config";
 import styles from "../../styles/login";
+import language from "../../assets/images/lang/language";
 // const CryptoJS = require("crypto-js");
 // import Toast from "react-native-toast-message";
 
@@ -26,9 +28,24 @@ export default function Login() {
   const [password, setPassword] = useState("");
   const [token, setToken] = useState("");
   const router = useRouter();
+  const [lang, setLang] = useState(true);
 
   const showModal = (modalVisible: any) => {
     setModalVisible(modalVisible);
+  };
+
+  const translate = (stringTranslate: string) => {
+    for (const key in language) {
+      if (key == stringTranslate) {
+        if (lang) {
+          return language[key as keyof typeof language].split("__")[0];
+        } else {
+          return language[key as keyof typeof language].split("__")[1];
+        }
+      }
+    }
+
+    return null;
   };
 
   const postLogin = async () => {
@@ -77,25 +94,48 @@ export default function Login() {
     }
   };
 
-  useEffect(() => {
-    axios
-      .get(
-        `http://10.10.4.43/studentsdnc-api/api/v1/common/keys/getPublicKey`,
-        {
-          headers: {
-            "Content-Type": "application/json",
-            "DHNCT-API-KEY": "@cntt@dhnct@",
-          },
+  useFocusEffect(
+    useCallback(() => {
+      const fetchData = async () => {
+        try {
+          setInterval(async () => {
+            const storedLang = await AsyncStorage.getItem("lang");
+            if (storedLang === "true") {
+              setLang(true);
+            } else {
+              setLang(false);
+            }
+          }, 500);
+        } catch (error) {
+          // Toast.show({
+          //   type: "error",
+          //   text1: "ERROR",
+          //   text2: "Network or server error occurred!",
+          // });
         }
-      )
-      .then((response) => {
-        // console.log(response.data.publicKey);
-        setPublicKey(response.data.publicKey);
-      })
-      .catch((error) => {
-        console.error("Error getting public key:", error);
-      });
-  }, []);
+      };
+
+      fetchData();
+
+      axios
+        .get(
+          `http://10.10.4.43/studentsdnc-api/api/v1/common/keys/getPublicKey`,
+          {
+            headers: {
+              "Content-Type": "application/json",
+              "DHNCT-API-KEY": "@cntt@dhnct@",
+            },
+          }
+        )
+        .then((response) => {
+          // console.log(response.data.publicKey);
+          setPublicKey(response.data.publicKey);
+        })
+        .catch((error) => {
+          console.error("Error getting public key:", error);
+        });
+    }, [])
+  );
 
   return (
     <View style={styles.container}>
@@ -105,7 +145,7 @@ export default function Login() {
             style={styles.imageLogin}
             source={require("../../assets/images/students/avatarLogin_2.jpg")}
           />
-          <Text style={styles.loginPageText}>LOGIN PAGE</Text>
+          <Text style={styles.loginPageText}>{translate("loginPage")}</Text>
           <View style={styles.inputField}>
             <Text style={styles.labelInput}>
               <Icon
@@ -142,7 +182,7 @@ export default function Login() {
             />
           </View>
           <TouchableOpacity style={styles.buttonLogin} onPress={postLogin}>
-            <Text style={styles.textLogin}>LOGIN</Text>
+            <Text style={styles.textLogin}>{translate("postLogin")}</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -158,7 +198,7 @@ export default function Login() {
         <View style={styles.modalOverlay}>
           <View style={styles.modalContainer}>
             <Text style={styles.modalTitle}>
-              Please enter the login information
+              {translate("pleaseEnterTheLoginInformation")}
             </Text>
             <View style={styles.buttonContainer}>
               <Button
