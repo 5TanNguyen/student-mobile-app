@@ -34,7 +34,7 @@ import LogIn2 from "./login_2";
 
 // 0.76 phiên phản RN
 const changeLanguage = (language: string) => {
-  console.log(`Ngôn ngữ được thay đổi sang: ${language}`);
+  console.log(`_layout | Ngôn ngữ được thay đổi sang: ${language}`);
 };
 
 const Tab = createBottomTabNavigator();

@@ -103,8 +103,7 @@ function DashboardScreen() {
               );
 
               if (response.data && response.data.data) {
-                console.log(response.data.data.tkb_lop_hoc_phan);
-
+                // console.log(response.data.data.tkb_lop_hoc_phan);
                 response.data.data.tkb_lop_hoc_phan.forEach((item: any) => {
                   if (!tkblistHocPhanId.includes(item.tkb_lop_hoc_phan_id)) {
                     listHocPhan.push({

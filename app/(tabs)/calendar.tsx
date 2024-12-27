@@ -161,8 +161,6 @@ const App = () => {
               }
             );
 
-            console.log(response.data);
-
             if (response.data && response.data.data) {
               setEventData(response.data.calendar);
 
@@ -341,7 +339,7 @@ const styles = StyleSheet.create({
     shadowRadius: 3.84, // Bán kính bóng
     elevation: 5, // Độ nổi (chỉ dành cho Android)
     backgroundColor: "#ffffff", // Nền cho calendar
-    margin: 10, // Khoảng cách từ calendar đến các phần tử khác
+    margin: 3, // Khoảng cách từ calendar đến các phần tử khác
   },
   todoContainer: {
     flex: 1,
@@ -360,7 +358,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     marginBottom: 1,
-    padding: 10,
+    padding: 5,
     marginVertical: 8,
     marginHorizontal: 10,
     // shadowColor: "#000", // Màu của bóng
@@ -444,8 +442,8 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   circleColor: {
-    width: 30,
-    height: 30,
+    width: 20,
+    height: 20,
     justifyContent: "center",
     alignItems: "center",
     marginRight: 10, // Khoảng cách giữa vòng tròn và tên môn học
