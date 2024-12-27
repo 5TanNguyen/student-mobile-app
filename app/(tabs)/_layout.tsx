@@ -329,10 +329,7 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 }, // iOS shadow offset
     shadowOpacity: 0.3, // iOS shadow opacity
     shadowRadius: 4, // iOS shadow radius
-    position: "relative",
-    top: 10,
-    right: 10,
-    width: "40%",
+    width: "60%",
   },
   headerText: {
     fontSize: 20,

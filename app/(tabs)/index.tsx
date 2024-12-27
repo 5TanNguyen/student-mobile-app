@@ -15,6 +15,7 @@ import axios from "axios";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { RootStackParamList } from "./types";
 import config from "../../constants/config";
+import styles from "../../styles/index";
 
 type NavigationProp = StackNavigationProp<
   RootStackParamList,
@@ -32,6 +33,7 @@ interface Course {
 
 const tkblistHocPhanId: string[] = [];
 const listHocPhan: Course[] = [];
+const colors = ["#FFCCCC", "#CCFFCC", "#CCCCFF", "#FFFFCC", "#CCFFFF"]; // Mảng màu
 
 function DashboardScreen() {
   const navigation = useNavigation<NavigationProp>();
@@ -165,8 +167,13 @@ function DashboardScreen() {
     }, [])
   );
 
-  const renderSubject = ({ item }: { item: Course }) => (
-    <View style={[styles.subjectBox, { backgroundColor: "white" }]}>
+  const renderSubject = ({ item, index }: { item: Course; index: number }) => (
+    <View
+      style={[
+        styles.subjectBox,
+        { backgroundColor: colors[index % colors.length] },
+      ]}
+    >
       <Text style={styles.subjectName}>
         {item.ctdt_hoc_phan_ten_tieng_anh
           ? item.ctdt_hoc_phan_ten_tieng_anh
@@ -238,104 +245,3 @@ function DashboardScreen() {
 export default function App() {
   return <DashboardScreen />;
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#f2f2f2",
-  },
-  header: {
-    flexDirection: "row",
-    alignItems: "center",
-    padding: 10,
-    backgroundColor: "#fff",
-    elevation: 2,
-    position: "absolute",
-    top: 0,
-    left: 0,
-    right: 0,
-    zIndex: 1,
-    paddingHorizontal: 15,
-    height: 60,
-  },
-  iconButton: {
-    marginRight: 10,
-  },
-  searchInput: {
-    flex: 1,
-    backgroundColor: "#f2f2f2",
-    marginHorizontal: 10,
-    padding: 8,
-    borderRadius: 5,
-  },
-  welcomeBox: {
-    padding: 20,
-    backgroundColor: "#fff",
-    elevation: 2,
-  },
-  welcomeText: {
-    fontSize: 18,
-    fontWeight: "bold",
-    marginBottom: 5,
-  },
-  dateText: {
-    color: "#666",
-  },
-  noticeBox: {
-    backgroundColor: "#e3f2fd",
-    margin: 15,
-    padding: 15,
-    borderRadius: 10,
-  },
-  noticeText: {
-    fontSize: 18,
-    fontWeight: "bold",
-    marginBottom: 5,
-  },
-  noticeSubText: {
-    color: "#666",
-    marginBottom: 10,
-  },
-  noticeButton: {
-    backgroundColor: "#2f95dc",
-    padding: 10,
-    borderRadius: 5,
-    alignItems: "center",
-  },
-  noticeButtonText: {
-    color: "#fff",
-    fontWeight: "bold",
-  },
-  sectionHeader: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    padding: 15,
-  },
-  sectionTitle: {
-    fontSize: 18,
-    fontWeight: "bold",
-  },
-  sectionLink: {
-    color: "#2f95dc",
-    fontWeight: "bold",
-  },
-  subjectBox: {
-    padding: 15,
-    margin: 10,
-    borderRadius: 5,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.2,
-    shadowRadius: 3,
-    elevation: 2,
-  },
-  subjectName: {
-    fontSize: 16,
-    fontWeight: "bold",
-  },
-  subjectDetails: {
-    marginTop: 5,
-    color: "#555",
-  },
-});

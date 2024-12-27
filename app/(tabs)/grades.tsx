@@ -10,7 +10,9 @@ import { useFocusEffect } from "@react-navigation/native";
 // import Toast from "react-native-toast-message";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
+import { Icon } from "react-native-elements";
 import config from "../../constants/config";
+import styles from "../../styles/grades";
 
 // Kiểu dữ liệu cho một khóa học
 interface Course {
@@ -104,6 +106,17 @@ const App: React.FC = () => {
         <Text style={styles.termText}>
           {item.diem_hoc_phan_nam_hoc + "-" + item.diem_hoc_phan_hoc_ky}
         </Text>
+        {expandedTerm ==
+        item.diem_hoc_phan_nam_hoc + "-" + item.diem_hoc_phan_hoc_ky ? (
+          <Icon name="chevron-up" type="font-awesome" size={20} color="#000" />
+        ) : (
+          <Icon
+            name="chevron-left"
+            type="font-awesome"
+            size={20}
+            color="#000"
+          />
+        )}
       </TouchableOpacity>
       {expandedTerm ===
         item.diem_hoc_phan_nam_hoc + "-" + item.diem_hoc_phan_hoc_ky && (
@@ -169,78 +182,5 @@ const App: React.FC = () => {
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    padding: 10,
-    backgroundColor: "#f5f5f5",
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: "bold",
-    marginBottom: 20,
-  },
-  termItem: {
-    padding: 15,
-    backgroundColor: "#ffffff",
-    marginBottom: 10,
-    borderRadius: 5,
-    elevation: 2,
-  },
-  termText: {
-    fontSize: 18,
-    fontWeight: "bold",
-  },
-  coursesContainer: {
-    padding: 10,
-    marginBottom: 10,
-    backgroundColor: "#f9f9f9",
-    borderRadius: 5,
-    elevation: 1,
-  },
-  courseItem: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    paddingVertical: 10,
-  },
-  courseText: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  courseTextCenter: {
-    flex: 1,
-    textAlign: "center",
-  },
-  courseTextGrade: {
-    flex: 1,
-    textAlign: "left",
-    paddingLeft: 20,
-  },
-  columnIndex: {
-    flex: 2,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  tableHeader: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    borderBottomWidth: 1,
-    borderBottomColor: "#ccc",
-    paddingBottom: 10,
-    marginBottom: 5,
-  },
-  headerText: {
-    flex: 1,
-    fontWeight: "bold",
-    textAlign: "center",
-  },
-  courseTextIndex: {
-    flex: 1,
-    width: 30,
-    fontWeight: "bold",
-  },
-});
 
 export default App;
