@@ -1,6 +1,15 @@
 import axios from "axios";
 import React, { useState, useEffect, useRef, useCallback } from "react";
-import { View, Text, Modal, Button, FlatList, Animated } from "react-native";
+import {
+  View,
+  Text,
+  Modal,
+  Button,
+  FlatList,
+  Animated,
+  TouchableOpacity,
+  ScrollView,
+} from "react-native";
 import { Calendar, LocaleConfig } from "react-native-calendars";
 import { useFocusEffect } from "@react-navigation/native";
 // import Toast from "react-native-toast-message";
@@ -245,107 +254,128 @@ const App = () => {
   );
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>{translate("schedule")}</Text>
-      <Calendar
-        style={styles.calendar}
-        theme={{
-          backgroundColor: "#ffffff",
-          calendarBackground: "#ffffff",
-          textSectionTitleColor: "#b6c1cd",
-          selectedDayBackgroundColor: "#00adf5",
-          selectedDayTextColor: "#ffffff",
-          todayTextColor: "#00adf5",
-          dayTextColor: "#2d4150",
-          textDisabledColor: "#dd99ee",
-        }}
-        onDayPress={onDayPress}
-        markedDates={markedDates}
-      />
-
-      <View style={styles.todoContainer}>
-        <Text style={styles.todoTitle}>{translate("subjectsList")}</Text>
-        <FlatList
-          data={subject}
-          keyExtractor={(item) => item.ctdt_hoc_phan_id.toString()}
-          renderItem={({ item, index }) => (
-            <View style={styles.subjectItem}>
-              <View
-                style={[
-                  styles.circleColor,
-                  {
-                    backgroundColor: colors[index % colors.length], // Đặt màu nền
-                  },
-                ]}
-              >
-                <Text style={styles.indexText}></Text>
-              </View>
-              <Text style={styles.subjectText}>
-                {lang
-                  ? item.ctdt_hoc_phan_ten_tieng_anh
-                  : item.ctdt_hoc_phan_ten_tieng_viet}
-              </Text>
-            </View>
-          )}
+    <ScrollView>
+      <View style={styles.container}>
+        <Text style={styles.title}>{translate("schedule")}</Text>
+        <Calendar
+          style={styles.calendar}
+          theme={{
+            backgroundColor: "#ffffff",
+            calendarBackground: "#ffffff",
+            textSectionTitleColor: "#b6c1cd",
+            selectedDayBackgroundColor: "#00adf5",
+            selectedDayTextColor: "#ffffff",
+            todayTextColor: "#00adf5",
+            dayTextColor: "#2d4150",
+            textDisabledColor: "#dd99ee",
+          }}
+          onDayPress={onDayPress}
+          markedDates={markedDates}
         />
-      </View>
 
-      <Modal
-        animationType="fade"
-        transparent={true}
-        visible={modalVisible}
-        onRequestClose={() => setModalVisible(false)}
-      >
-        <View style={styles.modalBackground}>
-          <View style={styles.modalContainer}>
-            <View style={styles.header}>
-              <Text style={styles.headerText}>
-                {translate("courseInformation")}
-              </Text>
-            </View>
+        <View style={styles.todoContainer}>
+          <Text style={styles.todoTitle}>{translate("subjectsList")}</Text>
+          <FlatList
+            data={subject}
+            scrollEnabled={false}
+            keyExtractor={(item) => item.ctdt_hoc_phan_id.toString()}
+            renderItem={({ item, index }) => (
+              <View style={styles.subjectItem}>
+                <View
+                  style={[
+                    styles.circleColor,
+                    {
+                      backgroundColor: colors[index % colors.length], // Đặt màu nền
+                    },
+                  ]}
+                >
+                  <Text style={styles.indexText}></Text>
+                </View>
+                <Text style={styles.subjectText}>
+                  {lang
+                    ? item.ctdt_hoc_phan_ten_tieng_anh
+                    : item.ctdt_hoc_phan_ten_tieng_viet}
+                </Text>
+              </View>
+            )}
+          />
+        </View>
 
-            <View style={styles.content}>
-              <View style={styles.row}>
-                <Text style={styles.label}>📚 {translate("courseName")}:</Text>
-                <Text style={styles.value}>
-                  {eventInfo.ctdt_hoc_phan_ten_tieng_viet}
+        <Modal
+          animationType="fade"
+          transparent={true}
+          visible={modalVisible}
+          onRequestClose={() => setModalVisible(false)}
+        >
+          <View style={styles.modalBackground}>
+            <View style={styles.modalContainer}>
+              <View style={styles.header}>
+                <Text style={styles.headerText}>
+                  {translate("courseInformation")}
                 </Text>
               </View>
 
-              <View style={styles.row}>
-                <Text style={styles.label}>🎤 {translate("lecturer")}:</Text>
-                <Text style={styles.value}>
-                  {eventInfo.nv_can_bo_ho} {eventInfo.nv_can_bo_ten}
-                </Text>
-              </View>
+              <View style={styles.content}>
+                <View style={styles.row}>
+                  <Text style={styles.label}>
+                    📚 {translate("courseName")}:
+                  </Text>
+                  <Text style={styles.value}>
+                    {eventInfo.ctdt_hoc_phan_ten_tieng_viet}
+                  </Text>
+                </View>
 
-              <View style={styles.row}>
-                <Text style={styles.label}>📍 {translate("room")}:</Text>
-                <Text style={styles.value}>{eventInfo.qttb_phong_ten}</Text>
-              </View>
+                <View style={styles.row}>
+                  <Text style={styles.label}>🎤 {translate("lecturer")}:</Text>
+                  <Text style={styles.value}>
+                    {eventInfo.nv_can_bo_ho} {eventInfo.nv_can_bo_ten}
+                  </Text>
+                </View>
 
-              <View style={styles.row}>
-                <Text style={styles.label}>📅 {translate("classDate")}:</Text>
-                <Text style={styles.value}>{eventInfo.tkb_ngay}</Text>
-              </View>
+                <View style={styles.row}>
+                  <Text style={styles.label}>📍 {translate("room")}:</Text>
+                  <Text style={styles.value}>{eventInfo.qttb_phong_ten}</Text>
+                </View>
 
-              <View style={styles.row}>
-                <Text style={styles.label}>⏰ {translate("classTime")}:</Text>
-                <Text style={styles.value}>{eventInfo.tkb_tiet_gio_vao}</Text>
-              </View>
+                <View style={styles.row}>
+                  <Text style={styles.label}>📅 {translate("classDate")}:</Text>
+                  <Text style={styles.value}>{eventInfo.tkb_ngay}</Text>
+                </View>
 
-              <View style={styles.row}>
-                <Text style={styles.label}>📝 {translate("notes")}:</Text>
-                <Text style={styles.value}>{eventInfo.tkb_ghi_chu}</Text>
-              </View>
+                <View style={styles.row}>
+                  <Text style={styles.label}>⏰ {translate("classTime")}:</Text>
+                  <Text style={styles.value}>{eventInfo.tkb_tiet_gio_vao}</Text>
+                </View>
 
-              <Button title="Close" onPress={() => setModalVisible(false)} />
+                <View style={styles.row}>
+                  <Text style={styles.label}>📝 {translate("notes")}:</Text>
+                  <Text style={styles.value}>{eventInfo.tkb_ghi_chu}</Text>
+                </View>
+
+                <TouchableOpacity
+                  style={{
+                    backgroundColor: "#4b7bec",
+                    paddingVertical: 10,
+                    paddingHorizontal: 20,
+                    borderRadius: 5,
+                    alignItems: "center",
+                    marginBottom: 10,
+                  }}
+                  onPress={() => setModalVisible(false)}
+                >
+                  <Text
+                    style={{ color: "#000", fontSize: 16, fontWeight: "bold" }}
+                  >
+                    {translate("close")}
+                  </Text>
+                </TouchableOpacity>
+              </View>
             </View>
           </View>
-        </View>
-      </Modal>
-      {/* <Toast /> */}
-    </View>
+        </Modal>
+        {/* <Toast /> */}
+      </View>
+    </ScrollView>
   );
 };
 

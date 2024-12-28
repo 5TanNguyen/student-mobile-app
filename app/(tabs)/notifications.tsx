@@ -316,7 +316,23 @@ const NotificationPage: React.FC = () => {
                 </Text>
               </View>
 
-              <Button title="Close" onPress={() => setModalVisible(false)} />
+              <TouchableOpacity
+                style={{
+                  backgroundColor: "#4b7bec",
+                  paddingVertical: 10,
+                  paddingHorizontal: 20,
+                  borderRadius: 5,
+                  alignItems: "center",
+                  marginBottom: 10,
+                }}
+                onPress={() => setModalVisible(false)}
+              >
+                <Text
+                  style={{ color: "#000", fontSize: 16, fontWeight: "bold" }}
+                >
+                  {translate("close")}
+                </Text>
+              </TouchableOpacity>
             </View>
           </View>
         </View>

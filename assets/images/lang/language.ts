@@ -1,6 +1,8 @@
 const lang = {
     // _layout
     action: "Action__Thao tác",
+    logOut: "Log out__Đăng xuất",
+    close: "Close__Đóng",
     
     
     // Trang đăng nhập

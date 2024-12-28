@@ -15,12 +15,18 @@ const styles = StyleSheet.create({
         padding: 15,
         backgroundColor: "#ffffff",
         marginBottom: 10,
-        borderRadius: 5,
+        borderRadius: 10,
         elevation: 2,
         flexDirection: "row",
         justifyContent: "space-between",
         borderLeftColor: "#3AB9F3",
-        borderLeftWidth: 7
+        borderLeftWidth: 7,
+        borderTopColor: "#000",
+        borderTopWidth: 1,
+        borderRightColor: "#000",
+        borderRightWidth: 1,
+        borderBottomColor: "#000",
+        borderBottomWidth: 1,
       },
       yearText: {
         fontSize: 20,
@@ -31,19 +37,22 @@ const styles = StyleSheet.create({
         backgroundColor: "#d1d8e0",
         marginBottom: 10,
         borderRadius: 5,
-        marginLeft: 15,
+        marginLeft: 7,
         elevation: 1,
       },
       termText: {
         fontSize: 18,
       },
       coursesContainer: {
-        padding: 10,
         marginBottom: 10,
-        backgroundColor: "#f9f9f9",
+        backgroundColor: "#fff",
         borderRadius: 5,
-        marginLeft: 15,
-        elevation: 1,
+        marginLeft: 7,
+        shadowColor: '#000',
+        shadowOffset: {width: 1, height: 1},
+        shadowOpacity: 0.4,
+        shadowRadius: 5,
+        elevation: 5
       },
       tableHeader: {
         flexDirection: "row",
@@ -52,11 +61,13 @@ const styles = StyleSheet.create({
         paddingBottom: 10,
         marginBottom: 5,
         backgroundColor: '#3AB9F3',
-        borderRadius: 5
+        borderRadius: 5,
       },
       headerText: {
+        flex: 1,
         fontWeight: "bold",
         textAlign: "center",
+        justifyContent: "center"
       },
       courseItem: {
         flexDirection: "row",
@@ -65,11 +76,7 @@ const styles = StyleSheet.create({
         borderBottomColor: "#eee",
       },
       courseText: {
-        textAlign: "center",
-      },
-      courseTextt: {
-        flex: 1,
-        textAlign: "center",
+        textAlign: "left",
       },
       courseTextIndex: {
         fontWeight: "bold",
@@ -78,20 +85,25 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: "center",
         alignItems: "center",
+        marginTop: 5
       },
       columnName: {
         flex: 3,
-        justifyContent: "center",
+        marginTop: 5,
+        textAlign: 'left'
       },
       columnCredits: {
         flex: 2,
         justifyContent: "center",
         alignItems: "center",
+        marginTop: 5
       },
       columnStatus: {
         flex: 2,
         justifyContent: "center",
         alignItems: "center",
+        marginTop: 5,
+        marginRight: 10
       },
 })
 

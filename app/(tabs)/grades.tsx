@@ -160,7 +160,7 @@ const App: React.FC = () => {
               <Text style={styles.headerText}>{translate("score")}</Text>
             </View>
             <View style={styles.columnIndex}>
-              <Text style={styles.headerText}>{translate("letterGrade")}</Text>
+              <Text style={styles.letterGrade}>{translate("letterGrade")}</Text>
             </View>
           </View>
           {Object.values(item.diem_bang_diem).map((course, index) => (

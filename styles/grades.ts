@@ -15,23 +15,33 @@ const styles = StyleSheet.create({
         padding: 15,
         backgroundColor: "#ffffff",
         marginBottom: 10,
-        borderRadius: 5,
+        borderRadius: 10,
         elevation: 2,
         flexDirection: "row",
         justifyContent: "space-between",
         borderLeftColor: "#3AB9F3",
-        borderLeftWidth: 7
+        borderLeftWidth: 7,
+        borderTopColor: "#000",
+        borderTopWidth: 1,
+        borderRightColor: "#000",
+        borderRightWidth: 1,
+        borderBottomColor: "#000",
+        borderBottomWidth: 1,
       },
       termText: {
         fontSize: 18,
         fontWeight: "bold",
       },
       coursesContainer: {
-        padding: 10,
+        marginLeft: 7,
         marginBottom: 10,
-        backgroundColor: "#f9f9f9",
+        backgroundColor: "#fff",
         borderRadius: 5,
-        elevation: 1,
+        shadowColor: '#000',
+        shadowOffset: {width: 1, height: 1},
+        shadowOpacity: 0.4,
+        shadowRadius: 5,
+        elevation: 5
       },
       courseItem: {
         flexDirection: "row",
@@ -70,11 +80,20 @@ const styles = StyleSheet.create({
         flex: 1,
         fontWeight: "bold",
         textAlign: "center",
+        marginTop: 5
+      },
+      letterGrade: {
+        flex: 1,
+        fontWeight: "bold",
+        textAlign: "center",
+        marginTop: 5,
+        marginRight: 5
       },
       courseTextIndex: {
         flex: 1,
         width: 30,
         fontWeight: "bold",
+        marginTop: 5
       },
 });
 

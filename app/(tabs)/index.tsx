@@ -41,6 +41,7 @@ function DashboardScreen() {
   const [course, setCourse] = useState<Course[]>([]);
   const [scheduleState, setScheduleState] = useState(false);
   const [lang, setLang] = useState(true);
+  const [studentName, setStudentName] = useState("");
 
   const getCurrentDate = () => {
     const months = [
@@ -134,6 +135,9 @@ function DashboardScreen() {
               //   text2: "Please login to see grades!",
               // });
             } else {
+              const stdName = await AsyncStorage.getItem("studentName");
+              setStudentName(stdName || "");
+
               const response = await axios.get(
                 `${config.API_URL}sinhvien/sinhvien/showdashboard`,
                 {
@@ -233,7 +237,9 @@ function DashboardScreen() {
   return (
     <ScrollView style={styles.container}>
       <View style={styles.welcomeBox}>
-        <Text style={styles.welcomeText}>👋 {translate("greating")}!</Text>
+        <Text style={styles.welcomeText}>
+          👋 {translate("greating")} {studentName}!
+        </Text>
         <Text style={styles.dateText}>{getCurrentDate()}</Text>
       </View>
       <View style={styles.noticeBox}>

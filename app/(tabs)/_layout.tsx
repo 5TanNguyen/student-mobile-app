@@ -10,15 +10,11 @@ import {
   StatusBar,
   Image,
   Modal,
-  Button,
 } from "react-native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { useFocusEffect, useNavigation } from "@react-navigation/native";
+import { useFocusEffect } from "@react-navigation/native";
 import { TabBarIcon } from "@/components/navigation/TabBarIcon";
-import { Colors } from "@/constants/Colors";
 import { useRouter } from "expo-router";
-import { useColorScheme } from "@/hooks/useColorScheme";
-import { NavigationContainer } from "@react-navigation/native";
 import { Icon } from "react-native-elements";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
@@ -41,6 +37,7 @@ const TabLayout: React.FC = () => {
   const [modalVisible, setModalVisible] = useState<boolean>(false); // Trạng thái modal
   const [token, setToken] = useState("");
   const [lang, setLang] = useState(true);
+  const [imageHeader, setImageHeader] = useState("");
 
   const changeLanguage = async (lang: boolean) => {
     setLang(lang);
@@ -64,10 +61,14 @@ const TabLayout: React.FC = () => {
 
   const logOut = async () => {
     try {
+      await AsyncStorage.removeItem("imageHeader");
+      await AsyncStorage.removeItem("studentName");
       await AsyncStorage.removeItem("token");
       setToken("");
       setModalVisible(false);
-      router.push("/login");
+      setTimeout(() => {
+        router.push("/login");
+      }, 500);
     } catch (error) {
       // Toast.show({
       //   type: "error",
@@ -82,7 +83,7 @@ const TabLayout: React.FC = () => {
       StatusBar.setBackgroundColor("#4b69c1", true);
       StatusBar.setBarStyle("light-content", true);
 
-      const checkTokenAndLanguage = async () => {
+      const checkAsyncStorage = async () => {
         const storedToken = await AsyncStorage.getItem("token");
         setToken(storedToken || "");
 
@@ -94,14 +95,17 @@ const TabLayout: React.FC = () => {
           await AsyncStorage.setItem("lang", "false");
           setLang(false);
         }
+
+        const storedImage = await AsyncStorage.getItem("imageHeader");
+        setImageHeader(storedImage || "");
       };
-      checkTokenAndLanguage();
+      checkAsyncStorage();
 
       const interval = setInterval(() => {
         StatusBar.setBackgroundColor("#4b69c1", true);
         StatusBar.setBarStyle("light-content", true);
 
-        checkTokenAndLanguage();
+        checkAsyncStorage();
       }, 1000);
 
       return () => clearInterval(interval);
@@ -115,10 +119,9 @@ const TabLayout: React.FC = () => {
     >
       <StatusBar />
       <View style={styles.header}>
-        <TouchableOpacity style={styles.iconButton}>
-          {/* Icon menu */}
+        {/* <TouchableOpacity style={styles.iconButton}>
           <Icon name="menu" size={30} color="#000" />
-        </TouchableOpacity>
+        </TouchableOpacity> */}
 
         {/* Ô tìm kiếm */}
         <TextInput
@@ -152,7 +155,12 @@ const TabLayout: React.FC = () => {
             )}
           </TouchableOpacity>
           <TouchableOpacity onPress={() => setModalVisible(true)}>
-            <Icon name="account-circle" size={30} color="#000" />
+            {imageHeader != "" ? (
+              <Image source={{ uri: imageHeader }} style={styles.avatar} />
+            ) : (
+              // <Icon name="account-circle" size={30} color="#000" />
+              <Icon name="account-circle" size={30} color="#000" />
+            )}
           </TouchableOpacity>
         </View>
       </View>
@@ -170,19 +178,40 @@ const TabLayout: React.FC = () => {
             </View>
 
             <View style={styles.content}>
-              <TouchableOpacity style={{ marginBottom: 10 }}>
-                <Button
-                  title="Log out"
-                  color="#e15f41"
-                  onPress={() => logOut()}
-                />
+              <TouchableOpacity
+                style={{
+                  backgroundColor: "#4b7bec",
+                  paddingVertical: 10,
+                  paddingHorizontal: 20,
+                  borderRadius: 5,
+                  alignItems: "center",
+                  marginBottom: 10,
+                }}
+                onPress={() => logOut()}
+              >
+                <Text
+                  style={{ color: "#000", fontSize: 16, fontWeight: "bold" }}
+                >
+                  {translate("logOut")}
+                </Text>
               </TouchableOpacity>
 
-              <Button
-                title="Close"
+              <TouchableOpacity
+                style={{
+                  backgroundColor: "#a5b1c2",
+                  paddingVertical: 10,
+                  paddingHorizontal: 20,
+                  borderRadius: 5,
+                  alignItems: "center",
+                }}
                 onPress={() => setModalVisible(false)}
-                color="#a4b0be" // Màu sắc của nút
-              />
+              >
+                <Text
+                  style={{ color: "#000", fontSize: 16, fontWeight: "bold" }}
+                >
+                  {translate("close")}
+                </Text>
+              </TouchableOpacity>
             </View>
           </View>
         </View>
@@ -393,19 +422,21 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     paddingVertical: 5,
     elevation: 3,
+    height: 50,
   },
   iconButton: {
     marginRight: 10,
   },
   searchInput: {
     flex: 1,
-    backgroundColor: "#f5f5f5",
+    backgroundColor: "#dcdde1",
     paddingVertical: 8,
     paddingHorizontal: 10,
     borderRadius: 5,
     marginHorizontal: 10,
     fontSize: 14,
     color: "#000",
+    height: 30,
   },
   headerRight: {
     flexDirection: "row",
@@ -424,6 +455,13 @@ const styles = StyleSheet.create({
   imageLang: {
     width: 35,
     height: 23,
+  },
+  avatar: {
+    width: 30,
+    height: 30,
+    borderRadius: 40,
+    marginLeft: 6,
+    backgroundColor: "#e0e0e0",
   },
 });
 

@@ -80,9 +80,45 @@ export default function Login() {
             }
           )
           .then(async (response) => {
-            // console.log(response.data.data.token);
+            console.log(response.data.data.token);
             setToken(response.data.data.token);
             await AsyncStorage.setItem("token", response.data.data.token);
+
+            const responseINFOR = await axios.get(
+              `${config.API_URL}sinhvien/info/Thongtinsinhvien`,
+              {
+                headers: {
+                  "Content-Type": "application/json",
+                  "DHNCT-API-KEY": "@cntt@dhnct@",
+                  "DHNCT-Authorization": response.data.data.token, // Sử dụng token từ AsyncStorage
+                },
+              }
+            );
+
+            if (responseINFOR.data && responseINFOR.data.data) {
+              const image =
+                `${config.API_IMAGE_URL}` +
+                `${responseINFOR.data.data.sv_sinh_vien_avatar.slice(
+                  responseINFOR.data.data.sv_sinh_vien_avatar.indexOf(
+                    "uploads"
+                  ),
+                  responseINFOR.data.data.sv_sinh_vien_avatar.length
+                )}`;
+
+              await AsyncStorage.setItem("imageHeader", image);
+              await AsyncStorage.setItem(
+                "studentName",
+                responseINFOR.data.data.sv_sinh_vien_ten
+              );
+              // console.log(response.data.data);
+            } else {
+              // Toast.show({
+              //   type: "error",
+              //   text1: "ERROR",
+              //   text2: "Failed to fetch data!",
+              // });
+            }
+
             router.push("/infor");
           })
           .catch((error) => {
@@ -118,15 +154,12 @@ export default function Login() {
       fetchData();
 
       axios
-        .get(
-          `http://10.10.4.43/studentsdnc-api/api/v1/common/keys/getPublicKey`,
-          {
-            headers: {
-              "Content-Type": "application/json",
-              "DHNCT-API-KEY": "@cntt@dhnct@",
-            },
-          }
-        )
+        .get(`${config.API_URL}common/keys/getPublicKey`, {
+          headers: {
+            "Content-Type": "application/json",
+            "DHNCT-API-KEY": "@cntt@dhnct@",
+          },
+        })
         .then((response) => {
           // console.log(response.data.publicKey);
           setPublicKey(response.data.publicKey);
