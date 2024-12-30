@@ -10,6 +10,7 @@ import axios from "axios";
 import { useFocusEffect } from "@react-navigation/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Icon } from "react-native-elements";
+import { LinearGradient } from "expo-linear-gradient";
 import config from "../../constants/config";
 import styles from "../../styles/academic_planning";
 import language from "../../assets/images/lang/language";
@@ -161,12 +162,19 @@ const App: React.FC = () => {
           renderItem={({ item: term }) => (
             <View>
               <TouchableOpacity
-                style={styles.termItem}
                 onPress={() => handleTermPress(term)}
+                style={styles.termItem}
               >
-                <Text style={styles.termText}>
-                  {translate("semester")} {term}
-                </Text>
+                <LinearGradient
+                  colors={["#3AB9F3", "#c7ecee"]} // Màu loang
+                  style={styles.gradientBackground}
+                  start={{ x: 10, y: 0 }}
+                  end={{ x: 30, y: 40 }}
+                >
+                  <Text style={styles.termText}>
+                    {translate("semester")} {term}
+                  </Text>
+                </LinearGradient>
               </TouchableOpacity>
               {expandedTerm === term && (
                 <View style={styles.coursesContainer}>

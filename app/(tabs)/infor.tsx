@@ -541,7 +541,7 @@ export default function StudentInfoScreen() {
 
       {/* Modal để chọn ảnh đại diện */}
       <Modal
-        animationType="slide"
+        animationType="fade"
         transparent={true}
         visible={modalVisible}
         onRequestClose={closeModal}
@@ -552,7 +552,13 @@ export default function StudentInfoScreen() {
               {translate("changeProfilePicture")}
             </Text>
             <View style={styles.buttonContainer}>
-              <Button title="Cancel" onPress={closeModal} color="#888" />
+              <TouchableOpacity onPress={closeModal} style={styles.button}>
+                <Text
+                  style={{ color: "#fff", fontSize: 16, fontWeight: "bold" }}
+                >
+                  {translate("close")}
+                </Text>
+              </TouchableOpacity>
             </View>
           </View>
         </View>

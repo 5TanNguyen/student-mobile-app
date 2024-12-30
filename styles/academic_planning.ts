@@ -33,12 +33,17 @@ const styles = StyleSheet.create({
         fontWeight: "bold",
       },
       termItem: {
-        padding: 10,
-        backgroundColor: "#d1d8e0",
+        // padding: 10,
         marginBottom: 10,
         borderRadius: 5,
         marginLeft: 7,
         elevation: 1,
+      },
+      gradientBackground: {
+        padding: 10, // Điều chỉnh padding cho nút
+        borderRadius: 10, // Bo góc cho nút
+        justifyContent: "center",
+        alignItems: "flex-start",
       },
       termText: {
         fontSize: 18,

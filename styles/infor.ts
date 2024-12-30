@@ -4,7 +4,7 @@ const styles = StyleSheet.create({
     container: {
         flexGrow: 1,
         padding: 10,
-        backgroundColor: "#fff",
+        backgroundColor: "#f5f5f5",
       },
       profileContainer: {
         flexDirection: "row",
@@ -40,10 +40,11 @@ const styles = StyleSheet.create({
       changeButtonText: {
         color: "#fff",
         fontSize: 14,
+        fontWeight: "bold"
       },
       infoContainer: {
         padding: 16,
-        backgroundColor: "#f5f5f5",
+        backgroundColor: "#fff",
         borderRadius: 8,
         shadowOffset: { width: 2, height: 2 },
         shadowColor: "#000",
@@ -97,7 +98,7 @@ const styles = StyleSheet.create({
       sectionContainer: {
         marginVertical: 10,
         padding: 10,
-        backgroundColor: "#f8f9fa",
+        backgroundColor: "#fff",
         borderRadius: 8,
         elevation: 2,
         shadowOffset: { width: 1, height: 1 },
@@ -115,6 +116,13 @@ const styles = StyleSheet.create({
         fontSize: 24,
         fontWeight: "bold",
         marginBottom: 20,
+      },
+      button: {
+        backgroundColor: "#4b69c1", // Màu nền của button
+        paddingVertical: 10, // Khoảng cách dọc bên trong
+        paddingHorizontal: 20, // Khoảng cách ngang bên trong
+        borderRadius: 5, // Bo tròn góc button
+        color: "#4b69c1", // Màu chữ trên button
       },
 });
 

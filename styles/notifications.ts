@@ -10,6 +10,7 @@ const styles = StyleSheet.create({
       fontSize: 24,
       fontWeight: "bold",
       margin: 16,
+      marginLeft: 0,
       textAlign: "center",
     },
     listContainer: {
@@ -81,7 +82,7 @@ const styles = StyleSheet.create({
       color: "#333",
       backgroundColor: "#f9f9f9",
       shadowColor: '#000',
-      shadowOffset: {width: 1, height: 1},
+      shadowOffset: {width: 2, height: 2},
       shadowOpacity: 0.5,
       shadowRadius: 5,
       elevation: 5

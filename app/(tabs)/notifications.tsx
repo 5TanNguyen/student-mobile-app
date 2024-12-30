@@ -328,7 +328,7 @@ const NotificationPage: React.FC = () => {
                 onPress={() => setModalVisible(false)}
               >
                 <Text
-                  style={{ color: "#000", fontSize: 16, fontWeight: "bold" }}
+                  style={{ color: "#fff", fontSize: 16, fontWeight: "bold" }}
                 >
                   {translate("close")}
                 </Text>
