@@ -168,8 +168,8 @@ const App: React.FC = () => {
                 <LinearGradient
                   colors={["#3AB9F3", "#c7ecee"]} // Màu loang
                   style={styles.gradientBackground}
-                  start={{ x: 10, y: 0 }}
-                  end={{ x: 30, y: 40 }}
+                  start={{ x: 0, y: 0 }}
+                  end={{ x: 1, y: 1 }}
                 >
                   <Text style={styles.termText}>
                     {translate("semester")} {term}

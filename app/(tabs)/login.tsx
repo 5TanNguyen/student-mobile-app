@@ -172,6 +172,15 @@ export default function Login() {
 
   return (
     <View style={styles.container}>
+      <View style={styles.greetingView}>
+        <Text style={styles.portal}>
+          {translate("internationalStudentPortal")}
+        </Text>
+        <Image
+          style={styles.imageLoginDNC}
+          source={require("../../assets/images/students/DNCLOGO.png")}
+        />
+      </View>
       <View style={styles.loginForm}>
         <View style={styles.loginContent}>
           <Image
@@ -233,13 +242,12 @@ export default function Login() {
             <Text style={styles.modalTitle}>
               {translate("pleaseEnterTheLoginInformation")}
             </Text>
-            <View style={styles.buttonContainer}>
-              <Button
-                title="Close"
-                onPress={() => showModal(!modalVisible)}
-                color="#888"
-              />
-            </View>
+            <TouchableOpacity
+              style={styles.buttonContainer}
+              onPress={() => showModal(!modalVisible)}
+            >
+              <Text style={styles.textClose}>{translate("close")}</Text>
+            </TouchableOpacity>
           </View>
         </View>
       </Modal>

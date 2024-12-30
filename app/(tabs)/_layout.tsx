@@ -217,7 +217,11 @@ const TabLayout: React.FC = () => {
         </View>
       </Modal>
 
-      <Tab.Navigator>
+      <Tab.Navigator
+        screenOptions={{
+          tabBarHideOnKeyboard: true,
+        }}
+      >
         {token ? (
           <Tab.Screen
             name="index"

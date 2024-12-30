@@ -41,12 +41,14 @@ const styles = StyleSheet.create({
       },
       gradientBackground: {
         padding: 10, // Điều chỉnh padding cho nút
-        borderRadius: 10, // Bo góc cho nút
+        borderRadius: 5, // Bo góc cho nút
         justifyContent: "center",
         alignItems: "flex-start",
       },
       termText: {
-        fontSize: 18,
+        color: "#fff", 
+        fontSize: 16, 
+        fontWeight: "bold"
       },
       coursesContainer: {
         marginBottom: 10,

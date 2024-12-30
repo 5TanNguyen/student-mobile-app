@@ -7,6 +7,32 @@ const styles = StyleSheet.create({
       backgroundColor: "#fff",
       justifyContent: "center",
       alignItems: "center",
+      flexDirection: "column"
+    },
+
+    greetingView: {
+      // position: "absolute",
+      top: 0,
+      marginBottom: 80,
+      alignItems: "center",
+      flexDirection: "column",
+    },
+
+    portal: {
+      fontWeight: "bold",
+      color: "red",
+      fontSize: 20
+    },
+
+    imageLoginDNC: {
+      width: 91,
+      height: 89,
+      borderColor: "white",
+      // borderWidth: 7,
+      // left: "50%",
+      top: 5,
+      // transform: [{ translateX: 0 }, { translateY: "10%" }],
+      backgroundColor: "#fff"
     },
   
     loginForm: {
@@ -100,16 +126,25 @@ const styles = StyleSheet.create({
       fontSize: 18,
       fontWeight: "bold",
       marginBottom: 16,
+      textAlign: "center"
     },
     buttonContainer: {
       flexDirection: "row",
       justifyContent: "center",
+      alignItems: "center",
       marginTop: 16,
+      paddingVertical: 10,
+      backgroundColor: "#4b7bec",
+      borderRadius: 5,
     },
     text: {
       marginBottom: 20,
       fontSize: 18,
     },
+    textClose: {
+      fontWeight: "bold",
+      color: "#fff"
+    }
   });
 
 export default styles;

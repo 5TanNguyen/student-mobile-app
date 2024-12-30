@@ -60,23 +60,23 @@ function DashboardScreen() {
     ];
 
     const daysOfWeek = [
-      "Sunday",
       "Monday",
       "Tuesday",
       "Wednesday",
       "Thursday",
       "Friday",
       "Saturday",
+      "Sunday",
     ];
 
     const ngayTrongTuan = [
-      "Chủ Nhật",
       "Thứ hai",
       "Thứ ba",
       "Thứ tư",
       "Thứ năm",
       "Thứ sáu",
       "Thứ bảy",
+      "Chủ Nhật",
     ];
 
     const currentDate = new Date();

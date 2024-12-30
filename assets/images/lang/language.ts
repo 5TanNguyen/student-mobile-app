@@ -9,6 +9,7 @@ const lang = {
     loginPage: "LOGIN PAGE__Trang đăng nhập",
     postLogin: "Login__Đăng nhập",
     pleaseEnterTheLoginInformation: "Please enter the login information__Hãy điền đầy đủ thông tin",
+    internationalStudentPortal: "INTERNATIONAL STUDENT PORTAL__HỆ THỐNG SINH VIÊN QUỐC TẾ",
     
     
     // Trang dashboard
