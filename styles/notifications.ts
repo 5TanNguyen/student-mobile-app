@@ -80,6 +80,11 @@ const styles = StyleSheet.create({
       fontSize: 16,
       color: "#333",
       backgroundColor: "#f9f9f9",
+      shadowColor: '#000',
+      shadowOffset: {width: 1, height: 1},
+      shadowOpacity: 0.5,
+      shadowRadius: 5,
+      elevation: 5
     },
     dateSentContainer: {
       flexDirection: "row",
