@@ -21,7 +21,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useFocusEffect } from "@react-navigation/native";
 import config from "../../constants/config";
 import styles from "../../styles/infor";
-import language from "../../assets/images/lang/language";
+import language from "../../constants/language";
 // import Toast from "react-native-toast-message";
 // import * as ImagePicker from "expo-image-picker";
 
@@ -212,7 +212,17 @@ export default function StudentInfoScreen() {
       student.sv_sinh_vien_avatar.length
     );
 
-  const gender = student.sv_sinh_vien_gioi_tinh === "2" ? "Male" : "Female";
+  const gender = (gioitinh: string) => {
+    if (gioitinh == "1") {
+      return translate("female");
+    } else if (gioitinh == "2") {
+      return translate("male");
+    } else if (gioitinh == "3") {
+      return translate("other");
+    }
+
+    return "";
+  };
 
   const openModal = () => {
     setModalVisible(true);
@@ -358,7 +368,9 @@ export default function StudentInfoScreen() {
         </View>
         <View style={styles.infoRow}>
           <Text style={styles.label}>{translate("gender")}:</Text>
-          <Text style={styles.value}>{gender}</Text>
+          <Text style={styles.value}>
+            {gender(student.sv_sinh_vien_gioi_tinh)}
+          </Text>
         </View>
         <View style={styles.infoRow}>
           <Text style={styles.label}>{translate("dateofBirth")}:</Text>

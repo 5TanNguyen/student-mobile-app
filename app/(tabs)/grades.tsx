@@ -13,7 +13,7 @@ import axios from "axios";
 import { Icon } from "react-native-elements";
 import config from "../../constants/config";
 import styles from "../../styles/grades";
-import language from "../../assets/images/lang/language";
+import language from "../../constants/language";
 
 // Kiểu dữ liệu cho một khóa học
 interface Course {

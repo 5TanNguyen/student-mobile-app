@@ -16,7 +16,7 @@ import { StackNavigationProp } from "@react-navigation/stack";
 import { RootStackParamList } from "./types";
 import config from "../../constants/config";
 import styles from "../../styles/index";
-import language from "../../assets/images/lang/language";
+import language from "../../constants/language";
 
 type NavigationProp = StackNavigationProp<
   RootStackParamList,

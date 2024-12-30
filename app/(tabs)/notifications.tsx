@@ -15,7 +15,7 @@ import { useFocusEffect } from "@react-navigation/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import config from "../../constants/config";
 import styles from "@/styles/notifications";
-import language from "../../assets/images/lang/language";
+import language from "../../constants/language";
 // import Toast from "react-native-toast-message";
 
 interface Notification {

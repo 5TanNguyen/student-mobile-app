@@ -13,7 +13,7 @@ import { Icon } from "react-native-elements";
 import { LinearGradient } from "expo-linear-gradient";
 import config from "../../constants/config";
 import styles from "../../styles/academic_planning";
-import language from "../../assets/images/lang/language";
+import language from "../../constants/language";
 // import Toast from "react-native-toast-message";
 
 // Dữ liệu mẫu

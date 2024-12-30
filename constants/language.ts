@@ -3,6 +3,10 @@ const lang = {
     action: "Action__Thao tác",
     logOut: "Log out__Đăng xuất",
     close: "Close__Đóng",
+    dashboard: "Dashboard__Trang chủ",
+    login: "Login__Đăng nhập",
+    infor: "Information__Thông tin",
+    planning: "Planning__Kế hoạch học tập",
     
     
     // Trang đăng nhập
@@ -55,7 +59,10 @@ const lang = {
     fathersInformation: "Father's Information__Thông tin của cha",
     motherInformation: "Mother's Information__Thông tin của mẹ",
     guardiansInformation: "Guardian's Information__Thông tin người giám hộ",
-    
+    male: "Male__Nam",
+    female: "Female__Nữ",
+    other: "Other__Khác",
+
     
     // Kế hoạch học tập
     academicPlanning: "Academic Planning__Kế hoạch học tập",

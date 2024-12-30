@@ -26,7 +26,7 @@ import Grades from "./grades";
 import Notifications from "./notifications";
 import LogIn from "./login";
 import LogIn2 from "./login_2";
-import language from "../../assets/images/lang/language";
+import language from "../../constants/language";
 // import Toast from "react-native-toast-message";
 
 // 0.76 phiên phản RN
@@ -220,6 +220,12 @@ const TabLayout: React.FC = () => {
       <Tab.Navigator
         screenOptions={{
           tabBarHideOnKeyboard: true,
+          tabBarStyle: {
+            backgroundColor: "#fff",
+          },
+          tabBarInactiveTintColor: "#718093",
+          tabBarActiveTintColor: "#4b69c1",
+          headerShown: false,
         }}
       >
         {token ? (
@@ -227,7 +233,7 @@ const TabLayout: React.FC = () => {
             name="index"
             component={Index}
             options={{
-              title: "Dashboard",
+              title: `${translate("dashboard")}`,
               tabBarIcon: ({ color, focused }) => (
                 <TabBarIcon
                   name={focused ? "home" : "home-outline"}
@@ -242,7 +248,7 @@ const TabLayout: React.FC = () => {
             name="login"
             component={LogIn}
             options={{
-              title: "Login",
+              title: `${translate("login")}`,
               tabBarIcon: ({ color, focused }) => (
                 <TabBarIcon
                   name={focused ? "log-in" : "log-in-outline"}
@@ -258,7 +264,7 @@ const TabLayout: React.FC = () => {
           name="infor"
           component={Infor}
           options={{
-            title: "Information",
+            title: `${translate("infor")}`,
             tabBarIcon: ({ color, focused }) => (
               <TabBarIcon
                 name={focused ? "person" : "person-outline"}
@@ -272,7 +278,7 @@ const TabLayout: React.FC = () => {
           name="academic_planning"
           component={AcademicPlanning}
           options={{
-            title: "Planning",
+            title: `${translate("planning")}`,
             tabBarIcon: ({ color, focused }) => (
               <TabBarIcon
                 name={focused ? "book" : "book-outline"}
@@ -286,7 +292,7 @@ const TabLayout: React.FC = () => {
           name="calendar" // Tên này phải giống với tên được sử dụng trong navigate
           component={Calendar}
           options={{
-            title: "Schedule",
+            title: `${translate("schedule")}`,
             tabBarIcon: ({ color, focused }) => (
               <TabBarIcon
                 name={focused ? "calendar" : "calendar-outline"}
@@ -301,7 +307,7 @@ const TabLayout: React.FC = () => {
           name="grades"
           component={Grades}
           options={{
-            title: "Grades",
+            title: `${translate("grades")}`,
             tabBarIcon: ({ color, focused }) => (
               <TabBarIcon
                 name={focused ? "checkbox" : "checkbox-outline"}
@@ -316,7 +322,7 @@ const TabLayout: React.FC = () => {
           name="notifications"
           component={Notifications}
           options={{
-            title: "Notifications",
+            title: `${translate("notifications")}`,
             tabBarIcon: ({ color, focused }) => (
               <TabBarIcon
                 name={focused ? "notifications" : "notifications-outline"}
@@ -326,7 +332,7 @@ const TabLayout: React.FC = () => {
             headerShown: false,
           }}
         />
-        <Tab.Screen
+        {/* <Tab.Screen
           name="test"
           component={LogIn2}
           options={{
@@ -339,7 +345,7 @@ const TabLayout: React.FC = () => {
             ),
             headerShown: false,
           }}
-        />
+        /> */}
       </Tab.Navigator>
     </SafeAreaView>
   );

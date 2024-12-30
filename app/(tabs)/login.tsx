@@ -17,7 +17,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useRouter } from "expo-router";
 import config from "../../constants/config";
 import styles from "../../styles/login";
-import language from "../../assets/images/lang/language";
+import language from "../../constants/language";
 // const CryptoJS = require("crypto-js");
 // import Toast from "react-native-toast-message";
 

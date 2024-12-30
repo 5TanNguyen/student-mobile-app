@@ -16,7 +16,7 @@ import { useFocusEffect } from "@react-navigation/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import config from "../../constants/config";
 import styles from "@/styles/calendar";
-import language from "../../assets/images/lang/language";
+import language from "../../constants/language";
 
 // Thiết lập LocaleConfig cho tiếng Anh
 LocaleConfig.locales["en"] = {
@@ -364,7 +364,7 @@ const App = () => {
                   onPress={() => setModalVisible(false)}
                 >
                   <Text
-                    style={{ color: "#000", fontSize: 16, fontWeight: "bold" }}
+                    style={{ color: "#fff", fontSize: 16, fontWeight: "bold" }}
                   >
                     {translate("close")}
                   </Text>
