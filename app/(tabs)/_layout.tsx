@@ -25,7 +25,7 @@ import Calendar from "./calendar";
 import Grades from "./grades";
 import Notifications from "./notifications";
 import LogIn from "./login";
-import LogIn2 from "./login_2";
+import LogIn_Test from "./login_3";
 import language from "../../constants/language";
 // import Toast from "react-native-toast-message";
 
@@ -332,9 +332,9 @@ const TabLayout: React.FC = () => {
             headerShown: false,
           }}
         />
-        {/* <Tab.Screen
+        <Tab.Screen
           name="test"
-          component={LogIn2}
+          component={LogIn_Test}
           options={{
             title: "Test login with google",
             tabBarIcon: ({ color, focused }) => (
@@ -345,7 +345,7 @@ const TabLayout: React.FC = () => {
             ),
             headerShown: false,
           }}
-        /> */}
+        />
       </Tab.Navigator>
     </SafeAreaView>
   );
