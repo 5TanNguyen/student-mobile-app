@@ -300,7 +300,8 @@ const NotificationPage: React.FC = () => {
               <View style={styles.dateSentContainer}>
                 <Text style={styles.label}>📅 {translate("dateSent")}: </Text>
                 <Text style={styles.value}>
-                  {notiInfo.ql_thong_bao_ngay_gui}
+                  {formatDate(notiInfo.ql_thong_bao_ngay_gui)}{" "}
+                  {notiInfo.ql_thong_bao_ngay_gui.split(" ")[1]}
                 </Text>
               </View>
 

@@ -294,6 +294,8 @@ const App = () => {
                 <Text style={styles.subjectText}>
                   {lang
                     ? item.ctdt_hoc_phan_ten_tieng_anh
+                      ? item.ctdt_hoc_phan_ten_tieng_anh
+                      : item.ctdt_hoc_phan_ten_tieng_viet
                     : item.ctdt_hoc_phan_ten_tieng_viet}
                 </Text>
               </View>
@@ -321,7 +323,11 @@ const App = () => {
                     📚 {translate("courseName")}:
                   </Text>
                   <Text style={styles.value}>
-                    {eventInfo.ctdt_hoc_phan_ten_tieng_viet}
+                    {lang
+                      ? eventInfo.ctdt_hoc_phan_ten_tieng_anh
+                        ? eventInfo.ctdt_hoc_phan_ten_tieng_anh
+                        : eventInfo.ctdt_hoc_phan_ten_tieng_viet
+                      : eventInfo.ctdt_hoc_phan_ten_tieng_viet}
                   </Text>
                 </View>
 
