@@ -9,12 +9,14 @@ import {
   Text,
   TextInput,
   Platform,
+  Alert,
 } from "react-native";
 import axios from "axios";
 import { Icon } from "react-native-elements";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useRouter } from "expo-router";
+import * as LocalAuthentication from "expo-local-authentication";
 import config from "../../constants/config";
 import styles from "../../styles/login";
 import language from "../../constants/language";
@@ -29,6 +31,84 @@ export default function Login() {
   const [token, setToken] = useState("");
   const router = useRouter();
   const [lang, setLang] = useState(true);
+  const [isBiometricSupportedcd, setIsBiometricSupportedcd] = useState(false);
+
+  const fallBackToDeFaultAuth = () => {
+    console.log("Fall back to password authentication");
+  };
+
+  const alertComponent = (
+    title: string,
+    mess: string,
+    btnTxt: string,
+    btnFunc: () => void
+  ) => {
+    return Alert.alert(title, mess, [
+      {
+        text: btnTxt,
+        onPress: btnFunc,
+      },
+    ]);
+  };
+
+  const TwoButtonAlert = () =>
+    Alert.alert("You are logged in", "5tan", [
+      {
+        text: "Back",
+        onPress: () => console.log("Cancel Pressed"),
+        style: "cancel",
+      },
+      {
+        text: "PROCEED",
+        onPress: () => console.log("OK Pressed"),
+      },
+    ]);
+
+  const handleBiometricAuth = async () => {
+    const isBiometricAvailable = await LocalAuthentication.hasHardwareAsync();
+
+    if (!isBiometricAvailable) {
+      return alertComponent(
+        "Please enter your password",
+        "Biometric auth not supported",
+        "OK",
+        () => fallBackToDeFaultAuth()
+      );
+    }
+
+    let supportedBiometrics;
+    if (isBiometricAvailable) {
+      supportedBiometrics =
+        await LocalAuthentication.supportedAuthenticationTypesAsync();
+    }
+
+    const savedBiometrics = await LocalAuthentication.isEnrolledAsync();
+    if (savedBiometrics) {
+      return alertComponent(
+        "Biometric record not found",
+        "Please login with your password",
+        "OK",
+        () => fallBackToDeFaultAuth()
+      );
+    }
+
+    const biometricAuth = await LocalAuthentication.authenticateAsync({
+      promptMessage: "Login to 5Tan dev app with biometric",
+      cancelLabel: "Cancel",
+      disableDeviceFallback: true,
+    });
+
+    if (biometricAuth) {
+      TwoButtonAlert();
+    }
+  };
+
+  useEffect(() => {
+    async () => {
+      const compatible = await LocalAuthentication.hasHardwareAsync();
+      setIsBiometricSupportedcd(compatible);
+    };
+  }, []);
 
   const showModal = (modalVisible: any) => {
     setModalVisible(modalVisible);
@@ -223,9 +303,23 @@ export default function Login() {
               placeholder="Password"
             />
           </View>
-          <TouchableOpacity style={styles.buttonLogin} onPress={postLogin}>
-            <Text style={styles.textLogin}>{translate("postLogin")}</Text>
-          </TouchableOpacity>
+          <View style={styles.viewButton}>
+            <TouchableOpacity style={styles.buttonLogin} onPress={postLogin}>
+              <Text style={styles.textLogin}>{translate("postLogin")}</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.finger_print}
+              onPress={handleBiometricAuth}
+            >
+              <Icon
+                name="fingerprint"
+                type="font-awesome-5"
+                color="#fff"
+                size={20}
+                style={{ marginTop: 1, marginLeft: 2 }}
+              />
+            </TouchableOpacity>
+          </View>
         </View>
       </View>
 
@@ -251,6 +345,13 @@ export default function Login() {
           </View>
         </View>
       </Modal>
+
+      <Text>
+        {""}
+        {isBiometricSupportedcd
+          ? "Your device is compatible with Biometrics"
+          : "Face or Fingerprint scanner is available on this device"}
+      </Text>
     </View>
   );
 }

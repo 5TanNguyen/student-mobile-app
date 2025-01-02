@@ -49,21 +49,26 @@ export default function App() {
     handleRevoke();
     const result = await promptAsync();
     if (result.type === "success") {
-      console.log("Access token:", result.params);
       const vietnamTime = moment.tz("Asia/Ho_Chi_Minh").format();
       // const queries = new URLSearchParams(result.params).toString();
       const queries = new URLSearchParams({
-        ...result.params,
+        code: result.params.code, // Mã code từ kết quả đăng nhập Google
+        scope:
+          "email+profile+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.email+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.profile+openid",
+        authuser: "0", // Đặt giá trị authuser giống với CI
+        prompt: "none", // Giá trị prompt giống với CI
         timeZone: "Asia/Ho_Chi_Minh",
         currentTime: vietnamTime,
       }).toString();
+
+      console.log(queries);
+
       const response = await axios.get(
         `${config.API_URL}authentication/login_google?` + `${queries}`,
         {
           headers: {
             "Content-Type": "application/json",
             "DHNCT-API-KEY": "@cntt@dhnct@",
-            // "DHNCT-Authorization": storedToken, // Sử dụng token từ AsyncStorage
           },
         }
       );

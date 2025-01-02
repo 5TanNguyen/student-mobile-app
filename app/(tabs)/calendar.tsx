@@ -254,8 +254,8 @@ const App = () => {
   );
 
   return (
-    <ScrollView>
-      <View style={styles.container}>
+    <ScrollView style={styles.container}>
+      <View>
         <Text style={styles.title}>{translate("schedule")}</Text>
         <Calendar
           style={styles.calendar}

@@ -95,7 +95,17 @@ const styles = StyleSheet.create({
     },
   
     buttonLogin: {
-      width: "100%",
+      flex: 3,
+      backgroundColor: "#b71540",
+      alignItems: "center",
+      justifyContent: "center",
+      height: 40,
+      borderRadius: 5,
+      marginRight: 5
+    },
+
+    finger_print: {
+      flex: 1,
       backgroundColor: "#b71540",
       alignItems: "center",
       justifyContent: "center",
@@ -144,6 +154,10 @@ const styles = StyleSheet.create({
     textClose: {
       fontWeight: "bold",
       color: "#fff"
+    },
+    viewButton: {
+      width: "100%",
+      flexDirection: 'row'
     }
   });
 

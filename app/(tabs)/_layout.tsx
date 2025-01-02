@@ -80,7 +80,7 @@ const TabLayout: React.FC = () => {
 
   useFocusEffect(
     useCallback(() => {
-      StatusBar.setBackgroundColor("#4b69c1", true);
+      StatusBar.setBackgroundColor("transparent", true);
       StatusBar.setBarStyle("light-content", true);
 
       const checkAsyncStorage = async () => {
@@ -102,7 +102,7 @@ const TabLayout: React.FC = () => {
       checkAsyncStorage();
 
       const interval = setInterval(() => {
-        StatusBar.setBackgroundColor("#4b69c1", true);
+        StatusBar.setBackgroundColor("black", true);
         StatusBar.setBarStyle("light-content", true);
 
         checkAsyncStorage();
